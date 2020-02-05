@@ -7,8 +7,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"gopkg.in/yaml.v3"
+
+	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 )
 
 type DescribedObject struct {
@@ -132,7 +135,7 @@ func collectChangelogs(repoConfig YamlRepoConfig) (map[string]string, error) {
 	for _, category := range repoConfig.Section.Categories {
 		log.Printf("Processing category: %s", category.Name)
 		for _, repo := range category.Repos {
-			log.Printf("- Processing repo: %s@%s", repo.Name)
+			log.Printf("- Processing repo: %s", repo.Name)
 
 			if repo.Version == "" {
 				// TODO: This should be somehow transformed from repo url
@@ -145,6 +148,11 @@ func collectChangelogs(repoConfig YamlRepoConfig) (map[string]string, error) {
 			}
 			// TODO: This should be somehow transformed from repo url
 			changelog, err := fetchChangelog("github", repo.Name, repo.Version)
+			if err != nil {
+				return nil, err
+			}
+
+			changelog, err = extractVersionChangeLog(changelog, repo.Version)
 			if err != nil {
 				return nil, err
 			}
@@ -183,7 +191,34 @@ func main() {
 	}
 
 	log.Printf("Changelogs")
-	log.Printf("%+v", changelogs)
+	var res string
+	for url, changelog := range changelogs {
+		if strings.TrimSpace(changelog) == "" {
+			continue
+		}
+		res += "## " + url + "\n"
+		res += changelog + "\n"
+	}
+
+	log.Println(res)
 
 	log.Printf("Changelog parser completed!")
+}
+
+func extractVersionChangeLog(
+	changelog string,
+	version string,
+) (string, error) {
+	versionChangelogs, err := changelogPkg.Parse(changelog)
+	if err != nil {
+		return "", err
+	}
+
+	for _, versionChangelog := range versionChangelogs {
+		if strings.TrimPrefix(version, "v") == versionChangelog.Version {
+			return versionChangelog.Body, nil
+		}
+	}
+
+	return "", nil
 }

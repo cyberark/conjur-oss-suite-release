@@ -13,18 +13,20 @@ section:
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
-      - name: cyberark/conjur-aws
-        url: https://github.com/cyberark/conjur-aws
-        description: AWS CloudFormation templates for deploying Conjur OSS.
+        version: v1.3.7
+#      - name: cyberark/conjur-aws
+#        url: https://github.com/cyberark/conjur-aws
+#        description: AWS CloudFormation templates for deploying Conjur OSS.
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
     repos:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
-      - name: cyberark/conjur-api-dotnet
-        url: https://github.com/cyberark/conjur-api-dotnet
-        description: Conjur .Net Client Library
+        version: v6.2.0
+#      - name: cyberark/conjur-api-dotnet
+#        url: https://github.com/cyberark/conjur-api-dotnet
+#        description: Conjur .Net Client Library
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
@@ -37,3 +39,4 @@ section:
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
+        version: v5.3.1
