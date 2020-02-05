@@ -1,3 +1,4 @@
 #!/bin/bash -e
 
+npm install
 go run ./cmd/changelog-parser/ -f ./repositories.yml
