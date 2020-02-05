@@ -1,17 +1,17 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v3"
+
+	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 )
 
 type DescribedObject struct {
@@ -79,8 +79,6 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	request.Header.Add("Authorization", "token 725ae82aaf466b77aa3e1260cc3f93e64e2d29dc")
 
 	log.Printf("  Fetching %s release info...", releaseUrl)
 	response, err := client.Do(request)
@@ -201,82 +199,17 @@ func main() {
 		res += "## " + url + "\n"
 		res += changelog + "\n"
 	}
-	err = ioutil.WriteFile("tmpCHANGELOG.md", []byte(res), 0644)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
+
+	log.Println(res)
 
 	log.Printf("Changelog parser completed!")
-}
-
-// patterns
-var semverRgx = regexp.MustCompile(`\[?v?([\w\d.-]+\.[\w\d.-]+[a-zA-Z0-9])]?`)
-var dateRgx = regexp.MustCompile(`.*[ ](\d\d?\d?\d?[-/.]\d\d?[-/.]\d\d?\d?\d?).*`)
-
-func parseChangelog(changelog string) ([]*VersionChangelog, error) {
-	scanner := bufio.NewScanner(strings.NewReader(changelog))
-
-	var versionChangelog *VersionChangelog
-	var changeLogs []*VersionChangelog
-
-	for scanner.Scan() {
-		line := scanner.Text()
-
-		// skip line if it's a link label
-		match, _ := regexp.MatchString(`^\[[^[\]]*\] *?:`, line)
-		if match {
-			continue
-		}
-
-		// new version found!
-		match, _ = regexp.MatchString(`^##? ?[^#]`, line)
-		if match {
-			if versionChangelog != nil && versionChangelog.Title != "" && versionChangelog.Version != "" {
-				changeLogs = append(changeLogs, versionChangelog)
-			}
-
-			versionChangelog = &VersionChangelog{}
-
-			versionChangelog.Title = string(line)[2:]
-
-			version := semverRgx.FindStringSubmatch(line)
-			if len(version) == 0 {
-				continue
-			}
-			versionChangelog.Version = string(version[1])
-
-			date := dateRgx.FindStringSubmatch(versionChangelog.Title)
-			if len(date) == 0 {
-				continue
-			}
-			versionChangelog.Date = string(date[1])
-
-			continue
-		}
-
-		// accumulate current changelog's body
-		if versionChangelog != nil {
-			versionChangelog.Body += fmt.Sprintln(line)
-		}
-	}
-	err := scanner.Err()
-
-	return changeLogs, err
-}
-
-type VersionChangelog struct {
-	Version string
-	Title string
-	Date string
-	Body string
 }
 
 func extractVersionChangeLog(
 	changelog string,
 	version string,
 ) (string, error) {
-	versionChangelogs, err := parseChangelog(changelog)
+	versionChangelogs, err := changelogPkg.Parse(changelog)
 	if err != nil {
 		return "", err
 	}
