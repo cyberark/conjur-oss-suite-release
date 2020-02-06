@@ -192,17 +192,13 @@ func extractVersionChangeLog(
 func main() {
 	log.Printf("Starting changelog parser...")
 
-	var filename string
-	flag.StringVar(&filename, "f", "", "Repository YAML file to parse.")
+	var outputFilename, repositoryFilename string
+	flag.StringVar(&repositoryFilename, "f", "repositories.yml", "Repository YAML file to parse.")
+	flag.StringVar(&outputFilename, "o", "CHANGELOG.md", "Output file. Defaults to CHANGELOG.md")
 	flag.Parse()
 
-	if filename == "" {
-		log.Fatal("Please provide repository YAML file by using -f option")
-		return
-	}
-
 	log.Printf("Parsing linked repositories...")
-	repoConfig, err := parseLinkedRepositories(filename)
+	repoConfig, err := parseLinkedRepositories(repositoryFilename)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -215,10 +211,13 @@ func main() {
 		return
 	}
 
-	log.Printf("Changelogs")
-
 	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
-	log.Println(combinedChangelog)
+
+	log.Printf("Writing changelog to %s...", outputFilename)
+	err = ioutil.WriteFile(outputFilename, []byte(combinedChangelog.String()), 0644)
+	if err != nil {
+		panic(err)
+	}
 
 	log.Printf("Changelog parser completed!")
 }
