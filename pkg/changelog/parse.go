@@ -19,19 +19,24 @@ type VersionChangelog struct {
 // semantic versioning pattern
 // [a.b.c], e.g. 2.2.3-pre.1, 2.0.0-x.7.z.92, v1.3.0.
 const semverRgx = `\[?v?([\w\d.-]+\.[\w\d.-]+[a-zA-Z0-9])\]?`
+
 // date pattern.
 // YYYY-MM-DD (or DD.MM.YYYY, D/M/YY, etc.)
 const dateRgx = `.*[ ](\d\d?\d?\d?[-/.]\d\d?[-/.]\d\d?\d?\d?).*`
+
 // link label pattern
 // [a.b.c]: http://altavista.com
 const linkLabelRgx = `^\[[^[\]]*\] *?:`
+
 // version line pattern
 // ## x.y.z - YYYY-MM-DD (or DD.MM.YYYY, D/M/YY, etc.)
 const versionLineRgx = `^##? ?[^#]`
+
 // subhead pattern
 // ### meow
 // #### moo
 const subhead = "^###"
+
 // list item pattern
 // * list item 1
 // * list item 2
@@ -145,7 +150,7 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 				versionChangelog.Sections["_"] = append(
 					versionChangelog.Sections["_"],
 					line,
-					)
+				)
 
 				if activeSubheader != "" {
 					versionChangelog.Sections[activeSubheader] = append(
@@ -156,6 +161,14 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 			}
 		}
 	}
+
+	hasPendingChangelog := versionChangelog != nil
+	hasPendingChangelog = hasPendingChangelog && versionChangelog.Title != ""
+	hasPendingChangelog = hasPendingChangelog && versionChangelog.Version != ""
+	if hasPendingChangelog {
+		changeLogs = append(changeLogs, versionChangelog)
+	}
+
 	err := scanner.Err()
 
 	return changeLogs, err

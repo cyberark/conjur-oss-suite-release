@@ -11,10 +11,18 @@ type CombinedChangelog map[string][]string
 func (c CombinedChangelog) String() string {
 	res := ""
 
-	for section, sectionValues := range c {
+	var sections []string
+	for section := range c {
+		sections = append(sections, section)
+	}
+	sort.Strings(sections)
+
+	for _, section := range sections {
 		if section == "_" {
 			continue
 		}
+
+		sectionValues := c[section]
 
 		res = res + fmt.Sprintf("### %s\n", section)
 		for _, sectionValue := range sectionValues {
@@ -27,7 +35,7 @@ func (c CombinedChangelog) String() string {
 	return res
 }
 
-func NewCombinedChangelog(changelogs ...*VersionChangelog) CombinedChangelog  {
+func NewCombinedChangelog(changelogs ...*VersionChangelog) CombinedChangelog {
 	res := CombinedChangelog{}
 
 	sort.Slice(changelogs, func(i, j int) bool {
@@ -38,6 +46,10 @@ func NewCombinedChangelog(changelogs ...*VersionChangelog) CombinedChangelog  {
 		for section, sectionValues := range changelog.Sections {
 			// normalise section keys
 			section = strings.ToUpper(section)
+
+			if section == "_" {
+				continue
+			}
 
 			if _, ok := res[section]; !ok {
 				res[section] = []string{}

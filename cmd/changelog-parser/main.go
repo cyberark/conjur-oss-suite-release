@@ -175,6 +175,14 @@ func collectChangelogs(repoConfig YamlRepoConfig) (
 				return nil, err
 			}
 
+			if versionChangelog == nil {
+				log.Printf(
+					"  CHANGELOG not found for %s@%s",
+					repo.Name,
+					repo.Version,
+				)
+				continue
+			}
 			changelogs = append(changelogs, versionChangelog)
 		}
 	}
