@@ -8,10 +8,12 @@ import (
 )
 
 type VersionChangelog struct {
-	Version string
-	Title string
-	Date string
-	Body string
+	Repo     string
+	Version  string
+	Title    string
+	Date     string
+	Body     string
+	Sections map[string][]string
 }
 
 // semantic versioning pattern
@@ -26,6 +28,14 @@ const linkLabelRgx = `^\[[^[\]]*\] *?:`
 // version line pattern
 // ## x.y.z - YYYY-MM-DD (or DD.MM.YYYY, D/M/YY, etc.)
 const versionLineRgx = `^##? ?[^#]`
+// subhead pattern
+// ### meow
+// #### moo
+const subhead = "^###"
+// list item pattern
+// * list item 1
+// * list item 2
+const listitem = "^[*-]"
 
 // Parse extracts and returns a slice of changelogs, one for each version.
 // Parse assumes a changelog structured roughly like so:
@@ -63,11 +73,12 @@ const versionLineRgx = `^##? ?[^#]`
 // * init
 //
 // [a.b.c]: http://altavista.com
-func Parse(changelog string) ([]*VersionChangelog, error) {
+func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 	scanner := bufio.NewScanner(strings.NewReader(changelog))
 
 	var versionChangelog *VersionChangelog
 	var changeLogs []*VersionChangelog
+	var activeSubheader string
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -86,10 +97,16 @@ func Parse(changelog string) ([]*VersionChangelog, error) {
 				changeLogs = append(changeLogs, versionChangelog)
 			}
 
-			versionChangelog = &VersionChangelog{}
+			versionChangelog = &VersionChangelog{
+				Repo: repo,
+				Sections: map[string][]string{
+					"_": {},
+				},
+			}
+			activeSubheader = ""
 
 			// extract title
-			versionChangelog.Title = string(line)[2:]
+			versionChangelog.Title = strings.TrimSpace(string(line)[2:])
 
 			// extract version
 			version := regexp.MustCompile(semverRgx).FindStringSubmatch(line)
@@ -109,8 +126,34 @@ func Parse(changelog string) ([]*VersionChangelog, error) {
 		}
 
 		// accumulate pending changelog's body
-		if versionChangelog != nil {
-			versionChangelog.Body += fmt.Sprintln(line)
+		if versionChangelog != nil && strings.TrimSpace(line) != "" {
+			versionChangelog.Body += fmt.Sprintln(strings.TrimSpace(line))
+
+			if match := regexp.MustCompile(subhead).MatchString(line); match {
+				key := strings.TrimSpace(strings.Replace(line, "###", "", 1))
+
+				if _, ok := versionChangelog.Sections[key]; !ok {
+					versionChangelog.Sections[key] = []string{}
+					activeSubheader = key
+				}
+			}
+
+			if match := regexp.MustCompile(listitem).MatchString(line); match {
+				line := regexp.MustCompile(listitem).ReplaceAllString(line, "")
+				line = strings.TrimSpace(line)
+
+				versionChangelog.Sections["_"] = append(
+					versionChangelog.Sections["_"],
+					line,
+					)
+
+				if activeSubheader != "" {
+					versionChangelog.Sections[activeSubheader] = append(
+						versionChangelog.Sections[activeSubheader],
+						line,
+					)
+				}
+			}
 		}
 	}
 	err := scanner.Err()

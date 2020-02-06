@@ -130,8 +130,11 @@ func fetchChangelog(provider string, repo string, version string) (string, error
 	return string(contents), nil
 }
 
-func collectChangelogs(repoConfig YamlRepoConfig) (map[string]string, error) {
-	changelogs := map[string]string{}
+func collectChangelogs(repoConfig YamlRepoConfig) (
+	[]*changelogPkg.VersionChangelog,
+	error,
+) {
+	var changelogs []*changelogPkg.VersionChangelog
 	for _, category := range repoConfig.Section.Categories {
 		log.Printf("Processing category: %s", category.Name)
 		for _, repo := range category.Repos {
@@ -147,18 +150,22 @@ func collectChangelogs(repoConfig YamlRepoConfig) (map[string]string, error) {
 				repo.Version = version
 			}
 			// TODO: This should be somehow transformed from repo url
-			changelog, err := fetchChangelog("github", repo.Name, repo.Version)
+			completeChangelog, err := fetchChangelog("github", repo.Name, repo.Version)
 			if err != nil {
 				return nil, err
 			}
 
-			changelog, err = extractVersionChangeLog(changelog, repo.Version)
+			versionChangelog, err := extractVersionChangeLog(
+				repo.Name,
+				repo.Version,
+				completeChangelog,
+			)
 			if err != nil {
 				return nil, err
 			}
 
-			changelogs[repo.Url] = changelog
-			log.Printf("  Changelog size: %d", len(changelog))
+			changelogs = append(changelogs, versionChangelog)
+			log.Printf("  Changelog size: %d", len(changelogs))
 		}
 	}
 	return changelogs, nil
@@ -191,34 +198,28 @@ func main() {
 	}
 
 	log.Printf("Changelogs")
-	var res string
-	for url, changelog := range changelogs {
-		if strings.TrimSpace(changelog) == "" {
-			continue
-		}
-		res += "## " + url + "\n"
-		res += changelog + "\n"
-	}
 
-	log.Println(res)
+	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
+	log.Println(combinedChangelog)
 
 	log.Printf("Changelog parser completed!")
 }
 
 func extractVersionChangeLog(
-	changelog string,
+	repo string,
 	version string,
-) (string, error) {
-	versionChangelogs, err := changelogPkg.Parse(changelog)
+	changelog string,
+) (*changelogPkg.VersionChangelog, error) {
+	versionChangelogs, err := changelogPkg.Parse(repo, changelog)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	for _, versionChangelog := range versionChangelogs {
 		if strings.TrimPrefix(version, "v") == versionChangelog.Version {
-			return versionChangelog.Body, nil
+			return versionChangelog, nil
 		}
 	}
 
-	return "", nil
+	return nil, nil
 }

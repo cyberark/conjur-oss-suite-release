@@ -14,6 +14,10 @@ section:
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
         version: v1.3.7
+      - name: cyberark/secretless-broker
+        url: https://github.com/cyberark/secretless-broker
+        description: Secretless Broker is a connection broker which relieves client applications of the need to directly handle secrets to target services such as databases, web services, SSH connections, or any other TCP-based service.
+        version: v1.4.2
 #      - name: cyberark/conjur-aws
 #        url: https://github.com/cyberark/conjur-aws
 #        description: AWS CloudFormation templates for deploying Conjur OSS.
