@@ -165,7 +165,6 @@ func collectChangelogs(repoConfig YamlRepoConfig) (
 			}
 
 			changelogs = append(changelogs, versionChangelog)
-			log.Printf("  Changelog size: %d", len(changelogs))
 		}
 	}
 	return changelogs, nil
