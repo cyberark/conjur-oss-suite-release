@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v3"
 
@@ -43,6 +46,12 @@ type ReleaseInfo struct {
 	TagName string `json:"tag_name"`
 }
 
+type ChangelogTemplateData struct {
+	Version           string
+	Date              time.Time
+	CombinedChangelog string
+}
+
 var ProviderToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
 }
@@ -50,6 +59,8 @@ var ProviderToEndpointPrefix = map[string]string{
 var ProviderVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
+
+const ChangelogTemplatePath = "./templates/CHANGELOG.md.tmpl"
 
 func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
 	log.Printf("Reading %s...", filename)
@@ -213,10 +224,30 @@ func main() {
 
 	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
 
-	log.Printf("Writing changelog to %s...", outputFilename)
-	err = ioutil.WriteFile(outputFilename, []byte(combinedChangelog.String()), 0644)
+	templateData := ChangelogTemplateData{
+		// TODO: Figure out what the version is
+		// TODO: Should the date be something defined in yml or the date of tag?
+		Version:           "Unreleased",
+		Date:              time.Now(),
+		CombinedChangelog: combinedChangelog.String(),
+	}
+
+	// Open the target file
+	log.Printf("Opening '%s'...", outputFilename)
+	outputFile, err := os.Create(outputFilename)
 	if err != nil {
-		panic(err)
+		log.Printf("Error creating %s: %v", outputFilename, err)
+		os.Exit(1)
+	}
+	defer outputFile.Close()
+
+	// Generate and write the data to it
+	log.Printf("Generating '%s' file from template '%s'...", outputFilename, ChangelogTemplatePath)
+	tmpl := template.Must(template.ParseFiles(ChangelogTemplatePath))
+	err = tmpl.Execute(outputFile, templateData)
+	if err != nil {
+		log.Printf("Error running template '%s': %v", ChangelogTemplatePath, err)
+		os.Exit(1)
 	}
 
 	log.Printf("Changelog parser completed!")
