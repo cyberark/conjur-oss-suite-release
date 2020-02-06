@@ -170,6 +170,25 @@ func collectChangelogs(repoConfig YamlRepoConfig) (
 	return changelogs, nil
 }
 
+func extractVersionChangeLog(
+	repo string,
+	version string,
+	changelog string,
+) (*changelogPkg.VersionChangelog, error) {
+	versionChangelogs, err := changelogPkg.Parse(repo, changelog)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, versionChangelog := range versionChangelogs {
+		if strings.TrimPrefix(version, "v") == versionChangelog.Version {
+			return versionChangelog, nil
+		}
+	}
+
+	return nil, nil
+}
+
 func main() {
 	log.Printf("Starting changelog parser...")
 
@@ -202,23 +221,4 @@ func main() {
 	log.Println(combinedChangelog)
 
 	log.Printf("Changelog parser completed!")
-}
-
-func extractVersionChangeLog(
-	repo string,
-	version string,
-	changelog string,
-) (*changelogPkg.VersionChangelog, error) {
-	versionChangelogs, err := changelogPkg.Parse(repo, changelog)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, versionChangelog := range versionChangelogs {
-		if strings.TrimPrefix(version, "v") == versionChangelog.Version {
-			return versionChangelog, nil
-		}
-	}
-
-	return nil, nil
 }
