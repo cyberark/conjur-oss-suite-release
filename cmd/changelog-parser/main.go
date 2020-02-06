@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v3"
 
@@ -43,6 +46,12 @@ type ReleaseInfo struct {
 	TagName string `json:"tag_name"`
 }
 
+type ChangelogTemplateData struct {
+	Version           string
+	Date              time.Time
+	CombinedChangelog string
+}
+
 var ProviderToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
 }
@@ -50,6 +59,8 @@ var ProviderToEndpointPrefix = map[string]string{
 var ProviderVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
+
+const ChangelogTemplatePath = "./templates/CHANGELOG.md.tmpl"
 
 func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
 	log.Printf("Reading %s...", filename)
@@ -165,44 +176,9 @@ func collectChangelogs(repoConfig YamlRepoConfig) (
 			}
 
 			changelogs = append(changelogs, versionChangelog)
-			log.Printf("  Changelog size: %d", len(changelogs))
 		}
 	}
 	return changelogs, nil
-}
-
-func main() {
-	log.Printf("Starting changelog parser...")
-
-	var filename string
-	flag.StringVar(&filename, "f", "", "Repository YAML file to parse.")
-	flag.Parse()
-
-	if filename == "" {
-		log.Fatal("Please provide repository YAML file by using -f option")
-		return
-	}
-
-	log.Printf("Parsing linked repositories...")
-	repoConfig, err := parseLinkedRepositories(filename)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-
-	log.Printf("Collecting changelogs...")
-	changelogs, err := collectChangelogs(repoConfig)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-
-	log.Printf("Changelogs")
-
-	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
-	log.Println(combinedChangelog)
-
-	log.Printf("Changelog parser completed!")
 }
 
 func extractVersionChangeLog(
@@ -222,4 +198,57 @@ func extractVersionChangeLog(
 	}
 
 	return nil, nil
+}
+
+func main() {
+	log.Printf("Starting changelog parser...")
+
+	var outputFilename, repositoryFilename string
+	flag.StringVar(&repositoryFilename, "f", "repositories.yml", "Repository YAML file to parse.")
+	flag.StringVar(&outputFilename, "o", "CHANGELOG.md", "Output file. Defaults to CHANGELOG.md")
+	flag.Parse()
+
+	log.Printf("Parsing linked repositories...")
+	repoConfig, err := parseLinkedRepositories(repositoryFilename)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	log.Printf("Collecting changelogs...")
+	changelogs, err := collectChangelogs(repoConfig)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
+
+	templateData := ChangelogTemplateData{
+		// TODO: Figure out what the version is
+		// TODO: Should the date be something defined in yml or the date of tag?
+		Version:           "Unreleased",
+		Date:              time.Now(),
+		CombinedChangelog: combinedChangelog.String(),
+	}
+
+	// Open the target file
+	log.Printf("Opening '%s'...", outputFilename)
+	outputFile, err := os.Create(outputFilename)
+	if err != nil {
+		log.Printf("Error creating %s: %v", outputFilename, err)
+		os.Exit(1)
+	}
+	defer outputFile.Close()
+
+	// Generate and write the data to it
+	log.Printf("Generating '%s' file from template '%s'...", outputFilename, ChangelogTemplatePath)
+	tmpl := template.Must(template.ParseFiles(ChangelogTemplatePath))
+	err = tmpl.Execute(outputFile, templateData)
+	if err != nil {
+		log.Printf("Error running template '%s': %v", ChangelogTemplatePath, err)
+		os.Exit(1)
+	}
+
+	log.Printf("Changelog parser completed!")
 }
