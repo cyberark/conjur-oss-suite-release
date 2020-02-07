@@ -1,12 +1,15 @@
 name: Test
-on: [push]
+on: [push, pull_request]
+
+env:
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
 jobs:
-
   test:
-    name: Test
+    name: Unit Tests
     runs-on: ubuntu-latest
-    steps:
 
+    steps:
     - name: Set up Go 1.13
       uses: actions/setup-go@v1
       with:
@@ -16,5 +19,21 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Test
-      run: go test -v -count=1 ./...
+    - name: Set BRANCH_NAME
+      run: echo "::set-env name=GIT_BRANCH::${GITHUB_REF#refs/heads/}"
+
+    - name: Prepare CC for reporting data
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+
+    - name: Run Tests
+      run: go test -v -coverprofile=c.out -count=1 ./...
+
+    - name: Submit CC Report
+      run: |
+        # cc-test-reporter doesn't work OOTB w/ Go modules
+        # https://github.com/codeclimate/test-reporter/issues/378
+        export PREFIX="$(go list -m)"
+        ./cc-test-reporter after-build -p "$PREFIX"
