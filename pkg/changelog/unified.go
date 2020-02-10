@@ -45,7 +45,7 @@ func NewUnifiedChangelog(changelogs ...*VersionChangelog) UnifiedChangelog {
 	for _, changelog := range changelogs {
 		for section, sectionValues := range changelog.Sections {
 			// normalise section keys
-			section = strings.ToUpper(section)
+			section = strings.Title(strings.ToLower(section))
 
 			if section == "_" {
 				continue

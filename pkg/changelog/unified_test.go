@@ -8,11 +8,11 @@ import (
 
 func TestNewUnifiedChangelog(t *testing.T) {
 	expected := UnifiedChangelog{
-		"ADDED": {
+		"Added": {
 			"`x-repo@x-version`: add 1",
 			"`y-repo@y-version`: add 2",
 		},
-		"CHANGED": {
+		"Changed": {
 			"`x-repo@x-version`: change 1",
 			"`x-repo@x-version`: change 2",
 			"`y-repo@y-version`: change 3",
@@ -62,11 +62,11 @@ func TestNewUnifiedChangelog(t *testing.T) {
 }
 
 func TestUnifiedChangelog_String(t *testing.T) {
-	expected := `### ADDED
+	expected := `### Added
 - ` + "`x-repo@x-version`" + `: add 1
 - ` + "`y-repo@y-version`" + `: add 2
 
-### CHANGED
+### Changed
 - ` + "`x-repo@x-version`" + `: change 1
 - ` + "`x-repo@x-version`" + `: change 2
 - ` + "`y-repo@y-version`" + `: change 3
@@ -74,11 +74,11 @@ func TestUnifiedChangelog_String(t *testing.T) {
 
 `
 	actual := UnifiedChangelog{
-		"ADDED": {
+		"Added": {
 			"`x-repo@x-version`: add 1",
 			"`y-repo@y-version`: add 2",
 		},
-		"CHANGED": {
+		"Changed": {
 			"`x-repo@x-version`: change 1",
 			"`x-repo@x-version`: change 2",
 			"`y-repo@y-version`: change 3",
