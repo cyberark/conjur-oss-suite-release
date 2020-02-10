@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewCombinedChangelog(t *testing.T) {
-	expected := CombinedChangelog{
+func TestNewUnifiedChangelog(t *testing.T) {
+	expected := UnifiedChangelog{
 		"ADDED": {
 			"`x-repo@x-version`: add 1",
 			"`y-repo@y-version`: add 2",
@@ -19,23 +19,23 @@ func TestNewCombinedChangelog(t *testing.T) {
 			"`y-repo@y-version`: change 4",
 		},
 	}
-	actual := NewCombinedChangelog(
+	actual := NewUnifiedChangelog(
 		&VersionChangelog{
-			Repo: "x-repo",
+			Repo:    "x-repo",
 			Version: "x-version",
 			Sections: map[string][]string{
-				"ADded": {"add 1"},
+				"ADded":   {"add 1"},
 				"Changed": {"change 1", "change 2"},
-				"_": {"add 1", "change 1", "change 2"},
+				"_":       {"add 1", "change 1", "change 2"},
 			},
 		},
 		&VersionChangelog{
-			Repo: "y-repo",
+			Repo:    "y-repo",
 			Version: "y-version",
 			Sections: map[string][]string{
-				"Added": {"add 2"},
+				"Added":   {"add 2"},
 				"changed": {"change 3", "change 4"},
-				"_": {"add 2", "change 3", "change 4"},
+				"_":       {"add 2", "change 3", "change 4"},
 			},
 		},
 	)
@@ -43,8 +43,8 @@ func TestNewCombinedChangelog(t *testing.T) {
 	assert.EqualValues(t, expected, actual)
 }
 
-func TestCombinedChangelog_String(t *testing.T) {
-	expected :=`### ADDED
+func TestUnifiedChangelog_String(t *testing.T) {
+	expected := `### ADDED
 - ` + "`x-repo@x-version`" + `: add 1
 - ` + "`y-repo@y-version`" + `: add 2
 
@@ -55,7 +55,7 @@ func TestCombinedChangelog_String(t *testing.T) {
 - ` + "`y-repo@y-version`" + `: change 4
 
 `
-	actual := CombinedChangelog{
+	actual := UnifiedChangelog{
 		"ADDED": {
 			"`x-repo@x-version`: add 1",
 			"`y-repo@y-version`: add 2",
@@ -67,7 +67,6 @@ func TestCombinedChangelog_String(t *testing.T) {
 			"`y-repo@y-version`: change 4",
 		},
 	}.String()
-
 
 	assert.EqualValues(t, expected, actual)
 }

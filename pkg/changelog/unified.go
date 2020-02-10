@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-type CombinedChangelog map[string][]string
+type UnifiedChangelog map[string][]string
 
-func (c CombinedChangelog) String() string {
+func (c UnifiedChangelog) String() string {
 	res := ""
 
 	var sections []string
@@ -35,8 +35,8 @@ func (c CombinedChangelog) String() string {
 	return res
 }
 
-func NewCombinedChangelog(changelogs ...*VersionChangelog) CombinedChangelog {
-	res := CombinedChangelog{}
+func NewUnifiedChangelog(changelogs ...*VersionChangelog) UnifiedChangelog {
+	res := UnifiedChangelog{}
 
 	sort.Slice(changelogs, func(i, j int) bool {
 		return changelogs[i].Repo < changelogs[j].Repo

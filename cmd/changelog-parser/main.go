@@ -46,10 +46,10 @@ type ReleaseInfo struct {
 	TagName string `json:"tag_name"`
 }
 
-type ChangelogTemplateData struct {
-	Version           string
-	Date              time.Time
-	CombinedChangelog string
+type UnifiedChangelogTemplateData struct {
+	Version          string
+	Date             time.Time
+	UnifiedChangelog string
 }
 
 var ProviderToEndpointPrefix = map[string]string{
@@ -60,7 +60,7 @@ var ProviderVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
 
-const ChangelogTemplatePath = "./templates/CHANGELOG.md.tmpl"
+const UnifiedChangelogTemplatePath = "./templates/CHANGELOG_unified.md.tmpl"
 
 func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
 	log.Printf("Reading %s...", filename)
@@ -230,14 +230,14 @@ func main() {
 		return
 	}
 
-	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
+	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
-	templateData := ChangelogTemplateData{
+	templateData := UnifiedChangelogTemplateData{
 		// TODO: Figure out what the version is
 		// TODO: Should the date be something defined in yml or the date of tag?
-		Version:           "Unreleased",
-		Date:              time.Now(),
-		CombinedChangelog: combinedChangelog.String(),
+		Version:          "Unreleased",
+		Date:             time.Now(),
+		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
 	// Open the target file
@@ -250,11 +250,11 @@ func main() {
 	defer outputFile.Close()
 
 	// Generate and write the data to it
-	log.Printf("Generating '%s' file from template '%s'...", outputFilename, ChangelogTemplatePath)
-	tmpl := template.Must(template.ParseFiles(ChangelogTemplatePath))
+	log.Printf("Generating '%s' file from template '%s'...", outputFilename, UnifiedChangelogTemplatePath)
+	tmpl := template.Must(template.ParseFiles(UnifiedChangelogTemplatePath))
 	err = tmpl.Execute(outputFile, templateData)
 	if err != nil {
-		log.Printf("Error running template '%s': %v", ChangelogTemplatePath, err)
+		log.Printf("Error running template '%s': %v", UnifiedChangelogTemplatePath, err)
 		os.Exit(1)
 	}
 
