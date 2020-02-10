@@ -24,18 +24,36 @@ func TestNewUnifiedChangelog(t *testing.T) {
 			Repo:    "x-repo",
 			Version: "x-version",
 			Sections: map[string][]string{
-				"ADded":   {"add 1"},
-				"Changed": {"change 1", "change 2"},
-				"_":       {"add 1", "change 1", "change 2"},
+				"ADded": {
+					"add 1",
+				},
+				"Changed": {
+					"change 1",
+					"change 2",
+				},
+				"_": {
+					"add 1",
+					"change 1",
+					"change 2",
+				},
 			},
 		},
 		&VersionChangelog{
 			Repo:    "y-repo",
 			Version: "y-version",
 			Sections: map[string][]string{
-				"Added":   {"add 2"},
-				"changed": {"change 3", "change 4"},
-				"_":       {"add 2", "change 3", "change 4"},
+				"Added": {
+					"add 2",
+				},
+				"changed": {
+					"change 3",
+					"change 4",
+				},
+				"_": {
+					"add 2",
+					"change 3",
+					"change 4",
+				},
 			},
 		},
 	)
