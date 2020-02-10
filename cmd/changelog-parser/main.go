@@ -15,6 +15,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
 )
 
 type DescribedObject struct {
@@ -40,10 +41,6 @@ type Section struct {
 
 type YamlRepoConfig struct {
 	Section Section
-}
-
-type ReleaseInfo struct {
-	TagName string `json:"tag_name"`
 }
 
 type UnifiedChangelogTemplateData struct {
@@ -104,7 +101,7 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 		return "", fmt.Errorf("code %d: %s: %s", response.StatusCode, releaseUrl, contents)
 	}
 
-	var releaseInfo = ReleaseInfo{}
+	var releaseInfo = github.ReleaseInfo{}
 	err = json.Unmarshal(contents, &releaseInfo)
 	if err != nil {
 		return "", err
