@@ -57,6 +57,10 @@ var ProviderVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
 
+const DefaultOutputFilename = "CHANGELOG.md"
+const DefaultRepositoryFilename = "repositories.yml"
+const DefaultVersionString = "Unreleased"
+
 const UnifiedChangelogTemplatePath = "./templates/CHANGELOG_unified.md.tmpl"
 
 func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
@@ -208,9 +212,13 @@ func extractVersionChangeLog(
 func main() {
 	log.Printf("Starting changelog parser...")
 
-	var outputFilename, repositoryFilename string
-	flag.StringVar(&repositoryFilename, "f", "repositories.yml", "Repository YAML file to parse.")
-	flag.StringVar(&outputFilename, "o", "CHANGELOG.md", "Output file. Defaults to CHANGELOG.md")
+	var outputFilename, repositoryFilename, version string
+	flag.StringVar(&repositoryFilename, "f", DefaultRepositoryFilename,
+		"Repository YAML file to parse")
+	flag.StringVar(&outputFilename, "o", DefaultOutputFilename,
+		"Output filename")
+	flag.StringVar(&version, "v", DefaultVersionString,
+		"Version to embed in the changelog")
 	flag.Parse()
 
 	log.Printf("Parsing linked repositories...")
@@ -230,9 +238,9 @@ func main() {
 	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
 	templateData := UnifiedChangelogTemplateData{
-		// TODO: Figure out what the version is
+		// TODO: Version should probably be read from some file
 		// TODO: Should the date be something defined in yml or the date of tag?
-		Version:          "Unreleased",
+		Version:          version,
 		Date:             time.Now(),
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
