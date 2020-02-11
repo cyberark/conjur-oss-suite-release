@@ -87,8 +87,13 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 		// Handle list-item found anywhere along version > section > list-item
 		case *ast.ListItem:
 			insideListItem = entering
+
+			// On entering list-item node under version section, reset list-item buffer
 			if entering {
 				listItemBuffer = ""
+
+			// On exiting list-item node under version section, populate changelog with
+			// list-item by reading list-item buffer
 			} else {
 				if _, ok := versionChangelog.Sections[sectionBuffer]; !ok {
 					versionChangelog.Sections[sectionBuffer] = []string{}
@@ -118,6 +123,8 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 				txt = fmt.Sprintf("](%s)", string(n.Destination))
 			}
 
+			// Populate relevant buffer with relevant component of link's textual
+			// representation
 			switch {
 			case insideSection:
 				sectionBuffer += txt
@@ -136,6 +143,7 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 			case len("##"):
 				insideVersion = entering
 
+				// On entering version header node, initialise changelog
 				if entering {
 					versionChangelog = &VersionChangelog{
 						Repo: repo,
@@ -144,8 +152,9 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 					versionBuffer = ""
 
 					changelogs = append(changelogs, versionChangelog)
-				} else {
 
+				// On exiting version header node, populate changelog
+				} else {
 					// Extract version
 					version := regexp.MustCompile(semverRgx).FindStringSubmatch(versionBuffer)
 					if len(version) == 0 {
@@ -160,9 +169,12 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 					}
 					versionChangelog.Date = string(date[1])
 				}
+
 			// Handle section under version
 			case len("###"):
 				insideSection = entering
+
+				// On entering section node under version header, reset section buffer
 				if entering {
 					sectionBuffer = ""
 				}
