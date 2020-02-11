@@ -15,6 +15,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
 )
 
 type DescribedObject struct {
@@ -42,14 +43,10 @@ type YamlRepoConfig struct {
 	Section Section
 }
 
-type ReleaseInfo struct {
-	TagName string `json:"tag_name"`
-}
-
-type ChangelogTemplateData struct {
-	Version           string
-	Date              time.Time
-	CombinedChangelog string
+type UnifiedChangelogTemplateData struct {
+	Version          string
+	Date             time.Time
+	UnifiedChangelog string
 }
 
 var ProviderToEndpointPrefix = map[string]string{
@@ -60,7 +57,11 @@ var ProviderVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
 
-const ChangelogTemplatePath = "./templates/CHANGELOG.md.tmpl"
+const DefaultOutputFilename = "CHANGELOG.md"
+const DefaultRepositoryFilename = "repositories.yml"
+const DefaultVersionString = "Unreleased"
+
+const UnifiedChangelogTemplatePath = "./templates/CHANGELOG_unified.md.tmpl"
 
 func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
 	log.Printf("Reading %s...", filename)
@@ -104,7 +105,7 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 		return "", fmt.Errorf("code %d: %s: %s", response.StatusCode, releaseUrl, contents)
 	}
 
-	var releaseInfo = ReleaseInfo{}
+	var releaseInfo = github.ReleaseInfo{}
 	err = json.Unmarshal(contents, &releaseInfo)
 	if err != nil {
 		return "", err
@@ -211,9 +212,13 @@ func extractVersionChangeLog(
 func main() {
 	log.Printf("Starting changelog parser...")
 
-	var outputFilename, repositoryFilename string
-	flag.StringVar(&repositoryFilename, "f", "repositories.yml", "Repository YAML file to parse.")
-	flag.StringVar(&outputFilename, "o", "CHANGELOG.md", "Output file. Defaults to CHANGELOG.md")
+	var outputFilename, repositoryFilename, version string
+	flag.StringVar(&repositoryFilename, "f", DefaultRepositoryFilename,
+		"Repository YAML file to parse")
+	flag.StringVar(&outputFilename, "o", DefaultOutputFilename,
+		"Output filename")
+	flag.StringVar(&version, "v", DefaultVersionString,
+		"Version to embed in the changelog")
 	flag.Parse()
 
 	log.Printf("Parsing linked repositories...")
@@ -230,14 +235,14 @@ func main() {
 		return
 	}
 
-	combinedChangelog := changelogPkg.NewCombinedChangelog(changelogs...)
+	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
-	templateData := ChangelogTemplateData{
-		// TODO: Figure out what the version is
+	templateData := UnifiedChangelogTemplateData{
+		// TODO: Version should probably be read from some file
 		// TODO: Should the date be something defined in yml or the date of tag?
-		Version:           "Unreleased",
-		Date:              time.Now(),
-		CombinedChangelog: combinedChangelog.String(),
+		Version:          version,
+		Date:             time.Now(),
+		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
 	// Open the target file
@@ -250,11 +255,11 @@ func main() {
 	defer outputFile.Close()
 
 	// Generate and write the data to it
-	log.Printf("Generating '%s' file from template '%s'...", outputFilename, ChangelogTemplatePath)
-	tmpl := template.Must(template.ParseFiles(ChangelogTemplatePath))
+	log.Printf("Generating '%s' file from template '%s'...", outputFilename, UnifiedChangelogTemplatePath)
+	tmpl := template.Must(template.ParseFiles(UnifiedChangelogTemplatePath))
 	err = tmpl.Execute(outputFile, templateData)
 	if err != nil {
-		log.Printf("Error running template '%s': %v", ChangelogTemplatePath, err)
+		log.Printf("Error running template '%s': %v", UnifiedChangelogTemplatePath, err)
 		os.Exit(1)
 	}
 
