@@ -2,7 +2,6 @@ package changelog
 
 import (
 	"bufio"
-	"fmt"
 	"regexp"
 	"strings"
 )
@@ -82,7 +81,7 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 	scanner := bufio.NewScanner(strings.NewReader(changelog))
 
 	var versionChangelog *VersionChangelog
-	var changeLogs []*VersionChangelog
+	var changelogs []*VersionChangelog
 	var activeSubheader string
 
 	for scanner.Scan() {
@@ -95,19 +94,14 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 
 		// new version found!
 		if match, _ := regexp.MatchString(versionLineRgx, line); match {
-			hasPendingChangelog := versionChangelog != nil
-			hasPendingChangelog = hasPendingChangelog && versionChangelog.Title != ""
-			hasPendingChangelog = hasPendingChangelog && versionChangelog.Version != ""
-			if hasPendingChangelog {
-				changeLogs = append(changeLogs, versionChangelog)
-			}
-
 			versionChangelog = &VersionChangelog{
 				Repo: repo,
 				Sections: map[string][]string{
 					"_": {},
 				},
 			}
+			changelogs = append(changelogs, versionChangelog)
+
 			activeSubheader = ""
 
 			// extract title
@@ -132,7 +126,10 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 
 		// accumulate pending changelog's body
 		if versionChangelog != nil && strings.TrimSpace(line) != "" {
-			versionChangelog.Body += fmt.Sprintln(strings.TrimSpace(line))
+			if versionChangelog.Body != "" {
+				versionChangelog.Body += "\n"
+			}
+			versionChangelog.Body += line
 
 			if match := regexp.MustCompile(subhead).MatchString(line); match {
 				key := strings.TrimSpace(strings.Replace(line, "###", "", 1))
@@ -162,14 +159,23 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 		}
 	}
 
-	hasPendingChangelog := versionChangelog != nil
-	hasPendingChangelog = hasPendingChangelog && versionChangelog.Title != ""
-	hasPendingChangelog = hasPendingChangelog && versionChangelog.Version != ""
-	if hasPendingChangelog {
-		changeLogs = append(changeLogs, versionChangelog)
+	// select valid changes with in-place filter
+	n := 0
+	for _, changelog := range changelogs {
+		if isValidChangelog(changelog) {
+			changelogs[n] = changelog
+			n++
+		}
 	}
+	changelogs = changelogs[:n]
 
 	err := scanner.Err()
 
-	return changeLogs, err
+	return changelogs, err
+}
+
+func isValidChangelog(versionChangelog *VersionChangelog) bool {
+	return versionChangelog != nil &&
+			versionChangelog.Title != "" &&
+			versionChangelog.Version != ""
 }

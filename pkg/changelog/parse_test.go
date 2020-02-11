@@ -32,8 +32,7 @@ func TestParseSimpleChangelog(t *testing.T) {
 - add 1
 ### Changed
 - change 1
-- change 2
-`,
+- change 2`,
 		Sections: map[string][]string{
 			"Added": {
 				"add 1",
@@ -57,9 +56,14 @@ func TestComplexChangelog(t *testing.T) {
 		return
 	}
 
-	t.Skip("TODO: Fix implementation to make this test pass")
-	return
 
+	assert.Equal(t, changelogs[0].Body, `### Changed
+- K8s hosts' application identity is extracted from annotations or id. If it is
+  defined in annotations it will taken from there and if not, it will be taken
+  from the id.
+- Another change ABC!@#$%`)
+
+	return
 	assert.Equal(t, changelogs[0], &VersionChangelog{
 		Repo:    "test-repo",
 		Version: "1.4.6",
