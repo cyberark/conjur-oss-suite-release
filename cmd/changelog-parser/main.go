@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -16,6 +14,7 @@ import (
 
 	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/template"
 )
 
 type DescribedObject struct {
@@ -245,22 +244,12 @@ func main() {
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
-	// Open the target file
-	log.Printf("Opening '%s'...", outputFilename)
-	outputFile, err := os.Create(outputFilename)
+	err = template.WriteChangelog(UnifiedChangelogTemplatePath,
+		templateData,
+		outputFilename)
 	if err != nil {
-		log.Printf("Error creating %s: %v", outputFilename, err)
-		os.Exit(1)
-	}
-	defer outputFile.Close()
-
-	// Generate and write the data to it
-	log.Printf("Generating '%s' file from template '%s'...", outputFilename, UnifiedChangelogTemplatePath)
-	tmpl := template.Must(template.ParseFiles(UnifiedChangelogTemplatePath))
-	err = tmpl.Execute(outputFile, templateData)
-	if err != nil {
-		log.Printf("Error running template '%s': %v", UnifiedChangelogTemplatePath, err)
-		os.Exit(1)
+		log.Fatal(err)
+		return
 	}
 
 	log.Printf("Changelog parser completed!")
