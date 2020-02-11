@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/gomarkdown/markdown/ast"
+	markdownparser "github.com/gomarkdown/markdown/parser"
 )
+
 
 type VersionChangelog struct {
 	Repo     string
 	Version  string
-	Title    string
 	Date     string
-	Body     string
 	Sections map[string][]string
 }
 
@@ -24,26 +26,8 @@ const semverRgx = `\[?v?([\w\d.-]+\.[\w\d.-]+[a-zA-Z0-9])\]?`
 // YYYY-MM-DD (or DD.MM.YYYY, D/M/YY, etc.)
 const dateRgx = `.*[ ](\d\d?\d?\d?[-/.]\d\d?[-/.]\d\d?\d?\d?).*`
 
-// link label pattern
-// [a.b.c]: http://altavista.com
-const linkLabelRgx = `^\[[^[\]]*\] *?:`
-
-// version line pattern
-// ## x.y.z - YYYY-MM-DD (or DD.MM.YYYY, D/M/YY, etc.)
-const versionLineRgx = `^##? ?[^#]`
-
-// subhead pattern
-// ### meow
-// #### moo
-const subhead = "^###"
-
-// list item pattern
-// * list item 1
-// * list item 2
-const listitem = "^[*-]"
-
 // Parse extracts and returns a slice of changelogs, one for each version.
-// Parse assumes a changelog structured roughly like so:
+// Parse assumes a changelog in the [keep a changelog](https://keepachangelog.com/) format:
 //
 // # changelog title
 //
@@ -82,94 +66,124 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 	scanner := bufio.NewScanner(strings.NewReader(changelog))
 
 	var versionChangelog *VersionChangelog
-	var changeLogs []*VersionChangelog
-	var activeSubheader string
+	var changelogs []*VersionChangelog
 
-	for scanner.Scan() {
-		line := scanner.Text()
+	parser := markdownparser.New()
+	rootNode := parser.Parse([]byte(changelog))
 
-		// skip line if it's a link label!
-		if match, _ := regexp.MatchString(linkLabelRgx, line); match {
-			continue
-		}
+	// state-machine state
+	var insideVersion = false
+	var insideSection = false
+	var insideListItem = false
 
-		// new version found!
-		if match, _ := regexp.MatchString(versionLineRgx, line); match {
-			hasPendingChangelog := versionChangelog != nil
-			hasPendingChangelog = hasPendingChangelog && versionChangelog.Title != ""
-			hasPendingChangelog = hasPendingChangelog && versionChangelog.Version != ""
-			if hasPendingChangelog {
-				changeLogs = append(changeLogs, versionChangelog)
-			}
+	// Buffers used to extract values spanning multiple AST nodes
+	var versionBuffer = ""
+	var sectionBuffer = ""
+	var listItemBuffer = ""
 
-			versionChangelog = &VersionChangelog{
-				Repo: repo,
-				Sections: map[string][]string{
-					"_": {},
-				},
-			}
-			activeSubheader = ""
-
-			// extract title
-			versionChangelog.Title = strings.TrimSpace(string(line)[2:])
-
-			// extract version
-			version := regexp.MustCompile(semverRgx).FindStringSubmatch(line)
-			if len(version) == 0 {
-				continue
-			}
-			versionChangelog.Version = string(version[1])
-
-			// extract date
-			date := regexp.MustCompile(dateRgx).FindStringSubmatch(line)
-			if len(date) == 0 {
-				continue
-			}
-			versionChangelog.Date = string(date[1])
-
-			continue
-		}
-
-		// accumulate pending changelog's body
-		if versionChangelog != nil && strings.TrimSpace(line) != "" {
-			versionChangelog.Body += fmt.Sprintln(strings.TrimSpace(line))
-
-			if match := regexp.MustCompile(subhead).MatchString(line); match {
-				key := strings.TrimSpace(strings.Replace(line, "###", "", 1))
-
-				if _, ok := versionChangelog.Sections[key]; !ok {
-					versionChangelog.Sections[key] = []string{}
-					activeSubheader = key
+	// Extract changelog versions
+	ast.WalkFunc(rootNode, func(node ast.Node, entering bool) ast.WalkStatus {
+		switch n := node.(type) {
+		// Handle list-item found anywhere along version > section > list-item
+		case *ast.ListItem:
+			insideListItem = entering
+			if entering {
+				listItemBuffer = ""
+			} else {
+				if _, ok := versionChangelog.Sections[sectionBuffer]; !ok {
+					versionChangelog.Sections[sectionBuffer] = []string{}
 				}
-			}
 
-			if match := regexp.MustCompile(listitem).MatchString(line); match {
-				line := regexp.MustCompile(listitem).ReplaceAllString(line, "")
-				line = strings.TrimSpace(line)
-
-				versionChangelog.Sections["_"] = append(
-					versionChangelog.Sections["_"],
-					line,
+				versionChangelog.Sections[sectionBuffer] = append(
+					versionChangelog.Sections[sectionBuffer],
+					string(listItemBuffer),
 				)
+			}
+		// Handle text
+		case *ast.Text:
+			switch {
+			case insideVersion:
+				versionBuffer += string(n.Literal)
+			case insideSection:
+				sectionBuffer += string(n.Literal)
+			case insideListItem:
+				listItemBuffer += string(n.Literal)
+			}
+		// Handle link found anywhere along version > section > list-item
+		case *ast.Link:
+			txt := ""
+			if entering {
+				txt = "["
+			} else {
+				txt = fmt.Sprintf("](%s)", string(n.Destination))
+			}
 
-				if activeSubheader != "" {
-					versionChangelog.Sections[activeSubheader] = append(
-						versionChangelog.Sections[activeSubheader],
-						line,
-					)
+			switch {
+			case insideSection:
+				sectionBuffer += txt
+			case insideListItem:
+				listItemBuffer += txt
+			case insideVersion:
+				// Do nothing.
+				// This avoids having destination as part of the versionBuffer. This is
+				// because the link regex doesn't expect the link destination to be
+				// present.
+			}
+		// Handle heading
+		case *ast.Heading:
+			switch n.Level {
+			// Handle version
+			case len("##"):
+				insideVersion = entering
+
+				if entering {
+					versionChangelog = &VersionChangelog{
+						Repo: repo,
+						Sections: map[string][]string{},
+					}
+					versionBuffer = ""
+
+					changelogs = append(changelogs, versionChangelog)
+				} else {
+
+					// Extract version
+					version := regexp.MustCompile(semverRgx).FindStringSubmatch(versionBuffer)
+					if len(version) == 0 {
+						break
+					}
+					versionChangelog.Version = string(version[1])
+
+					// Extract date
+					date := regexp.MustCompile(dateRgx).FindStringSubmatch(versionBuffer)
+					if len(date) == 0 {
+						break
+					}
+					versionChangelog.Date = string(date[1])
+				}
+			// Handle section under version
+			case len("###"):
+				insideSection = entering
+				if entering {
+					sectionBuffer = ""
 				}
 			}
 		}
-	}
 
-	hasPendingChangelog := versionChangelog != nil
-	hasPendingChangelog = hasPendingChangelog && versionChangelog.Title != ""
-	hasPendingChangelog = hasPendingChangelog && versionChangelog.Version != ""
-	if hasPendingChangelog {
-		changeLogs = append(changeLogs, versionChangelog)
+		return ast.GoToNext
+	})
+
+	// Select valid changelogs only, using in-place filter
+	// A valid changelog is one that has a non-empty version.
+	n := 0
+	for _, changelog := range changelogs {
+		if changelog != nil && changelog.Version != "" {
+			changelogs[n] = changelog
+			n++
+		}
 	}
+	changelogs = changelogs[:n]
 
 	err := scanner.Err()
 
-	return changeLogs, err
+	return changelogs, err
 }
