@@ -3,7 +3,7 @@ Latest stable releases of the Conjur OSS suite
 
 **THIS REPO IS UNDER CONSTRUCTION, AND THERE ARE NO SUITE RELEASES AVAILABLE YET**
 
-> For more info on the planned work, please see our [design doc](https://github.com/cyberark/conjur/blob/master/design/oss_suite_release.md)
+For more info on the planned work, please see our [design doc](https://github.com/cyberark/conjur/blob/master/design/oss_suite_release.md)
 > and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-release/issues).
 
 #### This repo's metrics:
