@@ -48,3 +48,57 @@ $$$
 
 	assert.Equal(t, string(outputFileContent), expectedOutput)
 }
+
+func TestWriteChangelogDestinationOpenError(t *testing.T) {
+	// Bad path
+	outputFile := "doesnotexist/foo"
+	testObj := struct{}{}
+
+	err := WriteChangelog("testdata/test.tmpl", testObj, outputFile)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(t, err,
+		"Error creating doesnotexist/foo: "+
+			"open doesnotexist/foo: no such file or directory")
+}
+
+func TestWriteChangelogTemplateOpenError(t *testing.T) {
+	dir, err := ioutil.TempDir("", "changelog_test")
+	if !assert.NoError(t, err) {
+		return
+	}
+	defer os.RemoveAll(dir)
+
+	outputFile := filepath.Join(dir, "output.txt")
+	testObj := struct{}{}
+
+	err = WriteChangelog("doesnotexist", testObj, outputFile)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(t, err, "Could not read template 'doesnotexist'")
+}
+
+func TestWriteChangelogTemplateResolutionError(t *testing.T) {
+	dir, err := ioutil.TempDir("", "changelog_test")
+	if !assert.NoError(t, err) {
+		return
+	}
+	defer os.RemoveAll(dir)
+
+	outputFile := filepath.Join(dir, "output.txt")
+	testObj := struct{}{}
+
+	err = WriteChangelog("testdata/test.tmpl", testObj, outputFile)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(t, err,
+		"Error running template 'testdata/test.tmpl': "+
+			"template: test.tmpl:2:3: executing \"test.tmpl\" at <.StringField>: "+
+			"can't evaluate field StringField in type struct {}")
+}

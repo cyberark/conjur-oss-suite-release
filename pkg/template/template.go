@@ -11,6 +11,11 @@ func WriteChangelog(templatePath string,
 	templateData interface{},
 	outputPath string) error {
 
+	// Sanity check
+	if _, err := os.Stat(templatePath); err != nil {
+		return fmt.Errorf("Could not read template '%s'", templatePath)
+	}
+
 	// Open the target file
 	log.Printf("Opening '%s'...", outputPath)
 	outputFile, err := os.Create(outputPath)
