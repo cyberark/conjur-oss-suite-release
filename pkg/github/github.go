@@ -1,5 +1,6 @@
 package github
 
 type ReleaseInfo struct {
-	TagName string `json:"tag_name"`
+	Description string `json:"body"`
+	TagName     string `json:"tag_name"`
 }
