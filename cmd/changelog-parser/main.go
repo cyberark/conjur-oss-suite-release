@@ -15,6 +15,7 @@ import (
 	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/template"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/version"
 )
 
 type DescribedObject struct {
@@ -57,6 +58,10 @@ var ProviderVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
 
+var ProviderReleasesTemplate = map[string]string{
+	"github": "https://api.github.com/repos/%s/releases",
+}
+
 const DefaultOutputFilename = "CHANGELOG.md"
 const DefaultRepositoryFilename = "repositories.yml"
 const DefaultVersionString = "Unreleased"
@@ -92,7 +97,7 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 		return "", err
 	}
 
-	log.Printf("  Fetching %s release info...", releaseUrl)
+	log.Printf("  Fetching %s info...", releaseUrl)
 	response, err := client.Do(request)
 
 	defer response.Body.Close()
@@ -111,7 +116,7 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 		return "", err
 	}
 
-	log.Printf("  'latest' -> '%s'", releaseInfo.TagName)
+	log.Printf("  'latest' resolved as '%s'", releaseInfo.TagName)
 
 	return releaseInfo.TagName, nil
 }
@@ -142,6 +147,46 @@ func fetchChangelog(provider string, repo string, version string) (string, error
 	return string(contents), nil
 }
 
+// https://api.github.com/repos/cyberark/secretless-broker/releases
+func getAvailableReleases(provider string, repo string) ([]string, error) {
+	client := &http.Client{}
+
+	releasesUrl := fmt.Sprintf(ProviderReleasesTemplate[provider], repo)
+	request, err := http.NewRequest("GET", releasesUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("  Fetching %s info...", releasesUrl)
+	response, err := client.Do(request)
+
+	defer response.Body.Close()
+	contents, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.StatusCode >= 300 {
+		return nil, fmt.Errorf("code %d: %s: %s", response.StatusCode, releasesUrl, contents)
+	}
+
+	var releases = []github.ReleaseInfo{}
+	err = json.Unmarshal(contents, &releases)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert ReleaseInfo array to an array of just the version strings
+	releaseVersions := make([]string, len(releases))
+	for index, release := range releases {
+		releaseVersions[index] = release.TagName
+	}
+
+	log.Printf("  Available versions: [%s]", strings.Join(releaseVersions, ", "))
+
+	return releaseVersions, nil
+}
+
 func collectChangelogs(repoConfig YamlRepoConfig) (
 	[]*changelogPkg.VersionChangelog,
 	error,
@@ -161,30 +206,51 @@ func collectChangelogs(repoConfig YamlRepoConfig) (
 
 				repo.Version = version
 			}
+
+			availableVersions, err := getAvailableReleases("github", repo.Name)
+			if err != nil {
+				return nil, err
+			}
+
+			relevantVersions, err := version.GetRelevantVersions(
+				availableVersions,
+				repo.AfterVersion,
+				repo.Version,
+			)
+			if err != nil {
+				return nil, err
+			}
+
+			log.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
+
 			// TODO: This should be somehow transformed from repo url
 			completeChangelog, err := fetchChangelog("github", repo.Name, repo.Version)
 			if err != nil {
 				return nil, err
 			}
 
-			versionChangelog, err := extractVersionChangeLog(
-				repo.Name,
-				repo.Version,
-				completeChangelog,
-			)
-			if err != nil {
-				return nil, err
-			}
-
-			if versionChangelog == nil {
-				log.Printf(
-					"  CHANGELOG not found for %s@%s",
+			// XXX: This still doesn't address releases and how we include that data in yet.
+			for _, relevantVersion := range relevantVersions {
+				log.Printf("  Extracting changelog data from %s...", relevantVersion)
+				versionChangelog, err := extractVersionChangeLog(
 					repo.Name,
-					repo.Version,
+					relevantVersion,
+					completeChangelog,
 				)
-				continue
+				if err != nil {
+					return nil, err
+				}
+
+				if versionChangelog == nil {
+					log.Printf(
+						"  CHANGELOG not found for %s@%s",
+						repo.Name,
+						relevantVersion,
+					)
+					continue
+				}
+				changelogs = append(changelogs, versionChangelog)
 			}
-			changelogs = append(changelogs, versionChangelog)
 		}
 	}
 	return changelogs, nil
@@ -235,10 +301,12 @@ func main() {
 		return
 	}
 
+	// TODO: Same-repo changelogs with different versions should be sorted
+	//       in descending order and not ascending one.
 	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
 	templateData := UnifiedChangelogTemplateData{
-		// TODO: Version should probably be read from some file
+		// TODO: Suite version should probably be read from some file
 		// TODO: Should the date be something defined in yml or the date of tag?
 		Version:          version,
 		Date:             time.Now(),
