@@ -15,7 +15,7 @@ var versionFixtureData = []string{
 	"v0.1.3",
 }
 
-func TestGetRelevantVersionsWithComplexVersions(t *testing.T) {
+func TestGetRelevantVersions(t *testing.T) {
 	relevantVersions, err := GetRelevantVersions(versionFixtureData, "v0.1.3", "v1.3.4")
 	if !assert.NoError(t, err) {
 		return
@@ -56,6 +56,34 @@ func TestGetRelevantVersionsWithSameVersion(t *testing.T) {
 		"v1.20.0",
 	}
 	relevantVersions, err := GetRelevantVersions(versions, "v1.3.3", "v1.3.3")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, []string{"v1.3.3"}, relevantVersions)
+}
+
+func TestGetRelevantVersionsWithOnlyLowVersion(t *testing.T) {
+	versions := []string{
+		"v1.3.4",
+		"v1.3.3",
+		"v1.20.0",
+	}
+	relevantVersions, err := GetRelevantVersions(versions, "v1.3.3", "")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, []string{"v1.3.3"}, relevantVersions)
+}
+
+func TestGetRelevantVersionsWithOnlyHighVersion(t *testing.T) {
+	versions := []string{
+		"v1.3.4",
+		"v1.3.3",
+		"v1.20.0",
+	}
+	relevantVersions, err := GetRelevantVersions(versions, "", "v1.3.3")
 	if !assert.NoError(t, err) {
 		return
 	}

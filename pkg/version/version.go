@@ -1,16 +1,14 @@
 package version
 
 import (
+	"strings"
+
 	"github.com/coreos/go-semver/semver"
 )
 
 func versionFromString(versionStr string) (*semver.Version, error) {
 	// Strip the 'v' from the beginning, if present
-	if versionStr[0] == 'v' {
-		versionStr = versionStr[1:]
-	}
-
-	return semver.NewVersion(versionStr)
+	return semver.NewVersion(strings.TrimPrefix(versionStr, "v"))
 }
 
 // GetRelevantVersions sorts and returns the list of versions from highest
@@ -19,6 +17,16 @@ func versionFromString(versionStr string) (*semver.Version, error) {
 func GetRelevantVersions(availVersionsStr []string,
 	startVersionStr string,
 	endVersionStr string) ([]string, error) {
+
+	// Allow specifying `""` as a low version
+	if startVersionStr == "" {
+		startVersionStr = endVersionStr
+	}
+
+	// Allow specifying `""` as a high version
+	if endVersionStr == "" {
+		endVersionStr = startVersionStr
+	}
 
 	// Parse the higher limit version from the provided string
 	highVersion, err := versionFromString(endVersionStr)
