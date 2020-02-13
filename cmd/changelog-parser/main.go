@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"strings"
 	"time"
 
@@ -14,6 +13,7 @@ import (
 
 	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/http"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/template"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/version"
 )
@@ -89,25 +89,10 @@ func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases/latest
 func latestVersionToExactVersion(provider string, repo string) (string, error) {
-	client := &http.Client{}
-
 	releaseUrl := fmt.Sprintf(ProviderVersionResolutionTemplate[provider], repo)
-	request, err := http.NewRequest("GET", releaseUrl, nil)
+	contents, err := http.Get(releaseUrl)
 	if err != nil {
 		return "", err
-	}
-
-	log.Printf("  Fetching %s info...", releaseUrl)
-	response, err := client.Do(request)
-
-	defer response.Body.Close()
-	contents, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return "", err
-	}
-
-	if response.StatusCode >= 300 {
-		return "", fmt.Errorf("code %d: %s: %s", response.StatusCode, releaseUrl, contents)
 	}
 
 	var releaseInfo = github.ReleaseInfo{}
@@ -122,52 +107,22 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 }
 
 func fetchChangelog(provider string, repo string, version string) (string, error) {
-	client := &http.Client{}
-
 	// `https://raw.githubusercontent.com/cyberark/secretless-broker/master/CHANGELOG.md`
 	changelogUrl := fmt.Sprintf("%s/%s/%s/CHANGELOG.md", ProviderToEndpointPrefix[provider], repo, version)
-	request, err := http.NewRequest("GET", changelogUrl, nil)
+	changelog, err := http.Get(changelogUrl)
 	if err != nil {
 		return "", err
 	}
 
-	log.Printf("  Fetching %s...", changelogUrl)
-	response, err := client.Do(request)
-
-	defer response.Body.Close()
-	contents, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return "", err
-	}
-
-	if response.StatusCode >= 300 {
-		return "", fmt.Errorf("code %d: %s: %s", response.StatusCode, changelogUrl, contents)
-	}
-
-	return string(contents), nil
+	return string(changelog), nil
 }
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases
 func getAvailableReleases(provider string, repo string) ([]string, error) {
-	client := &http.Client{}
-
 	releasesUrl := fmt.Sprintf(ProviderReleasesTemplate[provider], repo)
-	request, err := http.NewRequest("GET", releasesUrl, nil)
+	contents, err := http.Get(releasesUrl)
 	if err != nil {
 		return nil, err
-	}
-
-	log.Printf("  Fetching %s info...", releasesUrl)
-	response, err := client.Do(request)
-
-	defer response.Body.Close()
-	contents, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	if response.StatusCode >= 300 {
-		return nil, fmt.Errorf("code %d: %s: %s", response.StatusCode, releasesUrl, contents)
 	}
 
 	var releases = []github.ReleaseInfo{}
