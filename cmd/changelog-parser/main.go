@@ -26,6 +26,7 @@ type Repository struct {
 	DescribedObject `yaml:",inline"`
 	Url             string
 	Version         string `yaml:omitempty`
+	AfterVersion    string `yaml:"after",omitempty`
 }
 
 type Category struct {
