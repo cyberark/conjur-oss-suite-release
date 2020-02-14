@@ -9,7 +9,10 @@ import (
 
 func Get(url string) ([]byte, error) {
 	client := &stdlibHttp.Client{}
+	return GetWithOptions(url, client)
+}
 
+func GetWithOptions(url string, client *stdlibHttp.Client) ([]byte, error) {
 	request, err := stdlibHttp.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -17,8 +20,12 @@ func Get(url string) ([]byte, error) {
 
 	log.Printf("  Fetching %s...", url)
 	response, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
 
 	defer response.Body.Close()
+
 	contents, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
