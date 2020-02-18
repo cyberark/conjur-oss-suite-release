@@ -5,6 +5,25 @@ env:
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
 jobs:
+  linting:
+    name: Code Linting
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Run Linter
+      run: |
+        go get -u golang.org/x/lint/golint
+        $HOME/go/bin/golint -set_exit_status ./cmd/... ./pkg/...
+
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
