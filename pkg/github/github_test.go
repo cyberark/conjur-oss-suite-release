@@ -10,13 +10,13 @@ import (
 )
 
 func TestReleaseParsing(t *testing.T) {
-	releaseJson, err := ioutil.ReadFile("testdata/release_v3.json")
+	releaseJSON, err := ioutil.ReadFile("testdata/release_v3.json")
 	if !assert.NoError(t, err) {
 		return
 	}
 
 	var releaseInfo = ReleaseInfo{}
-	err = json.Unmarshal(releaseJson, &releaseInfo)
+	err = json.Unmarshal(releaseJSON, &releaseInfo)
 	if !assert.NoError(t, err) {
 		return
 	}
@@ -31,13 +31,13 @@ func TestReleaseParsing(t *testing.T) {
 }
 
 func TestReleasesParsing(t *testing.T) {
-	releaseJson, err := ioutil.ReadFile("testdata/releases_v3.json")
+	releaseJSON, err := ioutil.ReadFile("testdata/releases_v3.json")
 	if !assert.NoError(t, err) {
 		return
 	}
 
 	var releases = []ReleaseInfo{}
-	err = json.Unmarshal(releaseJson, &releases)
+	err = json.Unmarshal(releaseJSON, &releases)
 	if !assert.NoError(t, err) {
 		return
 	}

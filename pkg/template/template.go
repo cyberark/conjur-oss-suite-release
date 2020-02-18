@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+// WriteChangelog uses a combination of the template path and a data structure
+// to create an output file based on that template.
 func WriteChangelog(templatePath string,
 	templateData interface{},
 	outputPath string) error {

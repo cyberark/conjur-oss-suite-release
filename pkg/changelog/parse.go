@@ -10,7 +10,7 @@ import (
 	markdownparser "github.com/gomarkdown/markdown/parser"
 )
 
-
+// VersionChangelog contains a full changelog for a version of a repo
 type VersionChangelog struct {
 	Repo     string
 	Version  string
@@ -88,13 +88,12 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 		case *ast.ListItem:
 			insideListItem = entering
 
-			// On entering list-item node under version section, reset list-item buffer
 			if entering {
+				// On entering list-item node under version section, reset list-item buffer
 				listItemBuffer = ""
-
-			// On exiting list-item node under version section, populate changelog with
-			// list-item by reading list-item buffer
 			} else {
+				// On exiting list-item node under version section, populate changelog with
+				// list-item by reading list-item buffer
 				if _, ok := versionChangelog.Sections[sectionBuffer]; !ok {
 					versionChangelog.Sections[sectionBuffer] = []string{}
 				}
@@ -143,18 +142,19 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 			case len("##"):
 				insideVersion = entering
 
-				// On entering version header node, initialise changelog
 				if entering {
+					// On entering version header node, initialise changelog
 					versionChangelog = &VersionChangelog{
-						Repo: repo,
+						Repo:     repo,
 						Sections: map[string][]string{},
 					}
 					versionBuffer = ""
 
 					changelogs = append(changelogs, versionChangelog)
 
-				// On exiting version header node, populate changelog
 				} else {
+					// On exiting version header node, populate changelog
+
 					// Extract version
 					version := regexp.MustCompile(semverRgx).FindStringSubmatch(versionBuffer)
 					if len(version) == 0 {

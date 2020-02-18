@@ -1,0 +1,14 @@
+engines:
+  golint:
+    enabled: true
+    exclude_patterns:
+    - "**/"                # exclude all
+    - "!./cmd/"            # unexclude just the ones we want to lint
+    - "!./pkg/"
+
+  gofmt:
+    enabled: true
+
+  shellcheck:
+    enabled: true
+

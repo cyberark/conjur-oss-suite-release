@@ -18,70 +18,70 @@ import (
 	"github.com/cyberark/conjur-oss-suite-release/pkg/version"
 )
 
-type DescribedObject struct {
+type describedObject struct {
 	Name        string
 	Description string
 }
 
-type Repository struct {
-	DescribedObject `yaml:",inline"`
-	Url             string
+type repository struct {
+	describedObject `yaml:",inline"`
+	URL             string
 	Version         string `yaml:omitempty`
 	AfterVersion    string `yaml:"after",omitempty`
 }
 
-type Category struct {
-	DescribedObject `yaml:",inline"`
-	Repos           []Repository
+type category struct {
+	describedObject `yaml:",inline"`
+	Repos           []repository
 }
 
-type Section struct {
-	DescribedObject `yaml:",inline"`
-	Categories      []Category
+type section struct {
+	describedObject `yaml:",inline"`
+	Categories      []category
 }
 
-type YamlRepoConfig struct {
-	Section Section
+type yamlRepoConfig struct {
+	Section section
 }
 
-type UnifiedChangelogTemplateData struct {
+type unifiedChangelogTemplateData struct {
 	Version          string
 	Date             time.Time
 	UnifiedChangelog string
 }
 
-var ProviderToEndpointPrefix = map[string]string{
+var providerToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
 }
 
-var ProviderVersionResolutionTemplate = map[string]string{
+var providerVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
 
-var ProviderReleasesTemplate = map[string]string{
+var providerReleasesTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases",
 }
 
-const DefaultOutputFilename = "CHANGELOG.md"
-const DefaultRepositoryFilename = "repositories.yml"
-const DefaultVersionString = "Unreleased"
+const defaultOutputFilename = "CHANGELOG.md"
+const defaultRepositoryFilename = "repositories.yml"
+const defaultVersionString = "Unreleased"
 
-const UnifiedChangelogTemplatePath = "./templates/CHANGELOG_unified.md.tmpl"
+const unifiedChangelogTemplatePath = "./templates/CHANGELOG_unified.md.tmpl"
 
-func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
+func parseLinkedRepositories(filename string) (yamlRepoConfig, error) {
 	log.Printf("Reading %s...", filename)
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return YamlRepoConfig{},
-			fmt.Errorf("Error reading YAML file: %s\n", err)
+		return yamlRepoConfig{},
+			fmt.Errorf("error reading YAML file: %s", err)
 	}
 
 	log.Printf("Unmarshaling data...")
-	var repoConfig YamlRepoConfig
+	var repoConfig yamlRepoConfig
 	err = yaml.Unmarshal(yamlFile, &repoConfig)
 	if err != nil {
-		return YamlRepoConfig{},
-			fmt.Errorf("Error reading YAML file: %s\n", err)
+		return yamlRepoConfig{},
+			fmt.Errorf("error reading YAML file: %s", err)
 	}
 
 	return repoConfig, nil
@@ -89,8 +89,8 @@ func parseLinkedRepositories(filename string) (YamlRepoConfig, error) {
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases/latest
 func latestVersionToExactVersion(provider string, repo string) (string, error) {
-	releaseUrl := fmt.Sprintf(ProviderVersionResolutionTemplate[provider], repo)
-	contents, err := http.Get(releaseUrl)
+	releaseURL := fmt.Sprintf(providerVersionResolutionTemplate[provider], repo)
+	contents, err := http.Get(releaseURL)
 	if err != nil {
 		return "", err
 	}
@@ -108,8 +108,8 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 
 func fetchChangelog(provider string, repo string, version string) (string, error) {
 	// `https://raw.githubusercontent.com/cyberark/secretless-broker/master/CHANGELOG.md`
-	changelogUrl := fmt.Sprintf("%s/%s/%s/CHANGELOG.md", ProviderToEndpointPrefix[provider], repo, version)
-	changelog, err := http.Get(changelogUrl)
+	changelogURL := fmt.Sprintf("%s/%s/%s/CHANGELOG.md", providerToEndpointPrefix[provider], repo, version)
+	changelog, err := http.Get(changelogURL)
 	if err != nil {
 		return "", err
 	}
@@ -119,8 +119,8 @@ func fetchChangelog(provider string, repo string, version string) (string, error
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases
 func getAvailableReleases(provider string, repo string) ([]string, error) {
-	releasesUrl := fmt.Sprintf(ProviderReleasesTemplate[provider], repo)
-	contents, err := http.Get(releasesUrl)
+	releasesURL := fmt.Sprintf(providerReleasesTemplate[provider], repo)
+	contents, err := http.Get(releasesURL)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +142,7 @@ func getAvailableReleases(provider string, repo string) ([]string, error) {
 	return releaseVersions, nil
 }
 
-func collectChangelogs(repoConfig YamlRepoConfig) (
+func collectChangelogs(repoConfig yamlRepoConfig) (
 	[]*changelogPkg.VersionChangelog,
 	error,
 ) {
@@ -234,11 +234,11 @@ func main() {
 	log.Printf("Starting changelog parser...")
 
 	var outputFilename, repositoryFilename, version string
-	flag.StringVar(&repositoryFilename, "f", DefaultRepositoryFilename,
+	flag.StringVar(&repositoryFilename, "f", defaultRepositoryFilename,
 		"Repository YAML file to parse")
-	flag.StringVar(&outputFilename, "o", DefaultOutputFilename,
+	flag.StringVar(&outputFilename, "o", defaultOutputFilename,
 		"Output filename")
-	flag.StringVar(&version, "v", DefaultVersionString,
+	flag.StringVar(&version, "v", defaultVersionString,
 		"Version to embed in the changelog")
 	flag.Parse()
 
@@ -260,7 +260,7 @@ func main() {
 	//       in descending order and not ascending one.
 	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
-	templateData := UnifiedChangelogTemplateData{
+	templateData := unifiedChangelogTemplateData{
 		// TODO: Suite version should probably be read from some file
 		// TODO: Should the date be something defined in yml or the date of tag?
 		Version:          version,
@@ -268,7 +268,7 @@ func main() {
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
-	err = template.WriteChangelog(UnifiedChangelogTemplatePath,
+	err = template.WriteChangelog(unifiedChangelogTemplatePath,
 		templateData,
 		outputFilename)
 	if err != nil {

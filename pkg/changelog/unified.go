@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// UnifiedChangelog is a map of repos to their changelog sections
 type UnifiedChangelog map[string][]string
 
 func (c UnifiedChangelog) String() string {
@@ -35,6 +36,8 @@ func (c UnifiedChangelog) String() string {
 	return res
 }
 
+// NewUnifiedChangelog creates a unified changelog from varios per-version and
+// per-repo changelogs
 func NewUnifiedChangelog(changelogs ...*VersionChangelog) UnifiedChangelog {
 	res := UnifiedChangelog{}
 
