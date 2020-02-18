@@ -47,6 +47,7 @@ type yamlRepoConfig struct {
 type unifiedChangelogTemplateData struct {
 	Version          string
 	Date             time.Time
+	Changelogs       []*changelogPkg.VersionChangelog
 	UnifiedChangelog string
 }
 
@@ -62,11 +63,15 @@ var providerReleasesTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases",
 }
 
+var outputTypeTemplates = map[string]string{
+	"changelog": "templates/CHANGELOG_unified.md.tmpl",
+	"release":   "templates/RELEASE_NOTES_unified.md.tmpl",
+}
+
 const defaultOutputFilename = "CHANGELOG.md"
+const defaultOutputType = "changelog"
 const defaultRepositoryFilename = "repositories.yml"
 const defaultVersionString = "Unreleased"
-
-const unifiedChangelogTemplatePath = "./templates/CHANGELOG_unified.md.tmpl"
 
 func parseLinkedRepositories(filename string) (yamlRepoConfig, error) {
 	log.Printf("Reading %s...", filename)
@@ -233,14 +238,21 @@ func extractVersionChangeLog(
 func main() {
 	log.Printf("Starting changelog parser...")
 
-	var outputFilename, repositoryFilename, version string
+	var outputFilename, outputType, repositoryFilename, version string
 	flag.StringVar(&repositoryFilename, "f", defaultRepositoryFilename,
 		"Repository YAML file to parse")
+	flag.StringVar(&outputType, "t", defaultOutputType,
+		"Output type. Only accepts 'changelog' and 'release'.")
 	flag.StringVar(&outputFilename, "o", defaultOutputFilename,
 		"Output filename")
 	flag.StringVar(&version, "v", defaultVersionString,
 		"Version to embed in the changelog")
 	flag.Parse()
+
+	if _, ok := outputTypeTemplates[outputType]; !ok {
+		log.Fatal(fmt.Errorf("%s is not a valid output type", outputType))
+		return
+	}
 
 	log.Printf("Parsing linked repositories...")
 	repoConfig, err := parseLinkedRepositories(repositoryFilename)
@@ -265,10 +277,11 @@ func main() {
 		// TODO: Should the date be something defined in yml or the date of tag?
 		Version:          version,
 		Date:             time.Now(),
+		Changelogs:       changelogs,
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
-	err = template.WriteChangelog(unifiedChangelogTemplatePath,
+	err = template.WriteChangelog(outputTypeTemplates[outputType],
 		templateData,
 		outputFilename)
 	if err != nil {

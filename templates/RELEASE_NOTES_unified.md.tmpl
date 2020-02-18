@@ -1,0 +1,13 @@
+# Release Notes
+All notable changes to this project will be documented in this file.
+
+## [{{ .Version }}] - {{ .Date.Format "2006-01-02" }}
+{{ range .Changelogs }}
+### Changes to '{{ .Repo }}@{{ .Version}}' ({{ .Date }}) since last release
+{{ range $sectionKey, $sectionValues := .Sections }}
+#### {{ $sectionKey }}
+{{- range $sectionItem := $sectionValues }}
+- {{ $sectionItem -}}
+{{ end }}
+{{ end }}
+{{- end }}
