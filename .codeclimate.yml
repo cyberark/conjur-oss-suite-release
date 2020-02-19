@@ -5,6 +5,7 @@ engines:
     - "**/"                # exclude all
     - "!./cmd/"            # unexclude just the ones we want to lint
     - "!./pkg/"
+    - "!./templates/"
 
   gofmt:
     enabled: true
