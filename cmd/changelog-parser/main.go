@@ -93,9 +93,9 @@ func parseLinkedRepositories(filename string) (yamlRepoConfig, error) {
 }
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases/latest
-func latestVersionToExactVersion(provider string, repo string) (string, error) {
+func latestVersionToExactVersion(client *http.Client, provider string, repo string) (string, error) {
 	releaseURL := fmt.Sprintf(providerVersionResolutionTemplate[provider], repo)
-	contents, err := http.Get(releaseURL)
+	contents, err := client.Get(releaseURL)
 	if err != nil {
 		return "", err
 	}
@@ -111,10 +111,16 @@ func latestVersionToExactVersion(provider string, repo string) (string, error) {
 	return releaseInfo.TagName, nil
 }
 
-func fetchChangelog(provider string, repo string, version string) (string, error) {
+func fetchChangelog(
+	client *http.Client,
+	provider string,
+	repo string,
+	version string,
+) (string, error) {
+
 	// `https://raw.githubusercontent.com/cyberark/secretless-broker/master/CHANGELOG.md`
 	changelogURL := fmt.Sprintf("%s/%s/%s/CHANGELOG.md", providerToEndpointPrefix[provider], repo, version)
-	changelog, err := http.Get(changelogURL)
+	changelog, err := client.Get(changelogURL)
 	if err != nil {
 		return "", err
 	}
@@ -123,9 +129,9 @@ func fetchChangelog(provider string, repo string, version string) (string, error
 }
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases
-func getAvailableReleases(provider string, repo string) ([]string, error) {
+func getAvailableReleases(client *http.Client, provider string, repo string) ([]string, error) {
 	releasesURL := fmt.Sprintf(providerReleasesTemplate[provider], repo)
-	contents, err := http.Get(releasesURL)
+	contents, err := client.Get(releasesURL)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +153,7 @@ func getAvailableReleases(provider string, repo string) ([]string, error) {
 	return releaseVersions, nil
 }
 
-func collectChangelogs(repoConfig yamlRepoConfig) (
+func collectChangelogs(repoConfig yamlRepoConfig, httpClient *http.Client) (
 	[]*changelogPkg.VersionChangelog,
 	error,
 ) {
@@ -159,7 +165,7 @@ func collectChangelogs(repoConfig yamlRepoConfig) (
 
 			if repo.Version == "" {
 				// TODO: This should be somehow transformed from repo url
-				version, err := latestVersionToExactVersion("github", repo.Name)
+				version, err := latestVersionToExactVersion(httpClient, "github", repo.Name)
 				if err != nil {
 					return nil, err
 				}
@@ -167,7 +173,7 @@ func collectChangelogs(repoConfig yamlRepoConfig) (
 				repo.Version = version
 			}
 
-			availableVersions, err := getAvailableReleases("github", repo.Name)
+			availableVersions, err := getAvailableReleases(httpClient, "github", repo.Name)
 			if err != nil {
 				return nil, err
 			}
@@ -184,7 +190,7 @@ func collectChangelogs(repoConfig yamlRepoConfig) (
 			log.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
 
 			// TODO: This should be somehow transformed from repo url
-			completeChangelog, err := fetchChangelog("github", repo.Name, repo.Version)
+			completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, repo.Version)
 			if err != nil {
 				return nil, err
 			}
@@ -238,7 +244,7 @@ func extractVersionChangeLog(
 func main() {
 	log.Printf("Starting changelog parser...")
 
-	var outputFilename, outputType, repositoryFilename, version string
+	var apiToken, outputFilename, outputType, repositoryFilename, version string
 	flag.StringVar(&repositoryFilename, "f", defaultRepositoryFilename,
 		"Repository YAML file to parse")
 	flag.StringVar(&outputType, "t", defaultOutputType,
@@ -247,6 +253,8 @@ func main() {
 		"Output filename")
 	flag.StringVar(&version, "v", defaultVersionString,
 		"Version to embed in the changelog")
+	flag.StringVar(&apiToken, "p", "",
+		"GitHub API token")
 	flag.Parse()
 
 	if _, ok := outputTypeTemplates[outputType]; !ok {
@@ -262,7 +270,10 @@ func main() {
 	}
 
 	log.Printf("Collecting changelogs...")
-	changelogs, err := collectChangelogs(repoConfig)
+	httpClient := http.NewClient()
+	httpClient.AuthToken = apiToken
+
+	changelogs, err := collectChangelogs(repoConfig, httpClient)
 	if err != nil {
 		log.Fatal(err)
 		return
