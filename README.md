@@ -18,6 +18,22 @@ and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-rel
 ```
 - Resulting changelog will be placed in `CHANGELOG.md`
 
+## Advanced usage
+
+The CLI accepts the following arguments/parameters:
+```
+  -f string
+        Repository YAML file to parse (default "repositories.yml")
+  -o string
+        Output filename (default "CHANGELOG.md")
+  -p string
+        GitHub API token
+  -t string
+        Output type. Only accepts 'changelog' and 'release'. (default "changelog")
+  -v string
+        Version to embed in the changelog (default "Unreleased")
+```
+
 ## Development
 We welcome contributions of all kinds. For instructions on how to get started and
 descriptions of our development workflows, please see our [contributing guide](CONTRIBUTING.md).

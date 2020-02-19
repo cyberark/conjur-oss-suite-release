@@ -13,11 +13,35 @@ func TestHttpClientGet(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		assert.Equal(t, req.URL.String(), testPath)
+		assert.Equal(t, req.Header.Get("Authorization"), "")
 		rw.Write([]byte("Page Content"))
 	}))
 	defer server.Close()
 
-	content, err := GetWithOptions(server.URL+testPath, server.Client())
+	client := NewClient()
+	content, err := client.Get(server.URL + testPath)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, []byte("Page Content"), content)
+}
+
+func TestHttpClientGetTokenSupport(t *testing.T) {
+	testPath := "/foo/bar"
+	githubToken := "myapikey"
+
+	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		assert.Equal(t, req.URL.String(), testPath)
+		assert.Equal(t, req.Header.Get("Authorization"), "token "+githubToken)
+		rw.Write([]byte("Page Content"))
+	}))
+	defer server.Close()
+
+	client := NewClient()
+	client.AuthToken = githubToken
+
+	content, err := client.Get(server.URL + testPath)
 	if !assert.NoError(t, err) {
 		return
 	}
@@ -26,7 +50,8 @@ func TestHttpClientGet(t *testing.T) {
 }
 
 func TestHttpClientGetRequestUrlProblem(t *testing.T) {
-	_, err := Get("zzz")
+	client := NewClient()
+	_, err := client.Get("zzz")
 	if !assert.Error(t, err) {
 		return
 	}
@@ -42,7 +67,8 @@ func TestHttpClientGetRequestBadStatusCode(t *testing.T) {
 	}))
 	defer server.Close()
 
-	_, err := GetWithOptions(server.URL+testPath, server.Client())
+	client := NewClient()
+	_, err := client.Get(server.URL + testPath)
 	if !assert.Error(t, err) {
 		return
 	}
