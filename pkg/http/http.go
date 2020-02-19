@@ -7,19 +7,32 @@ import (
 	stdlibHttp "net/http"
 )
 
-// Get retrieves the content of a URL
-func Get(url string) ([]byte, error) {
-	client := &stdlibHttp.Client{}
-	return GetWithOptions(url, client)
+// Client is a wrapper around stdlibHttp client but with added storage for
+// an auth token
+type Client struct {
+	*stdlibHttp.Client
+	AuthToken string
 }
 
-// GetWithOptions retrieves the content of a URL but with the
-// ability to also specify a client which is useful for mocking
-// and tests
-func GetWithOptions(url string, client *stdlibHttp.Client) ([]byte, error) {
+// NewClient creates a Client with an initialized parent stdlibHttp.Client
+// object
+func NewClient() *Client {
+	return &Client{
+		&stdlibHttp.Client{},
+		"",
+	}
+}
+
+// Get retrieves the content of a URL
+func (client *Client) Get(url string) ([]byte, error) {
 	request, err := stdlibHttp.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
+	}
+
+	// Add API auth token if one is provided
+	if client.AuthToken != "" {
+		request.Header.Add("Authorization", "token "+client.AuthToken)
 	}
 
 	log.Printf("  Fetching %s...", url)
