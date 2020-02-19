@@ -5,7 +5,19 @@ import (
 	stdlibTemplate "html/template"
 	"log"
 	"os"
+	"time"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 )
+
+// UnifiedChangelogTemplateData stores all the data needed for generation of
+// templates
+type UnifiedChangelogTemplateData struct {
+	Version          string
+	Date             time.Time
+	Changelogs       []*changelog.VersionChangelog
+	UnifiedChangelog string
+}
 
 // WriteChangelog uses a combination of the template path and a data structure
 // to create an output file based on that template.

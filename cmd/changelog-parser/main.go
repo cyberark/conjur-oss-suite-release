@@ -44,13 +44,6 @@ type yamlRepoConfig struct {
 	Section section
 }
 
-type unifiedChangelogTemplateData struct {
-	Version          string
-	Date             time.Time
-	Changelogs       []*changelogPkg.VersionChangelog
-	UnifiedChangelog string
-}
-
 var providerToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
 }
@@ -272,7 +265,7 @@ func main() {
 	//       in descending order and not ascending one.
 	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
-	templateData := unifiedChangelogTemplateData{
+	templateData := template.UnifiedChangelogTemplateData{
 		// TODO: Suite version should probably be read from some file
 		// TODO: Should the date be something defined in yml or the date of tag?
 		Version:          version,
