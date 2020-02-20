@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 on: [push, pull_request]
 
 env:
@@ -6,7 +6,7 @@ env:
 
 jobs:
   test:
-    name: Unit Tests
+    name: Tests
     runs-on: ubuntu-latest
 
     steps:

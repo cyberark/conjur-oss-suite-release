@@ -61,10 +61,16 @@ $ ./parse-changelog
 
 - Docker
 
-### Running tests
+### Running all tests
 
 ```sh-session
-$ go test -v ./pkg/... ./cmd/...
+$ go test -v ./...
+```
+
+### Running only unit (short) tests
+
+```sh-session
+$ go test -v -short ./...
 ```
 
 ## Releasing
