@@ -1,5 +1,16 @@
 name: Tests
-on: [push, pull_request]
+on:
+  # Only run this on pushes to master
+  push:
+    branches:
+    - master
+
+  # And when PRs operations are done
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
 
 env:
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
