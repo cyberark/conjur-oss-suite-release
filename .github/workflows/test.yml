@@ -1,12 +1,23 @@
-name: Test
-on: [push, pull_request]
+name: Tests
+on:
+  # Only run this on pushes to master
+  push:
+    branches:
+    - master
+
+  # And when PRs operations are done
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
 
 env:
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
 jobs:
   test:
-    name: Unit Tests
+    name: Tests
     runs-on: ubuntu-latest
 
     steps:

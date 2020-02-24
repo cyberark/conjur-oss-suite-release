@@ -18,6 +18,15 @@ import (
 	"github.com/cyberark/conjur-oss-suite-release/pkg/version"
 )
 
+type cliOptions struct {
+	APIToken           string
+	Date               time.Time
+	OutputFilename     string
+	OutputType         string
+	RepositoryFilename string
+	Version            string
+}
+
 type describedObject struct {
 	Name        string
 	Description string
@@ -234,29 +243,14 @@ func extractVersionChangeLog(
 	return nil, nil
 }
 
-func main() {
-	log.Printf("Starting changelog parser...")
-
-	var apiToken, outputFilename, outputType, repositoryFilename, version string
-	flag.StringVar(&repositoryFilename, "f", defaultRepositoryFilename,
-		"Repository YAML file to parse")
-	flag.StringVar(&outputType, "t", defaultOutputType,
-		"Output type. Only accepts 'changelog' and 'release'.")
-	flag.StringVar(&outputFilename, "o", defaultOutputFilename,
-		"Output filename")
-	flag.StringVar(&version, "v", defaultVersionString,
-		"Version to embed in the changelog")
-	flag.StringVar(&apiToken, "p", "",
-		"GitHub API token")
-	flag.Parse()
-
-	if _, ok := outputTypeTemplates[outputType]; !ok {
-		log.Fatal(fmt.Errorf("%s is not a valid output type", outputType))
+func runParser(options cliOptions) {
+	if _, ok := outputTypeTemplates[options.OutputType]; !ok {
+		log.Fatal(fmt.Errorf("%s is not a valid output type", options.OutputType))
 		return
 	}
 
 	log.Printf("Parsing linked repositories...")
-	repoConfig, err := parseLinkedRepositories(repositoryFilename)
+	repoConfig, err := parseLinkedRepositories(options.RepositoryFilename)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -264,7 +258,7 @@ func main() {
 
 	log.Printf("Collecting changelogs...")
 	httpClient := http.NewClient()
-	httpClient.AuthToken = apiToken
+	httpClient.AuthToken = options.APIToken
 
 	changelogs, err := collectChangelogs(repoConfig, httpClient)
 	if err != nil {
@@ -276,22 +270,46 @@ func main() {
 	//       in descending order and not ascending one.
 	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
+	// TODO: Should the date be something defined in yml or the date of tag?
+	if options.Date.IsZero() {
+		options.Date = time.Now()
+	}
+
 	templateData := template.UnifiedChangelogTemplateData{
 		// TODO: Suite version should probably be read from some file
-		// TODO: Should the date be something defined in yml or the date of tag?
-		Version:          version,
-		Date:             time.Now(),
+		Version:          options.Version,
+		Date:             options.Date,
 		Changelogs:       changelogs,
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
-	err = template.WriteChangelog(outputTypeTemplates[outputType],
+	err = template.WriteChangelog(outputTypeTemplates[options.OutputType],
 		templateData,
-		outputFilename)
+		options.OutputFilename)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
 	log.Printf("Changelog parser completed!")
+}
+
+func main() {
+	log.Printf("Starting changelog parser...")
+
+	options := cliOptions{}
+
+	flag.StringVar(&options.RepositoryFilename, "f", defaultRepositoryFilename,
+		"Repository YAML file to parse")
+	flag.StringVar(&options.OutputType, "t", defaultOutputType,
+		"Output type. Only accepts 'changelog' and 'release'.")
+	flag.StringVar(&options.OutputFilename, "o", defaultOutputFilename,
+		"Output filename")
+	flag.StringVar(&options.Version, "v", defaultVersionString,
+		"Version to embed in the changelog")
+	flag.StringVar(&options.APIToken, "p", "",
+		"GitHub API token")
+	flag.Parse()
+
+	runParser(options)
 }

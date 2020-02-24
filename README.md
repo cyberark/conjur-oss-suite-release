@@ -7,7 +7,7 @@ _For more info on the planned work, please see our [design doc](https://github.c
 and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-release/issues)._
 
 #### This repo's metrics:
-![Unit Tests](https://github.com/cyberark/conjur-oss-suite-release/workflows/Test/badge.svg) [![Test Coverage](https://api.codeclimate.com/v1/badges/31060f348b29c7f5d02b/test_coverage)](https://codeclimate.com/repos/5e2b43bf92af05714c00b172/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/31060f348b29c7f5d02b/maintainability)](https://codeclimate.com/repos/5e2b43bf92af05714c00b172/maintainability)
+![Tests](https://github.com/cyberark/conjur-oss-suite-release/workflows/Tests/badge.svg) [![Test Coverage](https://api.codeclimate.com/v1/badges/31060f348b29c7f5d02b/test_coverage)](https://codeclimate.com/repos/5e2b43bf92af05714c00b172/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/31060f348b29c7f5d02b/maintainability)](https://codeclimate.com/repos/5e2b43bf92af05714c00b172/maintainability)
 
 ## Usage
 
