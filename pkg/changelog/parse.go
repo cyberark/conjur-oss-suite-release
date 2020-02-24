@@ -179,6 +179,18 @@ func Parse(repo string, changelog string) ([]*VersionChangelog, error) {
 					sectionBuffer = ""
 				}
 			}
+		// Handle any other leaf-nodes same as text-nodes
+		default:
+			if leafNode := node.AsLeaf(); leafNode != nil {
+				switch {
+				case insideVersion:
+					versionBuffer += string(leafNode.Literal)
+				case insideSection:
+					sectionBuffer += string(leafNode.Literal)
+				case insideListItem:
+					listItemBuffer += string(leafNode.Literal)
+				}
+			}
 		}
 
 		return ast.GoToNext

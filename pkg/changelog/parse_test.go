@@ -30,6 +30,7 @@ func TestParseSimpleChangelog(t *testing.T) {
 		Sections: map[string][]string{
 			"Added": {
 				"add 1",
+				"cyberark/conjur@1.4.4: Bumped toolset from 3.12.0 to 3.12.2",
 			},
 			"Changed": {
 				"change 1",
