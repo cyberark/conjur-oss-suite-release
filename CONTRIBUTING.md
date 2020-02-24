@@ -75,4 +75,16 @@ $ go test -v -short ./...
 
 ## Releasing
 
-TODO: Define the release process
+Releases are automatically prepared using GitHub actions [here](.github/workflows/release.yml).
+In general terms, whenever a tag with `v*` pattern is pushed up, the following steps
+are automatically run:
+- Tests are re-run
+- If tests fail, release process is halted
+- Release notes and changelog files are generated
+- Draft release is created on GitHub
+- Release notes and the changelog are attached as assets to that release
+
+To view the progress of the actions, you can take a look at [this](https://github.com/cyberark/conjur-oss-suite-release/actions) page.
+
+After these steps run and they encounter no problems, manual publishing of release will make it
+public for consumers of this repo.
