@@ -1,0 +1,87 @@
+on:
+  push:
+    # We trigger this workflow on tag pushes that match v* (eg. `v1.2.3`)
+    tags:
+      - 'v*'
+
+name: Create Release
+jobs:
+  # This job name must match the `needs` field in `release` step
+  run-tests:
+    # This is mostly a copy/paste from test.yml
+    name: Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Set BRANCH_NAME
+      run: echo "::set-env name=GIT_BRANCH::${GITHUB_REF#refs/heads/}"
+
+    - name: Run Tests
+      run: go test -v -coverprofile=c.out -count=1 ./...
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    needs: run-tests
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+
+    - name: Generate RELEASE_NOTES.md
+      run: go run cmd/changelog-parser/main.go -v "${{ github.ref }}" -t release -o tmp_RELEASE_NOTES.md
+
+    - name: Generate CHANGELOG.md
+      run: go run cmd/changelog-parser/main.go -v "${{ github.ref }}" -o tmp_CHANGELOG.md
+
+    - name: Capture release notes into a variable
+      id: release_notes
+      run: |
+        CONTENT=$(cat RELEASE_NOTES.md)
+        echo "::set-output name=content::${CONTENT//$'\n'/%0A}"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        body: ${{ steps.release_notes.outputs.content }}
+        draft: true
+        prerelease: true
+
+    - name: Upload RELEASE_NOTES to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./tmp_RELEASE_NOTES.md
+        asset_name: RELEASE_NOTES.md
+        asset_content_type: text/markdown
+
+    - name: Upload CHANGELOG to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./tmp_CHANGELOG.md
+        asset_name: CHANGELOG.md
+        asset_content_type: text/markdown
