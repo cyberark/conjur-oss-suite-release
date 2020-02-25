@@ -2,7 +2,7 @@
 name: Bug
 about: Create a bug report to help us improve
 title: ''
-labels: component/suite, kind/bug
+labels: kind/bug, component/suite
 assignees: ''
 
 ---
