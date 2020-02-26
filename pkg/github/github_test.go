@@ -3,10 +3,13 @@ package github
 import (
 	"encoding/json"
 	"io/ioutil"
+	stdlibHttp "net/http"
 	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	pkgHttp "github.com/cyberark/conjur-oss-suite-release/pkg/http"
 )
 
 func TestReleaseParsing(t *testing.T) {
@@ -67,4 +70,35 @@ func TestReleasesParsing(t *testing.T) {
 		assert.Equal(t, actualRelase.Name, expectedReleases[index].Name)
 		assert.Equal(t, actualRelase.Draft, expectedReleases[index].Draft)
 	}
+}
+
+func TestGetAvailableReleases(t *testing.T) {
+	expectedReleases := []string{
+		"v0.0.5",
+		"v0.0.4",
+		"v0.0.3",
+	}
+
+	transportWithFileSupport := &stdlibHttp.Transport{}
+	transportWithFileSupport.RegisterProtocol(
+		"file",
+		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
+	)
+
+	httpClient := &pkgHttp.Client{
+		&stdlibHttp.Client{
+			Transport: transportWithFileSupport,
+		},
+		"",
+	}
+
+	actualReleases, err := getAvailableReleases(
+		httpClient,
+		"file://./testdata/releases_v3.json",
+	)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, expectedReleases, actualReleases)
 }
