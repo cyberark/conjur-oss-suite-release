@@ -192,7 +192,7 @@ func collectChangelogs(repoConfig yamlRepoConfig, httpClient *http.Client) (
 			log.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
 
 			// TODO: This should be somehow transformed from repo url
-			completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, repo.Version)
+			completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, "master")
 			if err != nil {
 				return nil, err
 			}

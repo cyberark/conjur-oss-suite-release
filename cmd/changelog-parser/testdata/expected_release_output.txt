@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
 defined in annotations it will taken from there and if not, it will be taken
 from the id.
 
-### Changes to 'cyberark/conjur-api-python3@0.0.5' () since last release
+### Changes to 'cyberark/conjur-api-python3@0.0.5' (2019-12-06) since last release
 
 #### Added
 - Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)
