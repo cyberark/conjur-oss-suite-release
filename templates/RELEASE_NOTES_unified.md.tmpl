@@ -21,7 +21,7 @@ to their releases:
 The following are changes to the constituent components since the last Conjur
 OSS Suite release:
 {{ range .Changelogs }}
-### Changes to '{{ .Repo }}@{{ .Version}}' ({{ .Date }}) since last release
+### [{{ .Repo }} v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{ .Date }})
 {{ range $sectionKey, $sectionValues := .Sections }}
 #### {{ $sectionKey }}
 {{- range $sectionItem := $sectionValues }}
