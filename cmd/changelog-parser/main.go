@@ -79,15 +79,21 @@ func fetchChangelog(
 	return string(changelog), nil
 }
 
-func collectChangelogs(repoConfig repositories.Config, httpClient *http.Client) (
-	[]*changelogPkg.VersionChangelog,
+func collectComponents(repoConfig repositories.Config, httpClient *http.Client) (
+	[]template.Component,
 	error,
 ) {
-	var changelogs []*changelogPkg.VersionChangelog
+	var components []template.Component
 	for _, category := range repoConfig.Section.Categories {
 		log.Printf("Processing category: %s", category.Name)
 		for _, repo := range category.Repos {
 			log.Printf("- Processing repo: %s", repo.Name)
+
+			component := template.Component{
+				Repo: repo.Name,
+			}
+
+			var changelogs []*changelogPkg.VersionChangelog
 
 			if repo.Version == "" {
 				// TODO: This should be somehow transformed from repo url
@@ -98,6 +104,9 @@ func collectChangelogs(repoConfig repositories.Config, httpClient *http.Client) 
 
 				repo.Version = version
 			}
+
+			// Repo version is the linked component release version
+			component.ReleaseName = repo.Version
 
 			availableVersions, err := github.GetAvailableReleases(httpClient, repo.Name)
 			if err != nil {
@@ -141,11 +150,24 @@ func collectChangelogs(repoConfig repositories.Config, httpClient *http.Client) 
 					)
 					continue
 				}
+
+				// If this changelog is for the suite release pinned version, save the release
+				// date. Since VersionChangelogs are stripped of `v` prefix, we need it back for
+				// this comparison.
+				if "v"+versionChangelog.Version == component.ReleaseName {
+					component.ReleaseDate = versionChangelog.Date
+				}
+
 				changelogs = append(changelogs, versionChangelog)
 			}
+
+			// Save all relevant component changelogs to the component object
+			component.Changelogs = changelogs
+
+			components = append(components, component)
 		}
 	}
-	return changelogs, nil
+	return components, nil
 }
 
 func extractVersionChangeLog(
@@ -184,14 +206,17 @@ func runParser(options cliOptions) {
 	httpClient := http.NewClient()
 	httpClient.AuthToken = options.APIToken
 
-	changelogs, err := collectChangelogs(repoConfig, httpClient)
+	components, err := collectComponents(repoConfig, httpClient)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	// TODO: Same-repo changelogs with different versions should be sorted
-	//       in descending order and not ascending one.
+	// Combine all changelogs into a single array to generate the unified changelog
+	changelogs := []*changelogPkg.VersionChangelog{}
+	for _, component := range components {
+		changelogs = append(changelogs, component.Changelogs...)
+	}
 	unifiedChangelog := changelogPkg.NewUnifiedChangelog(changelogs...)
 
 	// TODO: Should the date be something defined in yml or the date of tag?
@@ -199,11 +224,11 @@ func runParser(options cliOptions) {
 		options.Date = time.Now()
 	}
 
-	templateData := template.UnifiedChangelogTemplateData{
+	templateData := template.SuiteData{
 		// TODO: Suite version should probably be read from some file
 		Version:          options.Version,
 		Date:             options.Date,
-		Changelogs:       changelogs,
+		Components:       components,
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
