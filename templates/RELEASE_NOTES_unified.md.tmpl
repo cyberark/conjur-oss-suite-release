@@ -2,8 +2,26 @@
 All notable changes to this project will be documented in this file.
 
 ## [{{ .Version }}] - {{ .Date.Format "2006-01-02" }}
+
+## Table of Contents
+
+- [Components](#components)
+- [Changes](#changes)
+
+## Components
+
+These are the components that combine to create this Conjur OSS Suite release and links
+to their releases:
 {{ range .Changelogs }}
-### Changes to '{{ .Repo }}@{{ .Version}}' ({{ .Date }}) since last release
+- [{{ .Repo }} v{{ .Version}} ({{ .Date }})](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }})
+{{- end }}
+
+## Changes
+
+The following are changes to the constituent components since the last Conjur
+OSS Suite release:
+{{ range .Changelogs }}
+### [{{ .Repo }} v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{ .Date }})
 {{ range $sectionKey, $sectionValues := .Sections }}
 #### {{ $sectionKey }}
 {{- range $sectionItem := $sectionValues }}
