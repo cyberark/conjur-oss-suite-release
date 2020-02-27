@@ -79,6 +79,85 @@ func fetchChangelog(
 	return string(changelog), nil
 }
 
+func componentFromRepo(httpClient *http.Client, repo repositories.Repository) (template.Component, error) {
+	component := template.Component{
+		Repo: repo.Name,
+	}
+
+	var changelogs []*changelogPkg.VersionChangelog
+
+	if repo.Version == "" {
+		// TODO: This should be somehow transformed from repo url
+		version, err := latestVersionToExactVersion(httpClient, "github", repo.Name)
+		if err != nil {
+			return component, err
+		}
+
+		repo.Version = version
+	}
+
+	// Repo version is the linked component release version
+	component.ReleaseName = repo.Version
+
+	availableVersions, err := github.GetAvailableReleases(httpClient, repo.Name)
+	if err != nil {
+		return component, err
+	}
+
+	relevantVersions, err := version.GetRelevantVersions(
+		availableVersions,
+		repo.AfterVersion,
+		repo.Version,
+	)
+	if err != nil {
+		return component, err
+	}
+
+	log.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
+
+	// TODO: This should be somehow transformed from repo url
+	completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, "master")
+	if err != nil {
+		return component, err
+	}
+
+	// XXX: This still doesn't address releases and how we include that data in yet.
+	for _, relevantVersion := range relevantVersions {
+		log.Printf("  Extracting changelog data from %s...", relevantVersion)
+		versionChangelog, err := extractVersionChangeLog(
+			repo.Name,
+			relevantVersion,
+			completeChangelog,
+		)
+		if err != nil {
+			return component, err
+		}
+
+		if versionChangelog == nil {
+			log.Printf(
+				"  CHANGELOG not found for %s@%s",
+				repo.Name,
+				relevantVersion,
+			)
+			continue
+		}
+
+		// If this changelog is for the suite release pinned version, save the release
+		// date. Since VersionChangelogs are stripped of `v` prefix, we need it back for
+		// this comparison.
+		if "v"+versionChangelog.Version == component.ReleaseName {
+			component.ReleaseDate = versionChangelog.Date
+		}
+
+		changelogs = append(changelogs, versionChangelog)
+	}
+
+	// Save all relevant component changelogs to the component object
+	component.Changelogs = changelogs
+
+	return component, nil
+}
+
 func collectComponents(repoConfig repositories.Config, httpClient *http.Client) (
 	[]template.Component,
 	error,
@@ -89,80 +168,10 @@ func collectComponents(repoConfig repositories.Config, httpClient *http.Client) 
 		for _, repo := range category.Repos {
 			log.Printf("- Processing repo: %s", repo.Name)
 
-			component := template.Component{
-				Repo: repo.Name,
-			}
-
-			var changelogs []*changelogPkg.VersionChangelog
-
-			if repo.Version == "" {
-				// TODO: This should be somehow transformed from repo url
-				version, err := latestVersionToExactVersion(httpClient, "github", repo.Name)
-				if err != nil {
-					return nil, err
-				}
-
-				repo.Version = version
-			}
-
-			// Repo version is the linked component release version
-			component.ReleaseName = repo.Version
-
-			availableVersions, err := github.GetAvailableReleases(httpClient, repo.Name)
+			component, err := componentFromRepo(httpClient, repo)
 			if err != nil {
 				return nil, err
 			}
-
-			relevantVersions, err := version.GetRelevantVersions(
-				availableVersions,
-				repo.AfterVersion,
-				repo.Version,
-			)
-			if err != nil {
-				return nil, err
-			}
-
-			log.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
-
-			// TODO: This should be somehow transformed from repo url
-			completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, "master")
-			if err != nil {
-				return nil, err
-			}
-
-			// XXX: This still doesn't address releases and how we include that data in yet.
-			for _, relevantVersion := range relevantVersions {
-				log.Printf("  Extracting changelog data from %s...", relevantVersion)
-				versionChangelog, err := extractVersionChangeLog(
-					repo.Name,
-					relevantVersion,
-					completeChangelog,
-				)
-				if err != nil {
-					return nil, err
-				}
-
-				if versionChangelog == nil {
-					log.Printf(
-						"  CHANGELOG not found for %s@%s",
-						repo.Name,
-						relevantVersion,
-					)
-					continue
-				}
-
-				// If this changelog is for the suite release pinned version, save the release
-				// date. Since VersionChangelogs are stripped of `v` prefix, we need it back for
-				// this comparison.
-				if "v"+versionChangelog.Version == component.ReleaseName {
-					component.ReleaseDate = versionChangelog.Date
-				}
-
-				changelogs = append(changelogs, versionChangelog)
-			}
-
-			// Save all relevant component changelogs to the component object
-			component.Changelogs = changelogs
 
 			components = append(components, component)
 		}
