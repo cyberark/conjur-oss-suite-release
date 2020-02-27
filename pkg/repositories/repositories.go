@@ -49,7 +49,7 @@ func NewConfig(filename string) (Config, error) {
 	var repoConfig Config
 	err = yaml.Unmarshal(yamlFile, &repoConfig)
 	if err != nil {
-		return Config{}, fmt.Errorf("error reading YAML file: %s", err)
+		return Config{}, fmt.Errorf("error unmarshaling YAML file: %s", err)
 	}
 
 	return repoConfig, nil
