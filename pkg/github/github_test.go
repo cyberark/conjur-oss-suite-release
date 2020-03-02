@@ -102,3 +102,55 @@ func TestGetAvailableReleases(t *testing.T) {
 
 	assert.Equal(t, expectedReleases, actualReleases)
 }
+
+func TestGetAvailableReleasesFetchingProblem(t *testing.T) {
+	httpClient := &pkgHttp.Client{
+		&stdlibHttp.Client{},
+		"",
+	}
+
+	_, err := getAvailableReleases(
+		httpClient,
+		"doesnotexist",
+	)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"Get doesnotexist: unsupported protocol scheme \"\"",
+	)
+}
+
+func TestGetAvailableReleasesUnmarshalingProblem(t *testing.T) {
+	transportWithFileSupport := &stdlibHttp.Transport{}
+	transportWithFileSupport.RegisterProtocol(
+		"file",
+		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
+	)
+
+	httpClient := &pkgHttp.Client{
+		&stdlibHttp.Client{
+			Transport: transportWithFileSupport,
+		},
+		"",
+	}
+
+	// release_v3.json (vs releases_v3.json) should fail unmarshaling since it's
+	// not an array
+	_, err := getAvailableReleases(
+		httpClient,
+		"file://./testdata/release_v3.json",
+	)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"json: cannot unmarshal object into Go value of type []github.ReleaseInfo",
+	)
+}

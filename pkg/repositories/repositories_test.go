@@ -62,3 +62,29 @@ func TestNewConfig(t *testing.T) {
 
 	assert.Equal(t, expectedConfig, reposConfig)
 }
+
+func TestNewConfigReadFileProblems(t *testing.T) {
+	_, err := NewConfig("doesnotexist")
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"error reading YAML file: open doesnotexist: no such file or directory",
+	)
+}
+
+func TestNewConfigUnmarshalingProblem(t *testing.T) {
+	_, err := NewConfig("./testdata/bad_repositories.yml")
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"error unmarshaling YAML file: yaml: unmarshal errors:\n  line 1: cannot unmarshal !!str `foobar` into repositories.Config",
+	)
+}
