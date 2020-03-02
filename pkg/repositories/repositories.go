@@ -55,3 +55,22 @@ func NewConfig(filename string) (Config, error) {
 
 	return repoConfig, nil
 }
+
+// SelectUnreleased modifies a Config in-place that will pin all component version
+// minimums to the maximums of the input Config as well as unset the maximum, effectively
+// enabling us to figure out what a Config for unreleased component versions would
+// include.
+func SelectUnreleased(config *Config) {
+	// We use indexes since modifying objects while using them doesn't work in Golang as
+	// expected.
+	// More info: https://github.com/golang/go/wiki/CommonMistakes#using-reference-to-loop-iterator-variable
+	for categoryIdx := range config.Section.Categories {
+		for repoIdx, repo := range config.Section.Categories[categoryIdx].Repos {
+			remappedRepo := repo
+			remappedRepo.Version = ""
+			remappedRepo.AfterVersion = repo.Version
+
+			config.Section.Categories[categoryIdx].Repos[repoIdx] = remappedRepo
+		}
+	}
+}

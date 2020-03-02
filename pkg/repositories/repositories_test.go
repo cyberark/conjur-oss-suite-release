@@ -17,7 +17,7 @@ func newTestRepoObject(name string) Repository {
 	}
 }
 
-func TestNewConfig(t *testing.T) {
+func testfileExpectedConfig() Config {
 	expectedRepo1 := newTestRepoObject("Repo1")
 	expectedRepo1.AfterVersion = "Repo1 After Version"
 
@@ -43,7 +43,7 @@ func TestNewConfig(t *testing.T) {
 		},
 	}
 
-	expectedConfig := Config{
+	return Config{
 		Section: section{
 			describedObject: describedObject{
 				Name:        "Section Name",
@@ -53,6 +53,9 @@ func TestNewConfig(t *testing.T) {
 		},
 	}
 
+}
+
+func TestNewConfig(t *testing.T) {
 	testPath := "testdata/repositories.yml"
 
 	reposConfig, err := NewConfig(testPath)
@@ -60,7 +63,7 @@ func TestNewConfig(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, expectedConfig, reposConfig)
+	assert.Equal(t, testfileExpectedConfig(), reposConfig)
 }
 
 func TestNewConfigReadFileProblems(t *testing.T) {
@@ -87,4 +90,23 @@ func TestNewConfigUnmarshalingProblem(t *testing.T) {
 		err,
 		"error unmarshaling YAML file: yaml: unmarshal errors:\n  line 1: cannot unmarshal !!str `foobar` into repositories.Config",
 	)
+}
+
+func TestSelectUnreleased(t *testing.T) {
+	expectedConfig := testfileExpectedConfig()
+	expectedConfig.Section.Categories[0].Repos[0].Version = ""
+	expectedConfig.Section.Categories[0].Repos[0].AfterVersion = "Repo1 Version"
+	expectedConfig.Section.Categories[0].Repos[1].Version = ""
+	expectedConfig.Section.Categories[0].Repos[1].AfterVersion = "Repo2 Version"
+	expectedConfig.Section.Categories[1].Repos[0].Version = ""
+	expectedConfig.Section.Categories[1].Repos[0].AfterVersion = "Repo3 Version"
+
+	config, err := NewConfig("./testdata/repositories.yml")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	SelectUnreleased(&config)
+
+	assert.Equal(t, expectedConfig, config)
 }
