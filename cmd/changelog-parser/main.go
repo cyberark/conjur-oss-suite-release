@@ -79,8 +79,12 @@ func fetchChangelog(
 	return string(changelog), nil
 }
 
-func componentFromRepo(httpClient *http.Client, repo repositories.Repository) (template.Component, error) {
-	component := template.Component{
+func componentFromRepo(
+	httpClient *http.Client,
+	repo repositories.Repository,
+) (template.SuiteComponent, error) {
+
+	component := template.SuiteComponent{
 		Repo: repo.Name,
 	}
 
@@ -159,10 +163,10 @@ func componentFromRepo(httpClient *http.Client, repo repositories.Repository) (t
 }
 
 func collectComponents(repoConfig repositories.Config, httpClient *http.Client) (
-	[]template.Component,
+	[]template.SuiteComponent,
 	error,
 ) {
-	var components []template.Component
+	var components []template.SuiteComponent
 	for _, category := range repoConfig.Section.Categories {
 		log.Printf("Processing category: %s", category.Name)
 		for _, repo := range category.Repos {
@@ -233,7 +237,7 @@ func runParser(options cliOptions) {
 		options.Date = time.Now()
 	}
 
-	templateData := template.SuiteData{
+	templateData := template.ReleaseSuite{
 		// TODO: Suite version should probably be read from some file
 		Version:          options.Version,
 		Date:             options.Date,

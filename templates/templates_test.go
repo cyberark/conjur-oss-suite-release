@@ -50,12 +50,12 @@ func TestTemplates(t *testing.T) {
 	date1, _ := time.Parse(time.RFC3339, "2020-02-01T11:58:05Z")
 	date2, _ := time.Parse(time.RFC3339, "2020-01-03T11:58:05Z")
 
-	testData := template.SuiteData{
+	testData := template.ReleaseSuite{
 		Version:          "11.22.33",
 		Date:             outputDate,
 		UnifiedChangelog: "@@@Unified changelog content@@@",
-		Components: []template.Component{
-			template.Component{
+		Components: []template.SuiteComponent{
+			template.SuiteComponent{
 				Repo:        "cyberark/conjur",
 				ReleaseName: "v1.4.4",
 				ReleaseDate: date2.Format("2006-01-02"),
