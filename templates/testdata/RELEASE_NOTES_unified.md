@@ -13,7 +13,6 @@ All notable changes to this project will be documented in this file.
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
 
-- [cyberark/conjur v1.3.6 (2020-02-01)](https://github.com/cyberark/conjur/releases/tag/v1.3.6)
 - [cyberark/conjur v1.4.4 (2020-01-03)](https://github.com/cyberark/conjur/releases/tag/v1.4.4)
 
 ## Changes

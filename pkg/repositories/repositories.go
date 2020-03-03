@@ -13,7 +13,8 @@ type describedObject struct {
 	Description string
 }
 
-type repository struct {
+// Repository represents a codified description of a target component
+type Repository struct {
 	describedObject `yaml:",inline"`
 	URL             string
 	Version         string `yaml:omitempty`
@@ -22,7 +23,7 @@ type repository struct {
 
 type category struct {
 	describedObject `yaml:",inline"`
-	Repos           []repository
+	Repos           []Repository
 }
 
 type section struct {

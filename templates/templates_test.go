@@ -50,30 +50,37 @@ func TestTemplates(t *testing.T) {
 	date1, _ := time.Parse(time.RFC3339, "2020-02-01T11:58:05Z")
 	date2, _ := time.Parse(time.RFC3339, "2020-01-03T11:58:05Z")
 
-	testData := template.UnifiedChangelogTemplateData{
+	testData := template.ReleaseSuite{
 		Version:          "11.22.33",
 		Date:             outputDate,
 		UnifiedChangelog: "@@@Unified changelog content@@@",
-		Changelogs: []*changelog.VersionChangelog{
-			&changelog.VersionChangelog{
-				Repo:    "cyberark/conjur",
-				Version: "1.3.6",
-				// Why are these strings?
-				Date: date1.Format("2006-01-02"),
-				Sections: map[string][]string{
-					"Changed": []string{"136Change", "136Change2"},
-					"Removed": []string{"136Removal"},
-				},
-			},
-			&changelog.VersionChangelog{
-				Repo:    "cyberark/conjur",
-				Version: "1.4.4",
-				// Why are these strings?
-				Date: date2.Format("2006-01-02"),
-				Sections: map[string][]string{
-					"Added":   []string{"144Addition", "144Addition2"},
-					"Changed": []string{"144Change", "144Change2"},
-					"Fixed":   []string{"144Fix"},
+		Components: []template.SuiteComponent{
+			template.SuiteComponent{
+				Repo:        "cyberark/conjur",
+				ReleaseName: "v1.4.4",
+				ReleaseDate: date2.Format("2006-01-02"),
+				Changelogs: []*changelog.VersionChangelog{
+					&changelog.VersionChangelog{
+						Repo:    "cyberark/conjur",
+						Version: "1.3.6",
+						// Why are these strings?
+						Date: date1.Format("2006-01-02"),
+						Sections: map[string][]string{
+							"Changed": []string{"136Change", "136Change2"},
+							"Removed": []string{"136Removal"},
+						},
+					},
+					&changelog.VersionChangelog{
+						Repo:    "cyberark/conjur",
+						Version: "1.4.4",
+						// Why are these strings?
+						Date: date2.Format("2006-01-02"),
+						Sections: map[string][]string{
+							"Added":   []string{"144Addition", "144Addition2"},
+							"Changed": []string{"144Change", "144Change2"},
+							"Fixed":   []string{"144Fix"},
+						},
+					},
 				},
 			},
 		},

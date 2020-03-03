@@ -12,14 +12,15 @@ All notable changes to this project will be documented in this file.
 
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
-{{ range .Changelogs }}
-- [{{ .Repo }} v{{ .Version}} ({{ .Date }})](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }})
+{{ range .Components }}
+- [{{ .Repo }} {{ .ReleaseName }} ({{ .ReleaseDate }})](https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }})
 {{- end }}
 
 ## Changes
 
 The following are changes to the constituent components since the last Conjur
 OSS Suite release:
+{{ range .Components -}}
 {{ range .Changelogs }}
 ### [{{ .Repo }} v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{ .Date }})
 {{ range $sectionKey, $sectionValues := .Sections }}
@@ -28,4 +29,5 @@ OSS Suite release:
 - {{ $sectionItem -}}
 {{ end }}
 {{ end }}
+{{- end }}
 {{- end }}

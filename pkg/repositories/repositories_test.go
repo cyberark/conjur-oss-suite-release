@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func newTestRepoObject(name string) repository {
-	return repository{
+func newTestRepoObject(name string) Repository {
+	return Repository{
 		describedObject: describedObject{
 			Name:        name + " Name",
 			Description: name + " Description",
@@ -27,7 +27,7 @@ func TestNewConfig(t *testing.T) {
 				Name:        "Category1",
 				Description: "Category1 Description",
 			},
-			Repos: []repository{
+			Repos: []Repository{
 				expectedRepo1,
 				newTestRepoObject("Repo2"),
 			},
@@ -37,7 +37,7 @@ func TestNewConfig(t *testing.T) {
 				Name:        "Category2",
 				Description: "Category2 Description",
 			},
-			Repos: []repository{
+			Repos: []Repository{
 				newTestRepoObject("Repo3"),
 			},
 		},

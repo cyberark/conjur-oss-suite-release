@@ -10,12 +10,20 @@ import (
 	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 )
 
-// UnifiedChangelogTemplateData stores all the data needed for generation of
-// templates
-type UnifiedChangelogTemplateData struct {
+// SuiteComponent represents a suite component with all of its changelogs and
+// relevant pin data
+type SuiteComponent struct {
+	Repo        string
+	Changelogs  []*changelog.VersionChangelog
+	ReleaseName string
+	ReleaseDate string
+}
+
+// ReleaseSuite stores all the data needed for generation of templates in the suite
+type ReleaseSuite struct {
 	Version          string
 	Date             time.Time
-	Changelogs       []*changelog.VersionChangelog
+	Components       []SuiteComponent
 	UnifiedChangelog string
 }
 
