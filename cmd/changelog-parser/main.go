@@ -143,9 +143,9 @@ func componentFromRepo(httpClient *http.Client, repo repositories.Repository) (t
 		}
 
 		// If this changelog is for the suite release pinned version, save the release
-		// date. Since VersionChangelogs are stripped of `v` prefix, we need it back for
-		// this comparison.
-		if "v"+versionChangelog.Version == component.ReleaseName {
+		// date. Since we don't know if there will be `v` prefixes, we compare the
+		// strings without them.
+		if strings.TrimPrefix(versionChangelog.Version, "v") == strings.TrimPrefix(component.ReleaseName, "v") {
 			component.ReleaseDate = versionChangelog.Date
 		}
 
