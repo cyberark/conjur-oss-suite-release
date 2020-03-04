@@ -221,7 +221,7 @@ func runParser(options cliOptions) {
 
 	components, err := collectComponents(repoConfig, httpClient)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("ERROR: %v", err)
 		return
 	}
 
