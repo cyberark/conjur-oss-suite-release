@@ -1,0 +1,34 @@
+# Unreleased Changes
+This file documents all changes that have not been released yet
+
+## Generated {{ .Date.Format "2006-01-02" }}
+
+## Table of Contents
+
+- [Unreleased Components](#unreleased-components)
+- [Unreleased Changes](#unreleased-changes)
+
+## Unreleased Components
+
+These are the component versions that have yet not been included in the Conjur OSS Suite:
+{{ range .Components -}}
+{{ range .Changelogs }}
+- [{{ .Repo }} v{{ .Version}} ({{ .Date }})](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }})
+{{- end }}
+{{- end }}
+
+## Unreleased Changes
+
+The following are changes that have been released in components but not yet released
+as part of the OSS Suite:
+{{ range .Components -}}
+{{ range .Changelogs }}
+### [{{ .Repo }} v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{ .Date }})
+{{ range $sectionKey, $sectionValues := .Sections }}
+#### {{ $sectionKey }}
+{{- range $sectionItem := $sectionValues }}
+- {{ $sectionItem -}}
+{{ end }}
+{{ end }}
+{{- end }}
+{{- end }}

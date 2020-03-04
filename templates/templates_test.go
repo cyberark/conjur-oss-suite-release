@@ -49,6 +49,7 @@ func TestTemplates(t *testing.T) {
 	outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T11:58:05Z")
 	date1, _ := time.Parse(time.RFC3339, "2020-02-01T11:58:05Z")
 	date2, _ := time.Parse(time.RFC3339, "2020-01-03T11:58:05Z")
+	date3, _ := time.Parse(time.RFC3339, "2020-01-08T11:58:05Z")
 
 	testData := template.ReleaseSuite{
 		Version:          "11.22.33",
@@ -79,6 +80,23 @@ func TestTemplates(t *testing.T) {
 							"Added":   []string{"144Addition", "144Addition2"},
 							"Changed": []string{"144Change", "144Change2"},
 							"Fixed":   []string{"144Fix"},
+						},
+					},
+				},
+			},
+			template.SuiteComponent{
+				Repo:        "cyberark/secretless-broker",
+				ReleaseName: "v1.4.2",
+				ReleaseDate: date3.Format("2006-01-02"),
+				Changelogs: []*changelog.VersionChangelog{
+					&changelog.VersionChangelog{
+						Repo:    "cyberark/secretless-broker",
+						Version: "1.4.2",
+						Date:    date3.Format("2006-01-02"),
+						Sections: map[string][]string{
+							"Added":   []string{"Broker142Addition"},
+							"Changed": []string{"Broker142Change"},
+							"Removed": []string{"Broker142Removal"},
 						},
 					},
 				},

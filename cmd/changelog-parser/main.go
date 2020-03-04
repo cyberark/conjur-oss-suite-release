@@ -34,8 +34,9 @@ var providerVersionResolutionTemplate = map[string]string{
 }
 
 var outputTypeTemplates = map[string]string{
-	"changelog": "templates/CHANGELOG_unified.md.tmpl",
-	"release":   "templates/RELEASE_NOTES_unified.md.tmpl",
+	"changelog":  "templates/CHANGELOG_unified.md.tmpl",
+	"release":    "templates/RELEASE_NOTES_unified.md.tmpl",
+	"unreleased": "templates/UNRELEASED_CHANGES_unified.md.tmpl",
 }
 
 const defaultOutputFilename = "CHANGELOG.md"
@@ -215,13 +216,18 @@ func runParser(options cliOptions) {
 		return
 	}
 
+	if options.OutputType == "unreleased" {
+		// This is an in-place operation
+		repositories.SelectUnreleased(&repoConfig)
+	}
+
 	log.Printf("Collecting changelogs...")
 	httpClient := http.NewClient()
 	httpClient.AuthToken = options.APIToken
 
 	components, err := collectComponents(repoConfig, httpClient)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("ERROR: %v", err)
 		return
 	}
 
@@ -264,7 +270,7 @@ func main() {
 	flag.StringVar(&options.RepositoryFilename, "f", defaultRepositoryFilename,
 		"Repository YAML file to parse")
 	flag.StringVar(&options.OutputType, "t", defaultOutputType,
-		"Output type. Only accepts 'changelog' and 'release'.")
+		"Output type. Only accepts 'changelog', 'release', and 'unreleased'.")
 	flag.StringVar(&options.OutputFilename, "o", defaultOutputFilename,
 		"Output filename")
 	flag.StringVar(&options.Version, "v", defaultVersionString,

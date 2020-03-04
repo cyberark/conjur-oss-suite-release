@@ -1,25 +1,25 @@
-# Release Notes
-All notable changes to this project will be documented in this file.
+# Unreleased Changes
+This file documents all changes that have not been released yet
 
-## [11.22.33] - 2020-02-19
+## Generated 2020-02-19
 
 ## Table of Contents
 
-- [Components](#components)
-- [Changes](#changes)
+- [Unreleased Components](#unreleased-components)
+- [Unreleased Changes](#unreleased-changes)
 
-## Components
+## Unreleased Components
 
-These are the components that combine to create this Conjur OSS Suite release and links
-to their releases:
+These are the component versions that have yet not been included in the Conjur OSS Suite:
 
+- [cyberark/conjur v1.3.6 (2020-02-01)](https://github.com/cyberark/conjur/releases/tag/v1.3.6)
 - [cyberark/conjur v1.4.4 (2020-01-03)](https://github.com/cyberark/conjur/releases/tag/v1.4.4)
 - [cyberark/secretless-broker v1.4.2 (2020-01-08)](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2)
 
-## Changes
+## Unreleased Changes
 
-The following are changes to the constituent components since the last Conjur
-OSS Suite release:
+The following are changes that have been released in components but not yet released
+as part of the OSS Suite:
 
 ### [cyberark/conjur v1.3.6](https://github.com/cyberark/conjur/releases/tag/v1.3.6) (2020-02-01)
 

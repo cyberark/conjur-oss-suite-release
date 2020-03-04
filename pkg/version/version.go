@@ -1,6 +1,7 @@
 package version
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/coreos/go-semver/semver"
@@ -45,10 +46,18 @@ func GetRelevantVersions(availVersionsStr []string,
 		highVersion, lowVersion = lowVersion, highVersion
 	}
 
-	// Special case: same semver as both high and low should just
-	// return the single version for fetching
+	// Special case: same semver as both high and low should just return the
+	// single version for fetching but only if that version is actually available
 	if highVersion.Equal(*lowVersion) {
-		return []string{"v" + highVersion.String()}, nil
+		for _, versionStr := range availVersionsStr {
+			version, _ := versionFromString(versionStr)
+			if version.Equal(*lowVersion) {
+				return []string{"v" + lowVersion.String()}, nil
+			}
+		}
+
+		errorMsg := "v%s is not in available versions (%s)"
+		return nil, fmt.Errorf(errorMsg, lowVersion, availVersionsStr)
 	}
 
 	versions := []*semver.Version{}
@@ -79,6 +88,11 @@ func GetRelevantVersions(availVersionsStr []string,
 	filteredVersionNames := []string{}
 	for _, version := range versions {
 		filteredVersionNames = append(filteredVersionNames, "v"+(*version).String())
+	}
+
+	if len(filteredVersionNames) == 0 {
+		errorMsg := "could not find relevant versions for range v%s -> v%s in available versions (%s)"
+		return nil, fmt.Errorf(errorMsg, lowVersion, highVersion, availVersionsStr)
 	}
 
 	return filteredVersionNames, nil
