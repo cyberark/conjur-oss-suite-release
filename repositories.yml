@@ -44,4 +44,4 @@ section:
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
-        version: v5.3.1
+        version: v4.10.2
