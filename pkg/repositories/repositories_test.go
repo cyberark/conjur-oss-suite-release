@@ -12,14 +12,18 @@ func newTestRepoObject(name string) Repository {
 			Name:        name + " Name",
 			Description: name + " Description",
 		},
-		URL:     name + " URL",
-		Version: name + " Version",
+		URL:        name + " URL",
+		Version:    name + " Version",
+		UpgradeURL: name + " Upgrade Url",
 	}
 }
 
 func testfileExpectedConfig() Config {
 	expectedRepo1 := newTestRepoObject("Repo1")
 	expectedRepo1.AfterVersion = "Repo1 After Version"
+
+	expectedRepo2 := newTestRepoObject("Repo2")
+	expectedRepo2.UpgradeURL = ""
 
 	expectedCategories := []category{
 		category{
@@ -29,7 +33,7 @@ func testfileExpectedConfig() Config {
 			},
 			Repos: []Repository{
 				expectedRepo1,
-				newTestRepoObject("Repo2"),
+				expectedRepo2,
 			},
 		},
 		category{

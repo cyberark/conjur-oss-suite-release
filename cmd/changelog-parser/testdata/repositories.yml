@@ -12,6 +12,7 @@ section:
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         version: v1.4.6
         after: v1.3.5
+        upgrade_url: https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
