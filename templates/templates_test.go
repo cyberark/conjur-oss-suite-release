@@ -60,6 +60,7 @@ func TestTemplates(t *testing.T) {
 				Repo:        "cyberark/conjur",
 				ReleaseName: "v1.4.4",
 				ReleaseDate: date2.Format("2006-01-02"),
+				UpgradeURL:  "https://conjur_upgrade_url",
 				Changelogs: []*changelog.VersionChangelog{
 					&changelog.VersionChangelog{
 						Repo:    "cyberark/conjur",

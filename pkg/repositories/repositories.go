@@ -19,6 +19,7 @@ type Repository struct {
 	URL             string
 	Version         string `yaml:omitempty`
 	AfterVersion    string `yaml:"after",omitempty`
+	UpgradeURL      string `yaml:"upgrade_url",omitempty`
 }
 
 type category struct {

@@ -11,6 +11,7 @@ section:
         description: Repo1 Description
         version: Repo1 Version
         after: Repo1 After Version
+        upgrade_url: Repo1 Upgrade Url
       - name: Repo2 Name
         url: Repo2 URL
         description: Repo2 Description
@@ -22,3 +23,4 @@ section:
         url: Repo3 URL
         description: Repo3 Description
         version: Repo3 Version
+        upgrade_url: Repo3 Upgrade Url

@@ -86,7 +86,8 @@ func componentFromRepo(
 ) (template.SuiteComponent, error) {
 
 	component := template.SuiteComponent{
-		Repo: repo.Name,
+		Repo:       repo.Name,
+		UpgradeURL: repo.UpgradeURL,
 	}
 
 	var changelogs []*changelogPkg.VersionChangelog
