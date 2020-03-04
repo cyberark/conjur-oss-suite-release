@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 . ./store.sh
 
@@ -6,7 +7,7 @@ echo "
 ---
 # This policy defines an authn-k8s endpoint, CA creds and a layer for whitelisted identities permitted to authenticate to it
 - !policy
-  id: conjur/authn-k8s/$(get_val AUTHENTICATOR_ID)
+  id: conjur/authn-k8s/$(store_get AUTHENTICATOR_ID)
   owner: !user admin
   annotations:
     description: Namespace defs for the Conjur cluster in dev
@@ -30,7 +31,7 @@ echo "
 
 # This policy defines a layer of whitelisted identities permitted to authenticate to the authn-k8s endpoint.
 - !policy
-  id: conjur/authn-k8s/$(get_val AUTHENTICATOR_ID)/apps
+  id: conjur/authn-k8s/$(store_get AUTHENTICATOR_ID)/apps
   owner: !user admin
   annotations:
     description: Identities permitted to authenticate
@@ -43,7 +44,7 @@ echo "
 
   - &hosts
     - !host
-      id: $(get_val TEST_NAMESPACE)/service_account/$(get_val APP_SERVICE_ACCOUNT)
+      id: $(store_get TEST_NAMESPACE)/service_account/$(store_get APP_SERVICE_ACCOUNT)
       annotations:
         kubernetes/authentication-container-name: authenticator
         kubernetes: true
@@ -83,10 +84,10 @@ echo "
 - !grant
   role: !layer test-app
   members:
-  - !layer conjur/authn-k8s/$(get_val AUTHENTICATOR_ID)/apps
+  - !layer conjur/authn-k8s/$(store_get AUTHENTICATOR_ID)/apps
 
 - !permit
-  resource: !webservice conjur/authn-k8s/$(get_val AUTHENTICATOR_ID)
+  resource: !webservice conjur/authn-k8s/$(store_get AUTHENTICATOR_ID)
   privilege: [ read, authenticate ]
-  role: !layer conjur/authn-k8s/$(get_val AUTHENTICATOR_ID)/apps
+  role: !layer conjur/authn-k8s/$(store_get AUTHENTICATOR_ID)/apps
 "

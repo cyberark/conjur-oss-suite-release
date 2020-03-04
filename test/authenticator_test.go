@@ -1,25 +1,24 @@
+// +build release_test
+
 package main
 
 import (
 	"errors"
-	"os"
 	"os/exec"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"test/kv"
 )
 
-var shouldRun bool
-func init()  {
-	v, ok := os.LookupEnv("RELEASE_TESTS")
-	shouldRun = ok && v == "1"
-}
-func checkShouldRun(t *testing.T) {
-	if !shouldRun {
-		t.Skip("skipping release tests")
+var storeClient *kv.StoreClient
+func init() {
+	var err error
+	storeClient, err = kv.DefaultStoreClient()
+	if err != nil {
+		panic(err)
 	}
 }
-
 
 func callCommand(name string, args ...string) (string, error) {
 	out, err := exec.Command(
@@ -40,19 +39,26 @@ func callCommand(name string, args ...string) (string, error) {
 }
 
 func TestKubernetesAuthenticator(t *testing.T) {
-	checkShouldRun(t)
-
 	t.Run("Retrieve conjur variable", func(t *testing.T) {
-		expectedValue := "meow meow meow"
-		out, err := callCommand("bash", "-c", `
-. ./store.sh
+		expectedValue := "abc123"
 
-kubectl exec "$(get_val APP_POD_NAME)" -c app -- bash -xce '
+		_, err := callCommand("bash", "-ec", `
+. ./executors.sh
+
+exec_conjur_client conjur variable values add test-app-secrets/username ` + expectedValue,
+		)
+		if !assert.NoError(t, err) {
+			return
+		}
+
+		out, err := callCommand("bash", "-ec", `
+. ./executors.sh
+
+exec_app bash -c '
 export CONJUR_AUTHN_TOKEN=$(cat /run/conjur/access-token | base64)
 conjur variable value test-app-secrets/username
 '
 `)
-
 		if !assert.NoError(t, err) {
 			return
 		}

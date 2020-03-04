@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 . ./store.sh
 
-set_val app.CONJUR_AUTHN_URL "$(get_val CONJUR_URL)/authn-k8s/$(get_val AUTHENTICATOR_ID)"
-set_val app.CONJUR_APPLIANCE_URL "$(get_val CONJUR_URL)"
-set_val app.CONJUR_ACCOUNT "$(get_val CONJUR_ACCOUNT)"
-set_val app.CONJUR_AUTHN_LOGIN "host/conjur/authn-k8s/$(get_val AUTHENTICATOR_ID)/apps/$(get_val TEST_NAMESPACE)/service_account/$(get_val APP_SERVICE_ACCOUNT)"
-set_val app.CONJUR_SSL_CERTIFICATE_SECRET "$(get_val CONJUR_RELEASE_NAME)-conjur-ssl-cert"
-set_val app.APP_SERVICE_ACCOUNT "$(get_val APP_SERVICE_ACCOUNT)"
-set_val app.CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION "$(get_val CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION)"
+store_set app.CONJUR_AUTHN_URL "$(store_get CONJUR_URL)/authn-k8s/$(store_get AUTHENTICATOR_ID)"
+store_set app.CONJUR_APPLIANCE_URL "$(store_get CONJUR_URL)"
+store_set app.CONJUR_ACCOUNT "$(store_get CONJUR_ACCOUNT)"
+store_set app.CONJUR_AUTHN_LOGIN "host/conjur/authn-k8s/$(store_get AUTHENTICATOR_ID)/apps/$(store_get TEST_NAMESPACE)/service_account/$(store_get APP_SERVICE_ACCOUNT)"
+store_set app.CONJUR_SSL_CERTIFICATE_SECRET "$(store_get CONJUR_RELEASE_NAME)-conjur-ssl-cert"
+store_set app.APP_SERVICE_ACCOUNT "$(store_get APP_SERVICE_ACCOUNT)"
+store_set app.CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION "$(store_get CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION)"
 
 echo "
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -28,7 +29,7 @@ spec:
       labels:
         app: test-app
     spec:
-      serviceAccountName: $(get_val app.APP_SERVICE_ACCOUNT)
+      serviceAccountName: $(store_get app.APP_SERVICE_ACCOUNT)
       containers:
       - image: cyberark/conjur-cli:5
         imagePullPolicy: Always
@@ -36,23 +37,23 @@ spec:
         command: ['sleep', 'infinity']
         env:
           - name: CONJUR_APPLIANCE_URL
-            value: '$(get_val app.CONJUR_APPLIANCE_URL)'
+            value: '$(store_get app.CONJUR_APPLIANCE_URL)'
           - name: CONJUR_ACCOUNT
-            value: '$(get_val app.CONJUR_ACCOUNT)'
+            value: '$(store_get app.CONJUR_ACCOUNT)'
           - name: CONJUR_AUTHN_LOGIN
-            value: '$(get_val app.CONJUR_AUTHN_LOGIN)'
+            value: '$(store_get app.CONJUR_AUTHN_LOGIN)'
           - name: CONJUR_AUTHN_TOKEN_FILE
             value: /run/conjur/access-token
           - name: CONJUR_SSL_CERTIFICATE
             valueFrom:
               secretKeyRef:
-                name: '$(get_val app.CONJUR_SSL_CERTIFICATE_SECRET)'
+                name: '$(store_get app.CONJUR_SSL_CERTIFICATE_SECRET)'
                 key: 'tls.crt'
         volumeMounts:
           - mountPath: /run/conjur
             name: conjur-access-token
             readOnly: true
-      - image: cyberark/conjur-kubernetes-authenticator:$(get_val app.CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION)
+      - image: cyberark/conjur-kubernetes-authenticator:$(store_get app.CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION)
         imagePullPolicy: Always
         name: authenticator
         env:
@@ -71,15 +72,15 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
           - name: CONJUR_AUTHN_URL
-            value: '$(get_val app.CONJUR_AUTHN_URL)'
+            value: '$(store_get app.CONJUR_AUTHN_URL)'
           - name: CONJUR_ACCOUNT
-            value: '$(get_val app.CONJUR_ACCOUNT)'
+            value: '$(store_get app.CONJUR_ACCOUNT)'
           - name: CONJUR_AUTHN_LOGIN
-            value: '$(get_val app.CONJUR_AUTHN_LOGIN)'
+            value: '$(store_get app.CONJUR_AUTHN_LOGIN)'
           - name: CONJUR_SSL_CERTIFICATE
             valueFrom:
               secretKeyRef:
-                name: '$(get_val app.CONJUR_SSL_CERTIFICATE_SECRET)'
+                name: '$(store_get app.CONJUR_SSL_CERTIFICATE_SECRET)'
                 key: 'tls.crt'
         volumeMounts:
           - mountPath: /run/conjur

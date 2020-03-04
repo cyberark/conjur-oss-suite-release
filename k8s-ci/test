@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+. ./utils.sh
+
+if [ $# -lt 1 ]; then
+  echo "Usage $0 <test_path>"
+  exit 1
+fi
+
+readonly TEST_PATH="$1"
+
+# Set environment variables
+TEST_ID="$(uuidgen | tr "[:upper:]" "[:lower:]" | head -c 12 | tr -d -)"
+export TEST_ID
+export TEST_NAMESPACE="test-release-${TEST_ID}"
+
+# Clean up when script completes
+function finish {
+  announce 'Wrapping up and removing test environment'
+}
+trap finish EXIT
+
+function runTest() {
+  local test_path="$1"
+
+  runDockerCommand "
+# ensure the container has the appropriate env
+
+# run tests
+cd '$test_path';
+./test
+"
+}
+
+function main() {
+  announce 'Preparing test environment'
+  prepareTestEnvironment
+
+  announce "Testing: $TEST_PATH..."
+  runTest "$TEST_PATH"
+  announce "Testing $TEST_PATH complete!"
+}
+
+main
