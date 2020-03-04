@@ -17,6 +17,7 @@ type SuiteComponent struct {
 	Changelogs  []*changelog.VersionChangelog
 	ReleaseName string
 	ReleaseDate string
+	UpgradeURL  string
 }
 
 // ReleaseSuite stores all the data needed for generation of templates in the suite
