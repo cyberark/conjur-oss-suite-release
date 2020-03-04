@@ -14,6 +14,7 @@ These are the components that combine to create this Conjur OSS Suite release an
 to their releases:
 
 - [cyberark/conjur v1.4.4 (2020-01-03)](https://github.com/cyberark/conjur/releases/tag/v1.4.4)
+- [cyberark/secretless-broker v1.4.2 (2020-01-08)](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2)
 
 ## Changes
 
@@ -41,4 +42,15 @@ OSS Suite release:
 
 #### Fixed
 - 144Fix
+
+### [cyberark/secretless-broker v1.4.2](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2) (2020-01-08)
+
+#### Added
+- Broker142Addition
+
+#### Changed
+- Broker142Change
+
+#### Removed
+- Broker142Removal
 
