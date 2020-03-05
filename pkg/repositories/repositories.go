@@ -58,21 +58,53 @@ func NewConfig(filename string) (Config, error) {
 	return repoConfig, nil
 }
 
+// UpdateConfigVersions updates a config's repos' versions in-place, if the repo has a newer
+// version in the supplied config. It does this through the following steps:
+// 1. Sets the 'afterVersion' to the current 'version' of a repo
+// 2. Updates the 'version' to the newer one
+func (config *Config) UpdateConfigVersions(configWithNewVersions *Config) {
+	// Extract repos and their new versions regardless of category
+	newVersions := make(map[string]string)
+
+	for _, category := range configWithNewVersions.Section.Categories {
+		for _, repo := range category.Repos {
+			newVersions[repo.URL] = repo.Version
+		}
+	}
+
+	// We use indexes since modifying objects while using them doesn't work in Golang
+	// as expected.
+	// More info: https://github.com/golang/go/wiki/CommonMistakes#using-reference-to-loop-iterator-variable
+	for _, category := range config.Section.Categories {
+		for repoIndex, repo := range category.Repos {
+			newVersion, present := newVersions[repo.URL]
+			if !present {
+				continue
+			}
+			remappedRepo := repo
+			remappedRepo.Version = newVersion
+			remappedRepo.AfterVersion = repo.Version
+
+			category.Repos[repoIndex] = remappedRepo
+		}
+	}
+}
+
 // SelectUnreleased modifies a Config in-place that will pin all component version
 // minimums to the maximums of the input Config as well as unset the maximum, effectively
 // enabling us to figure out what a Config for unreleased component versions would
 // include.
-func SelectUnreleased(config *Config) {
-	// We use indexes since modifying objects while using them doesn't work in Golang as
-	// expected.
-	// More info: https://github.com/golang/go/wiki/CommonMistakes#using-reference-to-loop-iterator-variable
-	for categoryIdx := range config.Section.Categories {
-		for repoIdx, repo := range config.Section.Categories[categoryIdx].Repos {
+func (config *Config) SelectUnreleased() {
+	for _, category := range config.Section.Categories {
+		// We use indexes since modifying objects while using them doesn't work in Golang
+		// as expected.
+		// More info: https://github.com/golang/go/wiki/CommonMistakes#using-reference-to-loop-iterator-variable
+		for repoIndex, repo := range category.Repos {
 			remappedRepo := repo
 			remappedRepo.Version = ""
 			remappedRepo.AfterVersion = repo.Version
 
-			config.Section.Categories[categoryIdx].Repos[repoIdx] = remappedRepo
+			category.Repos[repoIndex] = remappedRepo
 		}
 	}
 }

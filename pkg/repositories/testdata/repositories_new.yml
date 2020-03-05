@@ -1,0 +1,12 @@
+---
+section:
+  name: Section Name
+  description: Section Description
+  categories:
+  - name: Category1
+    description: Category1 Description
+    repos:
+      - name: Repo2 Name
+        url: Repo2 URL
+        description: Repo2 Description
+        version: Repo2 New Version
