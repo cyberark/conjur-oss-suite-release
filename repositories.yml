@@ -29,7 +29,7 @@ section:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
-        version: v6.2.0
+        version: v6.2.1
 #      - name: cyberark/conjur-api-dotnet
 #        url: https://github.com/cyberark/conjur-api-dotnet
 #        description: Conjur .Net Client Library
