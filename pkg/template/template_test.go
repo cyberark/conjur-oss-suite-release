@@ -44,6 +44,7 @@ somestring
   bbb
 
 $$$
+abcd
 `
 
 	assert.Equal(t, string(outputFileContent), expectedOutput)
