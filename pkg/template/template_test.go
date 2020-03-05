@@ -26,7 +26,8 @@ func TestWriteChangelog(t *testing.T) {
 		[]string{"aaa", "bbb"},
 	}
 
-	err = WriteChangelog("testdata/test.tmpl", testObj, outputFile)
+	tmpl := New("testdata")
+	err = tmpl.WriteChangelog("test.tmpl", testObj, outputFile)
 	if !assert.NoError(t, err) {
 		return
 	}
@@ -45,6 +46,9 @@ somestring
 
 $$$
 abcd
+@@@=== PARTIAL START ===
+somestring
+=== PARTIAL END ===
 `
 
 	assert.Equal(t, string(outputFileContent), expectedOutput)
@@ -55,7 +59,8 @@ func TestWriteChangelogDestinationOpenError(t *testing.T) {
 	outputFile := "doesnotexist/foo"
 	testObj := struct{}{}
 
-	err := WriteChangelog("testdata/test.tmpl", testObj, outputFile)
+	tmpl := New("testdata")
+	err := tmpl.WriteChangelog("test.tmpl", testObj, outputFile)
 	if !assert.Error(t, err) {
 		return
 	}
@@ -75,12 +80,13 @@ func TestWriteChangelogTemplateOpenError(t *testing.T) {
 	outputFile := filepath.Join(dir, "output.txt")
 	testObj := struct{}{}
 
-	err = WriteChangelog("doesnotexist", testObj, outputFile)
+	tmpl := New("testdata")
+	err = tmpl.WriteChangelog("doesnotexist", testObj, outputFile)
 	if !assert.Error(t, err) {
 		return
 	}
 
-	assert.EqualError(t, err, "Could not read template 'doesnotexist'")
+	assert.EqualError(t, err, "Could not read template 'testdata/doesnotexist'")
 }
 
 func TestWriteChangelogTemplateResolutionError(t *testing.T) {
@@ -93,7 +99,8 @@ func TestWriteChangelogTemplateResolutionError(t *testing.T) {
 	outputFile := filepath.Join(dir, "output.txt")
 	testObj := struct{}{}
 
-	err = WriteChangelog("testdata/test.tmpl", testObj, outputFile)
+	tmpl := New("testdata")
+	err = tmpl.WriteChangelog("test.tmpl", testObj, outputFile)
 	if !assert.Error(t, err) {
 		return
 	}
