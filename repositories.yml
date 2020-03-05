@@ -10,6 +10,7 @@ section:
         url: https://github.com/cyberark/conjur
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
+        certification: "certified"
         after: v1.3.5
         upgrade_url: https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm
       - name: cyberark/conjur-oss-helm-chart
@@ -29,6 +30,7 @@ section:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
+        certification: "certified"
         version: v6.2.1
 #      - name: cyberark/conjur-api-dotnet
 #        url: https://github.com/cyberark/conjur-api-dotnet
@@ -42,6 +44,7 @@ section:
       - name: cyberark/conjur-api-python3
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
+        certification: "community"
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
