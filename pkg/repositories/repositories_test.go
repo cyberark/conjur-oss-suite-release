@@ -12,9 +12,10 @@ func newTestRepoObject(name string) Repository {
 			Name:        name + " Name",
 			Description: name + " Description",
 		},
-		URL:        name + " URL",
-		Version:    name + " Version",
-		UpgradeURL: name + " Upgrade Url",
+		URL:                name + " URL",
+		Version:            name + " Version",
+		UpgradeURL:         name + " Upgrade Url",
+		CertificationLevel: name + " Certification",
 	}
 }
 
@@ -24,6 +25,7 @@ func testfileExpectedConfig() Config {
 
 	expectedRepo2 := newTestRepoObject("Repo2")
 	expectedRepo2.UpgradeURL = ""
+	expectedRepo2.CertificationLevel = ""
 
 	expectedCategories := []category{
 		category{
