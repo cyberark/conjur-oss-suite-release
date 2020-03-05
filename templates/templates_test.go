@@ -57,10 +57,12 @@ func TestTemplates(t *testing.T) {
 		UnifiedChangelog: "@@@Unified changelog content@@@",
 		Components: []template.SuiteComponent{
 			template.SuiteComponent{
-				Repo:        "cyberark/conjur",
-				ReleaseName: "v1.4.4",
-				ReleaseDate: date2.Format("2006-01-02"),
-				UpgradeURL:  "https://conjur_upgrade_url",
+				Repo:               "cyberark/conjur",
+				URL:                "https://github.com/cyberark/conjur",
+				ReleaseName:        "v1.4.4",
+				ReleaseDate:        date2.Format("2006-01-02"),
+				CertificationLevel: "trusted",
+				UpgradeURL:         "https://conjur_upgrade_url",
 				Changelogs: []*changelog.VersionChangelog{
 					&changelog.VersionChangelog{
 						Repo:    "cyberark/conjur",
@@ -86,9 +88,11 @@ func TestTemplates(t *testing.T) {
 				},
 			},
 			template.SuiteComponent{
-				Repo:        "cyberark/secretless-broker",
-				ReleaseName: "v1.4.2",
-				ReleaseDate: date3.Format("2006-01-02"),
+				Repo:               "cyberark/secretless-broker",
+				URL:                "https://github.com/cyberark/secretless-broker",
+				ReleaseName:        "v1.4.2",
+				ReleaseDate:        date3.Format("2006-01-02"),
+				CertificationLevel: "certified",
 				Changelogs: []*changelog.VersionChangelog{
 					&changelog.VersionChangelog{
 						Repo:    "cyberark/secretless-broker",
@@ -108,7 +112,9 @@ func TestTemplates(t *testing.T) {
 	for _, tt := range templates {
 		t.Run(tt, func(t *testing.T) {
 			outputFile := filepath.Join(dir, tt+"_output.txt")
-			err = template.WriteChangelog(tt, testData, outputFile)
+
+			tmpl := template.New(".")
+			err = tmpl.WriteChangelog(tt, testData, outputFile)
 			if !assert.NoError(t, err) {
 				return
 			}

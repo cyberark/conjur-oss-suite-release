@@ -15,11 +15,13 @@ import (
 // SuiteComponent represents a suite component with all of its changelogs and
 // relevant pin data
 type SuiteComponent struct {
-	Repo        string
-	Changelogs  []*changelog.VersionChangelog
-	ReleaseName string
-	ReleaseDate string
-	UpgradeURL  string
+	Repo               string
+	URL                string
+	ReleaseName        string
+	ReleaseDate        string
+	CertificationLevel string
+	Changelogs         []*changelog.VersionChangelog
+	UpgradeURL         string
 }
 
 // ReleaseSuite stores all the data needed for generation of templates in the suite
