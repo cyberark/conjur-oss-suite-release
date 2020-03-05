@@ -2,9 +2,9 @@ package template
 
 import (
 	"fmt"
-	stdlibTemplate "html/template"
 	"log"
 	"os"
+	stdlibTemplate "text/template"
 	"time"
 
 	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
