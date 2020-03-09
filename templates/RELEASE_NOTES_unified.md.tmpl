@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
 {{ range .Components }}
-- **[{{ .Repo }} {{ .ReleaseName }}](https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }})** ({{ .ReleaseDate }})
+- **[{{ .Repo }} {{ .ReleaseName }}](https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }})** ({{ .ReleaseDate }}) {{ template "certification_badge.md" . -}}
 {{- end }}
 
 ## Upgrade Instructions

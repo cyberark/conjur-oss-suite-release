@@ -14,9 +14,9 @@ All notable changes to this project will be documented in this file.
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
 
-- **[cyberark/conjur v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6)** (2020-01-21)
-- **[cyberark/conjur-oss-helm-chart v1.3.7](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7)** (2019-01-31)
-- **[cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5)** (2019-12-06)
+- **[cyberark/conjur v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6)** (2020-01-21) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-Blue)](https://github.com/cyberark/conjur)
+- **[cyberark/conjur-oss-helm-chart v1.3.7](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7)** (2019-01-31) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-Green)](https://github.com/cyberark/conjur-oss-helm-chart)
+- **[cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5)** (2019-12-06) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-Yellow)](https://github.com/cyberark/conjur-api-python3)
 
 ## Upgrade Instructions
 
@@ -60,7 +60,7 @@ OSS Suite release:
 ### [cyberark/conjur v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6) (2020-01-21)
 
 #### Changed
-- K8s hosts&#39; application identity is extracted from annotations or id. If it is
+- K8s hosts' application identity is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.
 

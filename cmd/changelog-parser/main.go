@@ -34,9 +34,9 @@ var providerVersionResolutionTemplate = map[string]string{
 }
 
 var outputTypeTemplates = map[string]string{
-	"changelog":  "templates/CHANGELOG_unified.md.tmpl",
-	"release":    "templates/RELEASE_NOTES_unified.md.tmpl",
-	"unreleased": "templates/UNRELEASED_CHANGES_unified.md.tmpl",
+	"changelog":  "CHANGELOG_unified.md.tmpl",
+	"release":    "RELEASE_NOTES_unified.md.tmpl",
+	"unreleased": "UNRELEASED_CHANGES_unified.md.tmpl",
 }
 
 const defaultOutputFilename = "CHANGELOG.md"
@@ -86,8 +86,10 @@ func componentFromRepo(
 ) (template.SuiteComponent, error) {
 
 	component := template.SuiteComponent{
-		Repo:       repo.Name,
-		UpgradeURL: repo.UpgradeURL,
+		Repo:               repo.Name,
+		URL:                repo.URL,
+		CertificationLevel: repo.CertificationLevel,
+		UpgradeURL:         repo.UpgradeURL,
 	}
 
 	var changelogs []*changelogPkg.VersionChangelog
@@ -252,7 +254,8 @@ func runParser(options cliOptions) {
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 
-	err = template.WriteChangelog(outputTypeTemplates[options.OutputType],
+	tmpl := template.New("templates")
+	err = tmpl.WriteChangelog(outputTypeTemplates[options.OutputType],
 		templateData,
 		options.OutputFilename)
 	if err != nil {

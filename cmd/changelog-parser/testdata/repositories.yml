@@ -13,10 +13,12 @@ section:
         version: v1.4.6
         after: v1.3.5
         upgrade_url: https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm
+        certification: "trusted"
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
         version: v1.3.7
+        certification: "certified"
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
     repos:
@@ -24,3 +26,4 @@ section:
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
         version: v0.0.5
+        certification: "community"

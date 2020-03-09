@@ -2,9 +2,11 @@ package template
 
 import (
 	"fmt"
-	stdlibTemplate "html/template"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
+	stdlibTemplate "text/template"
 	"time"
 
 	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
@@ -13,11 +15,13 @@ import (
 // SuiteComponent represents a suite component with all of its changelogs and
 // relevant pin data
 type SuiteComponent struct {
-	Repo        string
-	Changelogs  []*changelog.VersionChangelog
-	ReleaseName string
-	ReleaseDate string
-	UpgradeURL  string
+	CertificationLevel string
+	Changelogs         []*changelog.VersionChangelog
+	ReleaseName        string
+	ReleaseDate        string
+	Repo               string
+	UpgradeURL         string
+	URL                string
 }
 
 // ReleaseSuite stores all the data needed for generation of templates in the suite
@@ -28,11 +32,36 @@ type ReleaseSuite struct {
 	UnifiedChangelog string
 }
 
+// TemplatesExtension is the extension used for templates that we can use
+// to glob-load into the templating engine.
+const TemplatesExtension = ".md"
+
+// Engine is a templating generation object that can use partials and helpers
+type Engine struct {
+	BaseDir string
+}
+
+// Define helper methods for templates
+var funcMap = stdlibTemplate.FuncMap{
+	"toLower": strings.ToLower,
+}
+
+// New returns a new templating.Engine based on the specified root
+// template directory.
+func New(baseDir string) *Engine {
+	return &Engine{
+		BaseDir: baseDir,
+	}
+}
+
 // WriteChangelog uses a combination of the template path and a data structure
 // to create an output file based on that template.
-func WriteChangelog(templatePath string,
+func (engine *Engine) WriteChangelog(templateName string,
 	templateData interface{},
 	outputPath string) error {
+
+	templatePath := filepath.Join(engine.BaseDir, templateName)
+	partialsGlobPath := filepath.Join(engine.BaseDir, "partials", "*"+TemplatesExtension)
 
 	// Sanity check
 	if _, err := os.Stat(templatePath); err != nil {
@@ -49,8 +78,17 @@ func WriteChangelog(templatePath string,
 
 	// Generate and write the data to it
 	log.Printf("Generating '%s' file from template '%s'...", outputPath, templatePath)
-	tmpl := stdlibTemplate.Must(stdlibTemplate.ParseFiles(templatePath))
-	err = tmpl.Execute(outputFile, templateData)
+
+	// Create new parent template with helper functions
+	tmpl := stdlibTemplate.New("template").Funcs(funcMap)
+
+	// Load up any needed partials
+	tmpl = stdlibTemplate.Must(tmpl.ParseGlob(partialsGlobPath))
+
+	// Load up the requested template
+	tmpl = stdlibTemplate.Must(tmpl.ParseFiles(templatePath))
+
+	err = tmpl.ExecuteTemplate(outputFile, templateName, templateData)
 	if err != nil {
 		return fmt.Errorf("Error running template '%s': %v", templatePath, err)
 	}
