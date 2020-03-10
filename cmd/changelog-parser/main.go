@@ -221,7 +221,7 @@ func runParser(options cliOptions) {
 
 	if options.OutputType == "unreleased" {
 		// This is an in-place operation
-		repositories.SelectUnreleased(&repoConfig)
+		repoConfig.SelectUnreleased()
 	}
 
 	log.Printf("Collecting changelogs...")
