@@ -24,5 +24,5 @@ jobs:
         run: helm repo add stable https://kubernetes-charts.storage.googleapis.com/ && helm repo update
 
       - name: Run releases test
-        working-directory: ./test
+        working-directory: ./release-testing
         run: ./test

@@ -22,19 +22,7 @@ RUN apt-get update -y && \
     apt-get install -y docker-ce && \
     rm -rf /var/lib/apt/lists/*
 
-# Install kubectl CLI
-#RUN wget -q -O /usr/local/bin/kubectl \
-#      https://storage.googleapis.com/kubernetes-release/release/v1.11.3/bin/linux/amd64/kubectl && \
-#    chmod +x /usr/local/bin/kubectl
-
-# Install kubectx and kubens
-RUN wget -q -O /usr/local/bin/kubectx \
-      https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx && \
-    chmod +x /usr/local/bin/kubectx
-RUN wget -q -O /usr/local/bin/kubens \
-      https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens && \
-    chmod +x /usr/local/bin/kubens
-
+# Install Helm
 RUN HELM_VERSION=v3.0.2 && \
     wget https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz && \
     tar xvf helm-${HELM_VERSION}-linux-amd64.tar.gz && \
@@ -42,7 +30,6 @@ RUN HELM_VERSION=v3.0.2 && \
     rm helm-${HELM_VERSION}-linux-amd64.tar.gz && \
     rm -rf linux-amd64
 
+# Install Helm stable repo
 RUN helm repo add stable https://kubernetes-charts.storage.googleapis.com/ && \
     helm repo update
-
-RUN apt-get update && apt-get install -y jq

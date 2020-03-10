@@ -38,11 +38,15 @@ func callCommand(name string, args ...string) (string, error) {
 	return outString, nil
 }
 
-func TestKubernetesAuthenticator(t *testing.T) {
-	t.Run("Retrieve conjur variable", func(t *testing.T) {
+func TestSecretless(t *testing.T) {
+	t.Run("Consume conjur variable", func(t *testing.T) {
 		expectedValue := "abc123"
 
-		_, err := callCommand("bash", "-ec", `
+		_, err := callCommand(
+			"bash",
+			"-ec",
+			// language=bash
+			`
 . ./executors.sh
 
 exec_conjur_client conjur variable values add test-app-secrets/username ` + expectedValue,
@@ -51,17 +55,23 @@ exec_conjur_client conjur variable values add test-app-secrets/username ` + expe
 			return
 		}
 
-		out, err := callCommand("bash", "-ec", `
+		out, err := callCommand(
+			"bash",
+			"-ec",
+			// language=bash
+			`
 . ./executors.sh
 
 exec_app bash -c '
-export CONJUR_AUTHN_TOKEN=$(cat /run/conjur/access-token | base64)
-conjur variable value test-app-secrets/username
+export http_proxy=http://localhost:8080
+
+curl -s "http://httpbin.org/anything" | jq -j ".headers.Authorization"
 '
 `)
 		if !assert.NoError(t, err) {
 			return
 		}
+
 		assert.Equal(t, expectedValue, out)
 	})
 }

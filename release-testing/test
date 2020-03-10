@@ -29,7 +29,7 @@ function main() {
 
   store_set HELM_CHART_RELEASE_VERSION 1.3.8
   store_set CONJUR_OSS_RELEASE_VERSION 1.4.1
-  store_set CONJUR_KUBERNETES_AUTHENTICATOR_RELEASE_VERSION 0.15.0
+  store_set SECRETLESS_RELEASE_VERSION 1.5.2
 
   store_set TEST_NAMESPACE "suite-test-$(openssl rand -hex 2)"
 

@@ -14,11 +14,12 @@ function store_init() {
   "${CURRENT_DIR}/store" serve &> "${CURRENT_DIR}/store-logs" &
 
   sleep 1
+  export STORE_PORT=$(
   cat "${CURRENT_DIR}/store-logs" | \
    grep "Using port:" | \
-    awk '{ print $5 }' | \
-     xargs echo -n > "${CURRENT_DIR}/store-port"
-  export STORE_PORT="$(cat ${CURRENT_DIR}/store-port)"
+    awk '{ printf "%s", $5 }'
+  )
+  echo -n "${STORE_PORT}" > "${CURRENT_DIR}/store-port"
 }
 
 # store_destroy instructs the store, if one exists, to terminate.

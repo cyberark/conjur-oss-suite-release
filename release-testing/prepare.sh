@@ -135,7 +135,7 @@ function main() {
   echo "Deploy app."
   kubectl --namespace "$(store_get TEST_NAMESPACE)" \
     create sa "$(store_get APP_SERVICE_ACCOUNT)"
-  store_set "app_deployment" "$(./app_deployment.yml.sh)"
+  store_set "app_deployment" "$(./app_secretless_deployment.yml.sh)"
   store_get "app_deployment" | kubectl --namespace "$(store_get TEST_NAMESPACE)" apply -f -
 
   local APP_POD_NAME=$(kubectl --namespace "$(store_get TEST_NAMESPACE)" get pods \

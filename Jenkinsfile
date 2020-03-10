@@ -15,7 +15,7 @@ pipeline {
   stages {
     stage('Release test') {
       steps {
-        sh 'summon -f ./k8s-ci/secrets.yml ./k8s-ci/test test'
+        sh 'summon -f ./k8s-ci/secrets.yml ./k8s-ci/test release-testing'
       }
     }
   }
