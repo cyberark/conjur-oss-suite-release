@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -u
+
+function log_in() {
+  gcloud auth activate-service-account \
+    --key-file "${GCLOUD_SERVICE_KEY}"
+  gcloud container clusters get-credentials \
+    "${GCLOUD_CLUSTER_NAME}" \
+    --zone "${GCLOUD_ZONE}" \
+    --project "${GCLOUD_PROJECT_NAME}"
+}
+
+printf 'Logging in...'
+
+attempt=0
+
+log_in
+until [[ "$(gcloud auth list --filter=status:ACTIVE --format='value(account)' 2>/dev/null)" != "" ]]; do
+  echo -n '.'
+  sleep 2
+
+  attempt=$(( attempt + 1 ))
+  if [ $attempt -gt 10 ]; then
+    echo
+    echo "ERROR: Could not log into gcloud!"
+    exit 1
+  fi
+
+  log_in
+done
+
+echo
