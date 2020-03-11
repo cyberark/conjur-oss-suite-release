@@ -27,7 +27,7 @@ The CLI accepts the following arguments/parameters:
   -o string
         Output filename (default "CHANGELOG.md")
   -p string
-        GitHub API token
+        GitHub API token. This can also be passed in as the 'GITHUB_TOKEN' environment variable. The flag takes precedence.
   -t string
         Output type. Only accepts 'changelog' and 'release'. (default "changelog")
   -v string
