@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ## Table of Contents
 
 - [Components](#components)
+- [Installation Instructions for the Suite Release Version of Conjur](#installation-instructions-for-the-suite-release-version-of-conjur)
 - [Upgrade Instructions](#upgrade-instructions)
 - [Changes](#changes)
 
@@ -16,6 +17,10 @@ to their releases:
 {{ range .Components }}
 - **[{{ .Repo }} {{ .ReleaseName }}](https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }})** ({{ .ReleaseDate }}) {{ template "certification_badge.md" . -}}
 {{- end }}
+
+## Installation Instructions for the Suite Release Version of Conjur
+
+{{ template "conjur_installation_instructions.md" . }}
 
 ## Upgrade Instructions
 

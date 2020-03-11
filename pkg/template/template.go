@@ -33,6 +33,18 @@ type ReleaseSuite struct {
 	UnifiedChangelog string
 }
 
+// ComponentReleaseVersion returns the release version, stripped of the v-prefix,
+// for a given repo.
+func (r ReleaseSuite) ComponentReleaseVersion(repo string) string {
+	for _, component := range r.Components {
+		if component.Repo == repo {
+			return strings.TrimPrefix(component.ReleaseName, "v")
+		}
+	}
+
+	return ""
+}
+
 // MarkdownPartialsExt is the extension used for markdown partials glob matcher
 const MarkdownPartialsExt = ".md"
 
