@@ -56,52 +56,46 @@ Upgrade instructions are available for the following components:
 - [cyberark/conjur](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm)
 
 ## Changes
-
 The following are changes to the constituent components since the last Conjur
 OSS Suite release:
+- [cyberark/conjur](#cyberarkconjur)
+- [cyberark/conjur-oss-helm-chart](#cyberarkconjur-oss-helm-chart)
+- [cyberark/conjur-api-python3](#cyberarkconjur-api-python3)
 
-### [cyberark/conjur v1.3.6](https://github.com/cyberark/conjur/releases/tag/v1.3.6) (2019-02-19)
+### cyberark/conjur
 
-#### Changed
-- Reduced IAM authentication logging
-- Refactored authentication strategies
-
-#### Removed
-- Removed OIDC APIs public access
-
-### [cyberark/conjur v1.4.4](https://github.com/cyberark/conjur/releases/tag/v1.4.4) (2019-12-19)
-
-#### Added
-- Early validation of account existence during OIDC authentication
-- Code coverage reporting and collection
-
-#### Changed
-- Bumped puma from 3.12.0 to 3.12.2
-- Bumped rack from 1.6.11 to 1.6.12
-- Bumped excon from 0.62.0 to 0.71.0
-
-#### Fixed
-- Fixed password rotation of blank password
-- Fixed bug with multi-cert CA chains in Kubernetes service accounts
-- Fixed build issues with creating namespaces with multiple values
-
-#### Removed
-- Removed follower env configuration
-
-### [cyberark/conjur v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6) (2020-01-21)
-
-#### Changed
-- K8s hosts' application identity is extracted from annotations or id. If it is
+#### [v1.3.6](https://github.com/cyberark/conjur/releases/tag/v1.3.6) (2019-02-19)
+* **Changed**
+    - Reduced IAM authentication logging
+    - Refactored authentication strategies
+* **Removed**
+    - Removed OIDC APIs public access
+#### [v1.4.4](https://github.com/cyberark/conjur/releases/tag/v1.4.4) (2019-12-19)
+* **Added**
+    - Early validation of account existence during OIDC authentication
+    - Code coverage reporting and collection
+* **Changed**
+    - Bumped puma from 3.12.0 to 3.12.2
+    - Bumped rack from 1.6.11 to 1.6.12
+    - Bumped excon from 0.62.0 to 0.71.0
+* **Fixed**
+    - Fixed password rotation of blank password
+    - Fixed bug with multi-cert CA chains in Kubernetes service accounts
+    - Fixed build issues with creating namespaces with multiple values
+* **Removed**
+    - Removed follower env configuration
+#### [v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6) (2020-01-21)
+* **Changed**
+    - K8s hosts' application identity is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.
+### cyberark/conjur-oss-helm-chart
 
-### [cyberark/conjur-oss-helm-chart v1.3.7](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7) (2019-01-31)
+#### [v1.3.7](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7) (2019-01-31)
+* **Changed**
+    - Server ciphers have been upgraded to TLS1.2 levels.
+### cyberark/conjur-api-python3
 
-#### Changed
-- Server ciphers have been upgraded to TLS1.2 levels.
-
-### [cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5) (2019-12-06)
-
-#### Added
-- Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)
-
+#### [v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5) (2019-12-06)
+* **Added**
+    - Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)

@@ -63,7 +63,12 @@ type Engine struct {
 
 // Define helper methods for templates
 var funcMap = map[string]interface{}{
-	"toLower": strings.ToLower,
+	"toLower":            strings.ToLower,
+	"markdownHeaderLink": markdownHeaderLink,
+}
+
+func markdownHeaderLink(repo string) string {
+	return strings.Replace(repo, "/", "", -1)
 }
 
 // New returns a new templating.Engine based on the specified root
