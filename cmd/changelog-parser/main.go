@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -226,7 +227,12 @@ func runParser(options cliOptions) {
 
 	log.Printf("Collecting changelogs...")
 	httpClient := http.NewClient()
-	httpClient.AuthToken = options.APIToken
+
+	githubAPIToken := options.APIToken
+	if githubAPIToken == "" {
+		githubAPIToken = os.Getenv("GITHUB_TOKEN")
+	}
+	httpClient.AuthToken = githubAPIToken
 
 	components, err := collectComponents(repoConfig, httpClient)
 	if err != nil {
@@ -280,7 +286,7 @@ func main() {
 	flag.StringVar(&options.Version, "v", defaultVersionString,
 		"Version to embed in the changelog")
 	flag.StringVar(&options.APIToken, "p", "",
-		"GitHub API token")
+		"GitHub API token. This can also be passed in as the 'GITHUB_TOKEN' environment variable. The flag takes precedence.")
 	flag.Parse()
 
 	runParser(options)
