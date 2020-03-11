@@ -44,6 +44,11 @@ plugins:
   # Go
   gofmt:
     enabled: true
+    exclude_patterns:
+      - "**/"         # exclude all
+      - "!./cmd/"     # ynexclude just the ones we want to lint
+      - "!./pkg/"
+      - "!./templates"
   golint:
     enabled: true
   govet:
