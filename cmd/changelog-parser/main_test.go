@@ -66,3 +66,65 @@ func TestMain(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateOutputFilename(t *testing.T) {
+	outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
+	testCases := []struct {
+		description      string
+		expectedFilename string
+		options          cliOptions
+	}{
+		{
+			description:      "Output type is release, no filename given",
+			expectedFilename: "RELEASE_NOTES_Unreleased.md",
+			options: cliOptions{
+				Date:               outputDate,
+				OutputFilename:     "",
+				OutputType:         "release",
+				RepositoryFilename: "bar",
+				Version:            "Unreleased",
+			},
+		},
+		{
+			description:      "Output type is changelog, no filename given",
+			expectedFilename: "CHANGELOG_Unreleased.md",
+			options: cliOptions{
+				Date:               outputDate,
+				OutputFilename:     "",
+				OutputType:         "changelog",
+				RepositoryFilename: "bar",
+				Version:            "Unreleased",
+			},
+		},
+		{
+			description: "Output type is unreleased, no filename given",
+			options: cliOptions{
+				Date:               outputDate,
+				OutputFilename:     "",
+				OutputType:         "unreleased",
+				RepositoryFilename: "bar",
+				Version:            "Unreleased",
+			},
+			expectedFilename: "UNRELEASED.md",
+		},
+		{
+			description: "Output type is release, filename is given",
+			options: cliOptions{
+				Date:               outputDate,
+				OutputFilename:     "foo.md",
+				OutputType:         "release",
+				RepositoryFilename: "bar",
+				Version:            "Unreleased",
+			},
+			expectedFilename: "foo.md",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("GenerateOutputFilename: " + tc.description, func(t *testing.T) {
+			tc.options.generateOutputFilename()
+
+			assert.EqualValues(t, tc.expectedFilename, tc.options.OutputFilename)
+		})
+	}
+}

@@ -26,6 +26,26 @@ type cliOptions struct {
 	Version            string
 }
 
+type templateInfo struct {
+	TemplateName string
+	OutputName   string
+}
+
+var templates = map[string]templateInfo{
+	"changelog": {
+		TemplateName: "CHANGELOG_unified.md.tmpl",
+		OutputName:   "CHANGELOG_%s.md",
+	},
+	"release": {
+		TemplateName: "RELEASE_NOTES_unified.md.tmpl",
+		OutputName:   "RELEASE_NOTES_%s.md",
+	},
+	"unreleased": {
+		TemplateName: "UNRELEASED_CHANGES_unified.md.tmpl",
+		OutputName:   "UNRELEASED.md",
+	},
+}
+
 var providerToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
 }
@@ -34,13 +54,6 @@ var providerVersionResolutionTemplate = map[string]string{
 	"github": "https://api.github.com/repos/%s/releases/latest",
 }
 
-var outputTypeTemplates = map[string]string{
-	"changelog":  "CHANGELOG_unified.md.tmpl",
-	"release":    "RELEASE_NOTES_unified.md.tmpl",
-	"unreleased": "UNRELEASED_CHANGES_unified.md.tmpl",
-}
-
-const defaultOutputFilename = "CHANGELOG.md"
 const defaultOutputType = "changelog"
 const defaultRepositoryFilename = "repositories.yml"
 const defaultVersionString = "Unreleased"
@@ -208,7 +221,7 @@ func extractVersionChangeLog(
 }
 
 func runParser(options cliOptions) {
-	if _, ok := outputTypeTemplates[options.OutputType]; !ok {
+	if _, ok := templates[options.OutputType]; !ok {
 		log.Fatal(fmt.Errorf("%s is not a valid output type", options.OutputType))
 		return
 	}
@@ -224,6 +237,8 @@ func runParser(options cliOptions) {
 		// This is an in-place operation
 		repoConfig.SelectUnreleased()
 	}
+
+	options.generateOutputFilename()
 
 	log.Printf("Collecting changelogs...")
 	httpClient := http.NewClient()
@@ -261,7 +276,7 @@ func runParser(options cliOptions) {
 	}
 
 	tmpl := template.New("templates")
-	err = tmpl.WriteChangelog(outputTypeTemplates[options.OutputType],
+	err = tmpl.WriteChangelog(templates[options.OutputType].TemplateName,
 		templateData,
 		options.OutputFilename)
 	if err != nil {
@@ -270,6 +285,19 @@ func runParser(options cliOptions) {
 	}
 
 	log.Printf("Changelog parser completed!")
+}
+
+// If no filename is provided, we generate one based on the file type
+func (options *cliOptions) generateOutputFilename() {
+	if options.OutputFilename == "" {
+		if options.OutputType == "unreleased" {
+			options.OutputFilename = templates[options.OutputType].OutputName
+		} else {
+			options.OutputFilename = fmt.Sprintf(
+				templates[options.OutputType].OutputName,
+				options.Version)
+		}
+	}
 }
 
 func main() {
@@ -281,7 +309,7 @@ func main() {
 		"Repository YAML file to parse")
 	flag.StringVar(&options.OutputType, "t", defaultOutputType,
 		"Output type. Only accepts 'changelog', 'release', and 'unreleased'.")
-	flag.StringVar(&options.OutputFilename, "o", defaultOutputFilename,
+	flag.StringVar(&options.OutputFilename, "o", "",
 		"Output filename")
 	flag.StringVar(&options.Version, "v", defaultVersionString,
 		"Version to embed in the changelog")
