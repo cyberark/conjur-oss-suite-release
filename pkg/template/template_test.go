@@ -9,6 +9,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const complexString = "!@#$%^&*()<>"
+const escapedComplexString = "!@#$%^&amp;*()&lt;&gt;"
+
+var templateTypeTests = []struct {
+	templateName         string
+	expectedStringOutput string
+}{
+	{"test.md", complexString},
+	{"test.htm", escapedComplexString},
+}
+
 func TestWriteChangelog(t *testing.T) {
 	dir, err := ioutil.TempDir("", "changelog_test")
 	if !assert.NoError(t, err) {
@@ -16,42 +27,43 @@ func TestWriteChangelog(t *testing.T) {
 	}
 	defer os.RemoveAll(dir)
 
-	outputFile := filepath.Join(dir, "output.txt")
+	for _, tt := range templateTypeTests {
+		t.Run(tt.templateName, func(t *testing.T) {
+			outputFile := filepath.Join(dir, tt.templateName+"_output.txt")
 
-	testObj := struct {
-		StringField string
-		ArrayField  []string
-	}{
-		"somestring",
-		[]string{"aaa", "bbb"},
+			testObj := struct {
+				StringField string
+				ArrayField  []string
+			}{
+				complexString,
+				[]string{"aaa", "bbb"},
+			}
+
+			tmpl := New("testdata")
+			err = tmpl.WriteChangelog(tt.templateName, testObj, outputFile)
+			if !assert.NoError(t, err) {
+				return
+			}
+
+			outputFileContent, err := ioutil.ReadFile(outputFile)
+			if !assert.NoError(t, err) {
+				return
+			}
+
+			expectedOutput := "###\n" +
+				tt.expectedStringOutput +
+				"\n\n  aaa" +
+				"\n\n  bbb" +
+				"\n\n$$$" +
+				"\nabcd" +
+				"\n@@@" +
+				"=== PARTIAL START ===" +
+				"\n" + tt.expectedStringOutput +
+				"\n=== PARTIAL END ===\n"
+
+			assert.Equal(t, expectedOutput, string(outputFileContent))
+		})
 	}
-
-	tmpl := New("testdata")
-	err = tmpl.WriteChangelog("test.tmpl", testObj, outputFile)
-	if !assert.NoError(t, err) {
-		return
-	}
-
-	outputFileContent, err := ioutil.ReadFile(outputFile)
-	if !assert.NoError(t, err) {
-		return
-	}
-
-	expectedOutput := `###
-somestring
-
-  aaa
-
-  bbb
-
-$$$
-abcd
-@@@=== PARTIAL START ===
-somestring
-=== PARTIAL END ===
-`
-
-	assert.Equal(t, string(outputFileContent), expectedOutput)
 }
 
 func TestWriteChangelogDestinationOpenError(t *testing.T) {
@@ -60,7 +72,7 @@ func TestWriteChangelogDestinationOpenError(t *testing.T) {
 	testObj := struct{}{}
 
 	tmpl := New("testdata")
-	err := tmpl.WriteChangelog("test.tmpl", testObj, outputFile)
+	err := tmpl.WriteChangelog("test.md", testObj, outputFile)
 	if !assert.Error(t, err) {
 		return
 	}
@@ -86,7 +98,12 @@ func TestWriteChangelogTemplateOpenError(t *testing.T) {
 		return
 	}
 
-	assert.EqualError(t, err, "Could not read template 'testdata/doesnotexist'")
+	assert.EqualError(
+		t,
+		err,
+		"Error running template 'testdata/doesnotexist': "+
+			"Could not read template 'testdata/doesnotexist'",
+	)
 }
 
 func TestWriteChangelogTemplateResolutionError(t *testing.T) {
@@ -96,17 +113,22 @@ func TestWriteChangelogTemplateResolutionError(t *testing.T) {
 	}
 	defer os.RemoveAll(dir)
 
-	outputFile := filepath.Join(dir, "output.txt")
-	testObj := struct{}{}
+	for _, tt := range templateTypeTests {
+		t.Run(tt.templateName, func(t *testing.T) {
+			outputFile := filepath.Join(dir, tt.templateName+"_output.txt")
+			testObj := struct{}{}
 
-	tmpl := New("testdata")
-	err = tmpl.WriteChangelog("test.tmpl", testObj, outputFile)
-	if !assert.Error(t, err) {
-		return
+			tmpl := New("testdata")
+			err = tmpl.WriteChangelog(tt.templateName, testObj, outputFile)
+			if !assert.Error(t, err) {
+				return
+			}
+
+			assert.EqualError(t, err,
+				"Error running template 'testdata/"+tt.templateName+"': "+
+					"template: "+tt.templateName+":2:3: "+
+					"executing \""+tt.templateName+"\" at <.StringField>: "+
+					"can't evaluate field StringField in type struct {}")
+		})
 	}
-
-	assert.EqualError(t, err,
-		"Error running template 'testdata/test.tmpl': "+
-			"template: test.tmpl:2:3: executing \"test.tmpl\" at <.StringField>: "+
-			"can't evaluate field StringField in type struct {}")
 }
