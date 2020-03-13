@@ -29,7 +29,7 @@ func TestWriteChangelog(t *testing.T) {
 
 	for _, tt := range templateTypeTests {
 		t.Run(tt.templateName, func(t *testing.T) {
-			outputFile := filepath.Join(dir, tt.templateName+"_output.txt")
+			outputFile := filepath.Join(dir, tt.templateName+"_output.md")
 
 			testObj := struct {
 				StringField string
@@ -89,7 +89,7 @@ func TestWriteChangelogTemplateOpenError(t *testing.T) {
 	}
 	defer os.RemoveAll(dir)
 
-	outputFile := filepath.Join(dir, "output.txt")
+	outputFile := filepath.Join(dir, "output.md")
 	testObj := struct{}{}
 
 	tmpl := New("testdata")
@@ -115,7 +115,7 @@ func TestWriteChangelogTemplateResolutionError(t *testing.T) {
 
 	for _, tt := range templateTypeTests {
 		t.Run(tt.templateName, func(t *testing.T) {
-			outputFile := filepath.Join(dir, tt.templateName+"_output.txt")
+			outputFile := filepath.Join(dir, tt.templateName+"_output.md")
 			testObj := struct{}{}
 
 			tmpl := New("testdata")

@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ## Table of Contents
 
 - [Components](#components)
+- [Installation Instructions for the Suite Release Version of Conjur](#installation-instructions-for-the-suite-release-version-of-conjur)
 - [Upgrade Instructions](#upgrade-instructions)
 - [Changes](#changes)
 
@@ -16,6 +17,26 @@ to their releases:
 
 - **[cyberark/conjur v1.4.4](https://github.com/cyberark/conjur/releases/tag/v1.4.4)** (2020-01-03) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-Blue)](https://github.com/cyberark/conjur)
 - **[cyberark/secretless-broker v1.4.2](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2)** (2020-01-08) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-Green)](https://github.com/cyberark/secretless-broker)
+
+## Installation Instructions for the Suite Release Version of Conjur
+
+Installing the Suite Release Version of Conjur requires setting the container image tag. Below are more specific instructions depending on environment.
+
++ **Docker or docker-compose**
+
+  Set the container image tag to `cyberark/conjur:1.4.4`.
+  For example, make the following update to the conjur service in the [quickstart docker-compose.yml](https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml)
+  ```
+  image: cyberark/conjur:1.4.4
+  ```
+
++ [**Cloud Formation templates for AWS**](https://github.com/cyberark/conjur-aws)
+
+  Set the environment variable CONJUR_VERSION before building the AMI:
+  ```
+  export CONJUR_VERSION="1.4.4"
+  ./build-ami.sh
+  ```
 
 ## Upgrade Instructions
 

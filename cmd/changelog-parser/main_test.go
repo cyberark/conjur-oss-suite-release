@@ -36,7 +36,7 @@ func TestMain(t *testing.T) {
 			}
 			defer os.RemoveAll(outputDir)
 
-			outputFile := filepath.Join(outputDir, tt+"_output.txt")
+			outputFile := filepath.Join(outputDir, tt+"_output.md")
 			outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
 
 			// Run the test
@@ -55,8 +55,8 @@ func TestMain(t *testing.T) {
 				return
 			}
 
-			// Tests are expected at "./testdata/expected_<type>_output.txt"
-			expectedOutputFile := filepath.Join(thisDir, "testdata", "expected_"+tt+"_output.txt")
+			// Tests are expected at "./testdata/expected_<type>_output.md"
+			expectedOutputFile := filepath.Join(thisDir, "testdata", "expected_"+tt+"_output.md")
 			expectedOutput, err := ioutil.ReadFile(expectedOutputFile)
 			if !assert.NoError(t, err) {
 				return
