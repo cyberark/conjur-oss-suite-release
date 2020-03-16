@@ -1,15 +1,15 @@
+name: Create Draft Release
 on:
   push:
     # We trigger this workflow on tag pushes that match v* (eg. `v1.2.3`)
     tags:
       - 'v*'
 
-name: Create Draft Release
 jobs:
   # This job name must match the `needs` field in `release` step
   run-tests:
     # This is mostly a copy/paste from test.yml
-    name: Tests
+    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
       run: go test -v -coverprofile=c.out -count=1 ./...
 
   release:
-    name: Release
+    name: Create Draft Release
     runs-on: ubuntu-latest
 
     needs: run-tests

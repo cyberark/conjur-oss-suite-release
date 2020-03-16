@@ -1,10 +1,12 @@
+name: Commit Released Suite YAML
 on:
   release:
     types:
       - published
 
 jobs:
-  release-tests:
+  e2e-tests:
+    name: Run E2E Tests
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.13
@@ -29,8 +31,9 @@ jobs:
         run: ./test
 
   persist-new-suite-yml:
+    name: Commit Suite Release YML
     runs-on: ubuntu-latest
-    needs: release-tests
+    needs: e2e-tests
 
     steps:
     - name: Checkout repo
