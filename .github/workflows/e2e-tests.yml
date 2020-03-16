@@ -1,6 +1,17 @@
 name: E2E Tests
 
-on: push
+on:
+  # Only run this on pushes to master
+  push:
+    branches:
+    - master
+
+  # And when PRs operations are done
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
 
 jobs:
   release-tests:
