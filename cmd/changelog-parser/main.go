@@ -36,6 +36,10 @@ var templates = map[string]templateInfo{
 		TemplateName: "CHANGELOG_unified.md.tmpl",
 		OutputName:   "CHANGELOG_%s.md",
 	},
+	"docs-release": {
+		TemplateName: "RELEASE_NOTES_unified.htm.tmpl",
+		OutputName:   "ConjurSuite_%s.htm",
+	},
 	"release": {
 		TemplateName: "RELEASE_NOTES_unified.md.tmpl",
 		OutputName:   "RELEASE_NOTES_%s.md",
@@ -308,7 +312,7 @@ func main() {
 	flag.StringVar(&options.RepositoryFilename, "f", defaultRepositoryFilename,
 		"Repository YAML file to parse")
 	flag.StringVar(&options.OutputType, "t", defaultOutputType,
-		"Output type. Only accepts 'changelog', 'release', and 'unreleased'.")
+		"Output type. Only accepts 'changelog', 'docs-release', 'release', and 'unreleased'.")
 	flag.StringVar(&options.OutputFilename, "o", "",
 		"Output filename")
 	flag.StringVar(&options.Version, "v", defaultVersionString,

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+  <head></head>
+  <body>
+    <h1>Release Notes</h1>
+    <p>The following features were introduced or enhanced in the unreleased Conjur OSS suite.</p>
+
+    <h2>Components</h2>
+    <p>These are the components that comprise the Conjur Open Source Suite with links to their GitHub releases:</p>
+    <p>
+      <ul>
+         <li><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">cyberark/conjur v1.4.6</a> (2020-01-21)</li>
+         <li><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">cyberark/conjur-oss-helm-chart v1.3.7</a> (2019-01-31)</li>
+         <li><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</li>
+      </ul>
+    </p>
+
+    <h2>Upgrade Instructions</h2>
+    <p>Upgrade instructions are available for the following suite components:</p>
+    <p>
+      <ul>
+        <li><a href="https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm ">cyberark/conjur</a></li>
+      </ul>
+    </p>
+
+    <h2>What's New by Component</h2>
+    <p>
+      <ul>
+        <!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
+          <li><MadCap:xref href="#cyberark/conjur">cyberark/conjur</MadCap:xref></li><!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
+          <li><MadCap:xref href="#cyberark/conjur-oss-helm-chart">cyberark/conjur-oss-helm-chart</MadCap:xref></li><!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
+          <li><MadCap:xref href="#cyberark/conjur-api-python3">cyberark/conjur-api-python3</MadCap:xref></li>
+      </ul>
+    </p>
+
+    <!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
+    <h3><a name="cyberark-cyberark/conjur"></a>cyberark/conjur</h3>
+        <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.3.6">v1.3.6</a> (2019-02-19)</h4>
+        <p>
+          <ul>
+              <li><strong>Changed</strong>
+                <ul>
+                  <li>Reduced IAM authentication logging</li>
+                  <li>Refactored authentication strategies</li>
+                </ul>
+              </li>
+              <li><strong>Removed</strong>
+                <ul>
+                  <li>Removed OIDC APIs public access</li>
+                </ul>
+              </li>
+          </ul>
+        </p>
+        <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.4">v1.4.4</a> (2019-12-19)</h4>
+        <p>
+          <ul>
+              <li><strong>Added</strong>
+                <ul>
+                  <li>Early validation of account existence during OIDC authentication</li>
+                  <li>Code coverage reporting and collection</li>
+                </ul>
+              </li>
+              <li><strong>Changed</strong>
+                <ul>
+                  <li>Bumped puma from 3.12.0 to 3.12.2</li>
+                  <li>Bumped rack from 1.6.11 to 1.6.12</li>
+                  <li>Bumped excon from 0.62.0 to 0.71.0</li>
+                </ul>
+              </li>
+              <li><strong>Fixed</strong>
+                <ul>
+                  <li>Fixed password rotation of blank password</li>
+                  <li>Fixed bug with multi-cert CA chains in Kubernetes service accounts</li>
+                  <li>Fixed build issues with creating namespaces with multiple values</li>
+                </ul>
+              </li>
+              <li><strong>Removed</strong>
+                <ul>
+                  <li>Removed follower env configuration</li>
+                </ul>
+              </li>
+          </ul>
+        </p>
+        <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">v1.4.6</a> (2020-01-21)</h4>
+        <p>
+          <ul>
+              <li><strong>Changed</strong>
+                <ul>
+                  <li>K8s hosts' application identity is extracted from annotations or id. If it is
+defined in annotations it will taken from there and if not, it will be taken
+from the id.</li>
+                </ul>
+              </li>
+          </ul>
+        </p><!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
+    <h3><a name="cyberark-cyberark/conjur-oss-helm-chart"></a>cyberark/conjur-oss-helm-chart</h3>
+        <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">v1.3.7</a> (2019-01-31)</h4>
+        <p>
+          <ul>
+              <li><strong>Changed</strong>
+                <ul>
+                  <li>Server ciphers have been upgraded to TLS1.2 levels.</li>
+                </ul>
+              </li>
+          </ul>
+        </p><!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
+    <h3><a name="cyberark-cyberark/conjur-api-python3"></a>cyberark/conjur-api-python3</h3>
+        <h4><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">v0.0.5</a> (2019-12-06)</h4>
+        <p>
+          <ul>
+              <li><strong>Added</strong>
+                <ul>
+                  <li>Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)</li>
+                </ul>
+              </li>
+          </ul>
+        </p>
+  </body>
+</html>
