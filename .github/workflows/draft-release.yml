@@ -51,7 +51,7 @@ jobs:
     - name: Capture release notes into a variable
       id: release_notes
       run: |
-        CONTENT=$(cat RELEASE_NOTES.md)
+        CONTENT=$(cat tmp_RELEASE_NOTES.md)
         echo "::set-output name=content::${CONTENT//$'\n'/%0A}"
 
     - name: Create Release
