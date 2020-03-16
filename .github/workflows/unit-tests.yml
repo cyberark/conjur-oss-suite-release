@@ -1,4 +1,4 @@
-name: Tests
+name: Unit Tests
 on:
   # Only run this on pushes to master
   push:
@@ -17,7 +17,7 @@ env:
 
 jobs:
   test:
-    name: Tests
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:

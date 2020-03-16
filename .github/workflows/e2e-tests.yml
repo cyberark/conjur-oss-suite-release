@@ -1,9 +1,21 @@
-name: Release tests
+name: E2E Tests
 
-on: push
+on:
+  # Only run this on pushes to master
+  push:
+    branches:
+    - master
+
+  # And when PRs operations are done
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
 
 jobs:
-  release-tests:
+  e2e-tests:
+    name: Run E2E Tests
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.13
