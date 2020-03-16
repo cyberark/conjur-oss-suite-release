@@ -1,16 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
-	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/cli"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 )
 
 func TestMain(t *testing.T) {
@@ -42,7 +42,7 @@ func TestMain(t *testing.T) {
 			outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
 
 			// Run the test
-			runParser(cliOptions{
+			cli.RunParser(cli.Options{
 				Date:               outputDate,
 				OutputFilename:     outputFile,
 				OutputType:         tt,
@@ -65,87 +65,6 @@ func TestMain(t *testing.T) {
 			}
 
 			assert.Equal(t, string(expectedOutput), string(outputFileContent))
-		})
-	}
-}
-
-func TestGenerateOutputFilename(t *testing.T) {
-	outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
-	testCases := []struct {
-		outputType       string
-		version          string
-		outputFilename   string
-		expectedFilename string
-	}{
-		{
-			outputType:       "changelog",
-			version:          "mychangelogversion",
-			outputFilename:   "",
-			expectedFilename: "CHANGELOG_mychangelogversion.md",
-		},
-		{
-			outputType:       "changelog",
-			version:          "foo",
-			outputFilename:   "outputname1",
-			expectedFilename: "outputname1",
-		},
-		{
-			outputType:       "docs-release",
-			version:          "mydocsreleaseversion",
-			outputFilename:   "",
-			expectedFilename: "ConjurSuite_mydocsreleaseversion.htm",
-		},
-		{
-			outputType:       "docs-release",
-			version:          "bar",
-			outputFilename:   "outputname2",
-			expectedFilename: "outputname2",
-		},
-		{
-			outputType:       "release",
-			version:          "myreleaseversion",
-			outputFilename:   "",
-			expectedFilename: "RELEASE_NOTES_myreleaseversion.md",
-		},
-		{
-			outputType:       "release",
-			version:          "baz",
-			outputFilename:   "outputname3",
-			expectedFilename: "outputname3",
-		},
-		{
-			outputType:       "unreleased",
-			version:          "notused",
-			outputFilename:   "",
-			expectedFilename: "UNRELEASED.md",
-		},
-		{
-			outputType:       "unreleased",
-			version:          "notused",
-			outputFilename:   "outputname4",
-			expectedFilename: "outputname4",
-		},
-	}
-
-	for _, tc := range testCases {
-		options := cliOptions{
-			Date:               outputDate,
-			OutputFilename:     tc.outputFilename,
-			OutputType:         tc.outputType,
-			RepositoryFilename: "bar",
-			Version:            tc.version,
-		}
-
-		testName := fmt.Sprintf(
-			"GenerateOutputFilename: %s/'%s'",
-			tc.outputType,
-			tc.expectedFilename,
-		)
-
-		t.Run(testName, func(t *testing.T) {
-			options.generateOutputFilename()
-
-			assert.EqualValues(t, tc.expectedFilename, options.OutputFilename)
 		})
 	}
 }

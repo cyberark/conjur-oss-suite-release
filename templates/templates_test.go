@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/template"
 )
 
@@ -55,8 +56,8 @@ func TestTemplates(t *testing.T) {
 		Version:          "11.22.33",
 		Date:             outputDate,
 		UnifiedChangelog: "@@@Unified changelog content@@@",
-		Components: []template.SuiteComponent{
-			template.SuiteComponent{
+		Components: []github.SuiteComponent{
+			github.SuiteComponent{
 				Repo:               "cyberark/conjur",
 				URL:                "https://github.com/cyberark/conjur",
 				ReleaseName:        "v1.4.4",
@@ -87,7 +88,7 @@ func TestTemplates(t *testing.T) {
 					},
 				},
 			},
-			template.SuiteComponent{
+			github.SuiteComponent{
 				Repo:               "cyberark/secretless-broker",
 				URL:                "https://github.com/cyberark/secretless-broker",
 				ReleaseName:        "v1.4.2",

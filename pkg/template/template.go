@@ -9,40 +9,16 @@ import (
 	textTemplate "text/template"
 	"time"
 
-	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 )
-
-// SuiteComponent represents a suite component with all of its changelogs and
-// relevant pin data
-type SuiteComponent struct {
-	CertificationLevel string
-	Changelogs         []*changelog.VersionChangelog
-	ReleaseName        string
-	ReleaseDate        string
-	Repo               string
-	UpgradeURL         string
-	URL                string
-}
 
 // ReleaseSuite stores all the data needed for generation of templates in the suite
 type ReleaseSuite struct {
 	Version          string
 	Date             time.Time
-	Components       []SuiteComponent
+	Components       []github.SuiteComponent
 	UnifiedChangelog string
-}
-
-// ComponentReleaseVersion returns the release version, stripped of the v-prefix,
-// for a given repo.
-func (r ReleaseSuite) ComponentReleaseVersion(repo string) string {
-	for _, component := range r.Components {
-		if component.Repo == repo {
-			return strings.TrimPrefix(component.ReleaseName, "v")
-		}
-	}
-
-	return ""
 }
 
 // MarkdownPartialsExt is the extension used for markdown partials glob matcher
@@ -145,4 +121,16 @@ func (engine *Engine) WriteChangelog(
 	}
 
 	return nil
+}
+
+// ComponentReleaseVersion returns the release version, stripped of the v-prefix,
+// for a given repo.
+func (r ReleaseSuite) ComponentReleaseVersion(repo string) string {
+	for _, component := range r.Components {
+		if component.Repo == repo {
+			return strings.TrimPrefix(component.ReleaseName, "v")
+		}
+	}
+
+	return ""
 }
