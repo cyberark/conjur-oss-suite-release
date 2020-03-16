@@ -55,7 +55,7 @@ var providerVersionResolutionTemplate = map[string]string{
 }
 
 const defaultOutputType = "changelog"
-const defaultRepositoryFilename = "repositories.yml"
+const defaultRepositoryFilename = "suite.yml"
 const defaultVersionString = "Unreleased"
 
 // https://api.github.com/repos/cyberark/secretless-broker/releases/latest
