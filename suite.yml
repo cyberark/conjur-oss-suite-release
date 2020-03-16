@@ -31,12 +31,12 @@ section:
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
         certification: "certified"
-        version: v6.2.0
+        version: v6.0.1
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
         certification: "community"
-        version: v1.1.1
+        version: v1.4.0
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
@@ -46,7 +46,7 @@ section:
         url: https://github.com/cyberark/conjur-api-java
         description: Conjur Java Client Library
         certification: "community"
-        version: v1.1
+        version: v2.0.0
       - name: cyberark/conjur-api-python3
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
@@ -55,8 +55,8 @@ section:
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
-        version: v5.3.0
         certification: "certified"
+        version: v5.3.1
 
   # This section goes back two versions to help ensure our logic for computing
   # CHANGELOG diffs works when there are multiple versions between the latest
@@ -107,13 +107,13 @@ section:
           hosts and install the Summon tool, which enables hosts to securely retrieve
           credentials.
         certification: "trusted"
-        version: v0.3.0
+        version: v0.3.1
       - name: cyberark/conjur-credentials-plugin
         url: https://github.com/cyberark/conjur-credentials-plugin
         tool: Jenkins
         description: Conjur plugin for securely providing credentials to Jenkins jobs.
         certification: "community"
-        version: v0.7
+        version: v0.7.0
       - name: cyberark/conjur-puppet
         url: https://github.com/cyberark/conjur-puppet
         tool: Puppet
@@ -170,7 +170,7 @@ section:
         url: https://github.com/cyberark/summon-keyring
         description: Summon provider for cross-platform keyrings.
         certification: "community"
-        version: v0.2.0
+        version: v0.2.1
       - name: cyberark/summon-s3
         url: https://github.com/cyberark/summon-s3
         description: Summon provider for AWS S3.
