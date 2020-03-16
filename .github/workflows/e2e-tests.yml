@@ -1,4 +1,4 @@
-name: Release tests
+name: E2E Tests
 
 on: push
 
