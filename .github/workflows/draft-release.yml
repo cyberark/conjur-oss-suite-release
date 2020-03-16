@@ -4,7 +4,7 @@ on:
     tags:
       - 'v*'
 
-name: Create Release
+name: Create Draft Release
 jobs:
   # This job name must match the `needs` field in `release` step
   run-tests:
