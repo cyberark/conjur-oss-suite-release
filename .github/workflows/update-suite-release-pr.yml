@@ -1,4 +1,4 @@
-name: Commit Released Suite YAML
+name: Open PR for Releases Update
 on:
   release:
     types:
@@ -46,24 +46,39 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
 
-    - name: Permanently save the new suite release
+    - name: Set BRANCH_NAME
       run: |
-        mkdir -p releases
-
         tag_name=${{github.event.release.tag_name}}
         echo "Tag: $tag_name"
 
         version=$(echo "$tag_name" | sed 's/^v//')
         echo "Version: $version"
 
-        new_suite_version_yml="releases/suite_${version}.yml"
+        echo "::set-output name=suite_version::${version}"
+        echo "::set-output name=suite_update_branch::suite_${version}"
+      id: data
+
+    - name: Permanently save the new suite release
+      run: |
+        mkdir -p releases
+
+        new_suite_version_yml="releases/suite_${{ steps.data.outputs.suite_version }}.yml"
         echo "Suite target file: $new_suite_version_yml"
 
         cp suite.yml "${new_suite_version_yml}"
 
         git add "${new_suite_version_yml}"
-        git commit -m "Release ${version} auto-commit of new release"
+        git commit -m "Suite v${{ steps.data.outputs.suite_version }} auto-commit of new release files"
 
     - name: Push files
       run: |
-        git push "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git" "HEAD:suite_${version}"
+        git push --force "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git" "HEAD:${{ steps.data.outputs.suite_update_branch }}"
+
+    - name: Open a PR to the default branch
+      uses: vsoch/pull-request-action@d987bc1 # Pinned v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PULL_REQUEST_FROM_BRANCH: "${{ steps.data.outputs.suite_update_branch }}"
+        PULL_REQUEST_BRANCH: master
+        PULL_REQUEST_TITLE: "Action: Update suite release file for v${{ steps.data.outputs.suite_version }}"
+        PULL_REQUEST_BODY: "Auto-generated PR!"
