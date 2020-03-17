@@ -21,9 +21,6 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Set BRANCH_NAME
-      run: echo "::set-env name=GIT_BRANCH::${GITHUB_REF#refs/heads/}"
-
     - name: Run Tests
       run: go test -v -coverprofile=c.out -count=1 ./...
 
@@ -41,6 +38,9 @@ jobs:
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
+
+    - name: Set GIT_BRANCH
+      run: echo "::set-env name=GIT_BRANCH::${GITHUB_REF#refs/tags/}"
 
     - name: Generate RELEASE_NOTES.md
       run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -t release -o tmp_RELEASE_NOTES.md
