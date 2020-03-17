@@ -1,0 +1,53 @@
+name: Update Wiki
+
+on:
+
+  schedule: # Nightly run on default branch
+    - cron:  '0 0 * * *'
+
+jobs:
+
+  update-wiki:
+    name: Update Wiki
+    runs-on: ubuntu-latest
+    env:
+      UNRELEASED_CHANGES: Unreleased-Changes.md
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Checkout wiki
+      run: |
+        rm -rf conjur-oss-suite-release.wiki
+        git clone https://github.com/cyberark/conjur-oss-suite-release.wiki.git
+
+    - name: Configure Git for wiki
+      working-directory: ./conjur-oss-suite-release.wiki
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Generate unreleased changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: ./parse-changelogs -t unreleased -o "${PWD}/${UNRELEASED_CHANGES}"
+
+    - name: Update unreleased changes wiki page
+      working-directory: ./conjur-oss-suite-release.wiki
+      run: |
+        cp "../${UNRELEASED_CHANGES}" "${UNRELEASED_CHANGES}"
+        git add "${UNRELEASED_CHANGES}"
+
+        # Commit only when there are changes
+        if ! git diff --staged --quiet; then
+          echo "Committing changes to ${UNRELEASED_CHANGES}"
+
+          git commit -m "Auto-commit of unreleased changes"
+        else
+          echo "No change to ${UNRELEASED_CHANGES}"
+        fi
+
+    - name: Push updates to wiki
+      working-directory: ./conjur-oss-suite-release.wiki
+      run: |
+        git push "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.wiki.git" HEAD:master
