@@ -8,22 +8,16 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"test/kv"
 )
 
-var storeClient *kv.StoreClient
-func init() {
-	var err error
-	storeClient, err = kv.DefaultStoreClient()
-	if err != nil {
-		panic(err)
-	}
-}
-
-func callCommand(name string, args ...string) (string, error) {
+func callBashScript(script string) (string, error) {
 	out, err := exec.Command(
-		name,
-		args...
+		"bash",
+		"-c",
+		`
+set -euo pipefail;
+. ./executors.sh;
+` + script,
 	).Output()
 
 	outString := string(out)
@@ -42,26 +36,18 @@ func TestSecretless(t *testing.T) {
 	t.Run("Consume conjur variable", func(t *testing.T) {
 		expectedValue := "abc123"
 
-		_, err := callCommand(
-			"bash",
-			"-ec",
+		_, err := callBashScript(
 			// language=bash
 			`
-. ./executors.sh
-
 exec_conjur_client conjur variable values add test-app-secrets/username ` + expectedValue,
 		)
 		if !assert.NoError(t, err) {
 			return
 		}
 
-		out, err := callCommand(
-			"bash",
-			"-ec",
+		out, err := callBashScript(
 			// language=bash
 			`
-. ./executors.sh
-
 exec_app bash -c '
 export http_proxy=http://localhost:8080
 

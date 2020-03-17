@@ -2,7 +2,8 @@
 
 CURRENT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 if [[ -f "${CURRENT_DIR}/store-port" ]]; then
-    export STORE_PORT="$(cat ${CURRENT_DIR}/store-port)"
+    export STORE_PORT
+    STORE_PORT="$(cat "${CURRENT_DIR}/store-port")"
 fi
 
 # store_init initialises a store and waits for it to come online.
@@ -14,7 +15,8 @@ function store_init() {
   "${CURRENT_DIR}/store" serve &> "${CURRENT_DIR}/store-logs" &
 
   sleep 1
-  export STORE_PORT=$(
+  export STORE_PORT
+  STORE_PORT=$(
   cat "${CURRENT_DIR}/store-logs" | \
    grep "Using port:" | \
     awk '{ printf "%s", $5 }'
