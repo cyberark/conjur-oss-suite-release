@@ -41,3 +41,20 @@ function store_get() {
 function store_set() {
   "${CURRENT_DIR}/store" set -k "${1}" -v "${2}"
 }
+
+# store_snapshot provides a JSON snapshot of the store.
+function store_snapshot() {
+  "${CURRENT_DIR}/store" snapshot
+}
+
+# store_cleanup snapshots then destroys the store
+function store_cleanup() {
+  # inherit exit_code or use $?
+  local exit_code="${exit_code:-$?}"
+
+  if [[ ! "${exit_code}" = 0 ]]; then
+    echo 'snapshotting the store...'
+    store_snapshot || true
+  fi
+  store_destroy || true
+}

@@ -15,18 +15,22 @@ function reset_infra() {
   kubectl delete clusterrole --ignore-not-found "${CONJUR_RELEASE_NAME}-conjur-authenticator"
 }
 
-function cleanup() {
+function complete_cleanup() {
+  # inherit exit_code or use $?
+  local exit_code="${exit_code:-$?}"
+  export exit_code
+
   local TEST_NAMESPACE
-  TEST_NAMESPACE="$(store_get TEST_NAMESPACE)"
+  TEST_NAMESPACE="$(store_get TEST_NAMESPACE || true)"
 
   echo "Cleaning up."
 
   # snapshot of workloads
-  kubectl --namespace "${TEST_NAMESPACE}" get pods
-  kubectl --namespace "${TEST_NAMESPACE}" get events --field-selector type=Warning
+  kubectl --namespace "${TEST_NAMESPACE}" get pods || true
+  kubectl --namespace "${TEST_NAMESPACE}" get events --field-selector type=Warning || true
 
-  reset_infra
-#  store_destroy
+  reset_infra || true
+  store_cleanup || true
 }
 
 function store_set_component_versions() {
@@ -46,9 +50,12 @@ function store_set_component_versions() {
 }
 
 function main() {
-  trap "store_destroy || true" EXIT
+  # exit cleans up only store, at this point, because nothing else has been created
+  trap "store_cleanup" EXIT
+
   store_init
 
+  # extract component version from suite.yml in root directory
   store_set_component_versions
 
   local TEST_NAMESPACE
@@ -76,7 +83,8 @@ function main() {
 
   store_set CLI_POD_NAME "test-client"
 
-  trap "cleanup || true" EXIT
+  # exit should now result in complete cleanuip
+  trap "complete_cleanup" EXIT
   reset_infra
 
   # setup infrastructure for testing

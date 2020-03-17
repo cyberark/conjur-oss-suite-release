@@ -20,6 +20,7 @@ func main() {
 	listCommand := flag.NewFlagSet("list", flag.ExitOnError)
 	destroyCommand := flag.NewFlagSet("destroy", flag.ExitOnError)
 	serveCommand := flag.NewFlagSet("serve", flag.ExitOnError)
+	snapshotCommand := flag.NewFlagSet("snapshot", flag.ExitOnError)
 
 	getKeyPtr := getCommand.String("k", "", "Key to get. (Required)")
 
@@ -30,7 +31,7 @@ func main() {
 	// os.Arg[0] is the main command
 	// os.Arg[1] will be the subcommand
 	if len(os.Args) < 2 {
-		Fatal("subcommand is required")
+		fatal("subcommand is required")
 	}
 
 	// Switch on the subcommand
@@ -48,8 +49,10 @@ func main() {
 		destroyCommand.Parse(os.Args[2:])
 	case "serve":
 		serveCommand.Parse(os.Args[2:])
+	case "snapshot":
+		snapshotCommand.Parse(os.Args[2:])
 	default:
-		Fatal("unknown subcommand")
+		fatal("unknown subcommand")
 	}
 
 	if serveCommand.Parsed() {
@@ -59,14 +62,14 @@ func main() {
 
 	client, err := kv.DefaultStoreClient()
 	if err != nil {
-		Fatal("unable to create store client: " + err.Error())
+		fatal("unable to create store client: " + err.Error())
 		return
 	}
 
 	if destroyCommand.Parsed() {
 		err = client.Destroy()
 		if err != nil && err != io.ErrUnexpectedEOF {
-			Fatal(err.Error())
+			fatal(err.Error())
 		}
 
 		return
@@ -75,7 +78,7 @@ func main() {
 	if listCommand.Parsed() {
 		keys, err := client.List()
 		if err != nil {
-			Fatal(err.Error())
+			fatal(err.Error())
 		}
 
 		for _, key := range keys {
@@ -93,7 +96,17 @@ func main() {
 
 		val, err := client.Get(*getKeyPtr)
 		if err != nil {
-			Fatal(err.Error())
+			fatal(err.Error())
+		}
+
+		fmt.Printf("%s", val)
+		return
+	}
+
+	if snapshotCommand.Parsed() {
+		val, err := client.Snapshot()
+		if err != nil {
+			fatal(err.Error())
 		}
 
 		fmt.Printf("%s", val)
@@ -108,22 +121,22 @@ func main() {
 		}
 
 		if err != client.Set(*setKeyPtr, *setValPtr) {
-			Fatal(err.Error())
+			fatal(err.Error())
 		}
 
 		return
 	}
 }
 
-func Fatal(msg string) {
+func fatal(msg string) {
 	_, _ = os.Stderr.Write([]byte("ERROR: " + msg))
 	os.Exit(1)
 }
 
-func runServer()  {
+func runServer() {
 	log.Println("#Serve")
 
-	err := rpc.Register(kv.NewStore())
+	err := rpc.Register(kv.Store{})
 	if err != nil {
 		log.Fatal("register error: " + err.Error())
 	}
