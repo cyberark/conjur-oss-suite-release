@@ -66,4 +66,4 @@ jobs:
 
     - name: Push files
       run: |
-        git push "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git" HEAD:master
+        git push "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git" "HEAD:suite_${version}"
