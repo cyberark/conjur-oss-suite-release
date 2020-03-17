@@ -43,10 +43,10 @@ jobs:
         go-version: 1.13
 
     - name: Generate RELEASE_NOTES.md
-      run: go run cmd/changelog-parser/main.go -v "${{ github.ref }}" -t release -o tmp_RELEASE_NOTES.md
+      run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -t release -o tmp_RELEASE_NOTES.md
 
     - name: Generate CHANGELOG.md
-      run: go run cmd/changelog-parser/main.go -v "${{ github.ref }}" -o tmp_CHANGELOG.md
+      run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -o tmp_CHANGELOG.md
 
     - name: Capture release notes into a variable
       id: release_notes
