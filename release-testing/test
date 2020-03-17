@@ -40,9 +40,9 @@ function store_set_component_versions() {
   go run ./store-component-versions.go ./init_store.go -f ../suite.yml
 
   local HELM_CHART_RELEASE_VERSION CONJUR_OSS_RELEASE_VERSION SECRETLESS_RELEASE_VERSION
-  HELM_CHART_RELEASE_VERSION="$(store_get "release.cyberark/conjur-oss-helm-chart.version")"
-  CONJUR_OSS_RELEASE_VERSION="$(store_get "release.cyberark/conjur.version")"
-  SECRETLESS_RELEASE_VERSION="$(store_get "release.cyberark/secretless-broker.version")"
+  HELM_CHART_RELEASE_VERSION="$(store_get "RELEASE.CYBERARK/CONJUR-OSS-HELM-CHART.VERSION")"
+  CONJUR_OSS_RELEASE_VERSION="$(store_get "RELEASE.CYBERARK/CONJUR.VERSION")"
+  SECRETLESS_RELEASE_VERSION="$(store_get "RELEASE.CYBERARK/SECRETLESS-BROKER.VERSION")"
 
   store_set HELM_CHART_RELEASE_VERSION "${HELM_CHART_RELEASE_VERSION}"
   store_set CONJUR_OSS_RELEASE_VERSION "${CONJUR_OSS_RELEASE_VERSION}"

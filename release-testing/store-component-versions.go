@@ -28,7 +28,7 @@ func main() {
 
 	for _, categories := range repoConfig.Section.Categories {
 		for _, repo := range categories.Repos {
-			key := fmt.Sprintf("release.%s.version", repo.Name)
+			key := fmt.Sprintf("RELEASE.%s.VERSION", strings.ToUpper(repo.Name))
 			log.Println("Setting store value for key: " + key)
 
 			err = storeClient.Set(

@@ -18,8 +18,8 @@ function store_init() {
   export STORE_PORT
   STORE_PORT=$(
   cat "${CURRENT_DIR}/store-logs" | \
-   grep "Using port:" | \
-    awk '{ printf "%s", $5 }'
+    grep "Using port:" | \
+      awk '{ printf "%s", $5 }'
   )
   echo -n "${STORE_PORT}" > "${CURRENT_DIR}/store-port"
 }
