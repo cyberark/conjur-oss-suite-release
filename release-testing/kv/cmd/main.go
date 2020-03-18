@@ -4,11 +4,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"net/rpc"
 	"os"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 
 	"test/kv"
 )
@@ -134,23 +135,23 @@ func fatal(msg string) {
 }
 
 func runServer() {
-	log.Println("#Serve")
+	log.OutLogger.Println("#Serve")
 
 	err := rpc.Register(kv.Store{})
 	if err != nil {
-		log.Fatal("register error: " + err.Error())
+		log.ErrLogger.Fatal("register error: " + err.Error())
 	}
 
 	rpc.HandleHTTP()
 	l, err := net.Listen("tcp", "localhost:")
 	if err != nil {
-		log.Fatal("listen error:", err)
+		log.ErrLogger.Fatal("listen error:", err)
 	}
 
-	log.Println("Using port:", l.Addr().(*net.TCPAddr).Port)
+	log.OutLogger.Println("Using port:", l.Addr().(*net.TCPAddr).Port)
 
 	err = http.Serve(l, nil)
 	if err != nil {
-		log.Fatal("serve error:", err)
+		log.ErrLogger.Fatal("serve error:", err)
 	}
 }

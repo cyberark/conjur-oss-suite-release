@@ -53,11 +53,11 @@ function register_conjur_pod() {
   POD_LABEL_SELECTOR="app=conjur-oss,release=${CONJUR_RELEASE_NAME}"
   TEST_NAMESPACE="$(store_get TEST_NAMESPACE)"
 
-  # wait for deployment
+  # Wait for deployment
   kubectl --namespace "${TEST_NAMESPACE}" \
     rollout status deployment "${CONJUR_RELEASE_NAME}" --watch --timeout=150s
 
-  # wait for pod
+  # Wait for pod
   kubectl --namespace "${TEST_NAMESPACE}" \
     wait pod --for=condition=ready -l "${POD_LABEL_SELECTOR}" --timeout 150s
 
@@ -77,21 +77,21 @@ function register_conjur_client_pod() {
 
   local CONJUR_CLIENT_POD_NAME="conjur-client-pod"
 
-  # start the CLI pod
+  # Start the CLI pod
   kubectl --namespace "${TEST_NAMESPACE}" run --generator=run-pod/v1 \
     "${CONJUR_CLIENT_POD_NAME}" \
     --restart='Never' \
     --image cyberark/conjur-cli:5 \
     --command -- sleep infinity
 
-  # wait for CLI pod to be ready
+  # Wait for CLI pod to be ready
   kubectl --namespace "${TEST_NAMESPACE}" \
     wait --for=condition=ready "pod/${CONJUR_CLIENT_POD_NAME}" --timeout 150s
 
-  # login to conjur
+  # Login to conjur
   kubectl --namespace "${TEST_NAMESPACE}" \
     exec -i "${CONJUR_CLIENT_POD_NAME}" -- \
-      bash -xce "
+      bash -exc "
 yes yes | conjur init -u '${CONJUR_URL}' -a '${CONJUR_ACCOUNT}'
 
 # API key here is the key that creation of the account provided you in step #2
@@ -131,7 +131,7 @@ function run_policy() {
   store_set "POLICY" "${POLICY}"
   echo -n "${POLICY}" | exec_conjur_client conjur policy load --replace root /dev/stdin
 
-  exec_conjur_client bash -xce "
+  exec_conjur_client bash -exc "
 # Generate OpenSSL private key
 openssl genrsa -out ca.key 2048
 
@@ -169,30 +169,38 @@ function main() {
   APP_SERVICE_ACCOUNT="$(store_get APP_SERVICE_ACCOUNT)"
   TEST_NAMESPACE="$(store_get TEST_NAMESPACE)"
 
+  echo -n "Create namespace: ${TEST_NAMESPACE}." | tee -a info-log.txt
   kubectl create namespace "${TEST_NAMESPACE}"
+  echo " ✅ " | tee -a info-log.txt
 
-  echo "Deploy Postgres."
+  echo -n "Deploy Postgres." | tee -a info-log.txt
   deploy_pg
+  echo " ✅ " | tee -a info-log.txt
 
-  echo "Deploy Conjur."
+  echo -n "Deploy Conjur." | tee -a info-log.txt
   deploy_conjur
   register_conjur_pod
+  echo " ✅ " | tee -a info-log.txt
 
-  echo "Wait for Conjur."
-  exec_conjur conjurctl wait
+  echo "Wait for Conjur." | tee -a info-log.txt
+  exec_conjur conjurctl wait | tee -a info-log.txt
+  echo " ✅ " | tee -a info-log.txt
 
-  echo "Setup Conjur."
+  echo -n "Setup Conjur account." | tee -a info-log.txt
   setup_conjur
   register_conjur_admin_key
+  echo " ✅ " | tee -a info-log.txt
 
-  echo "Run policy on Conjur."
+  echo -n "Apply policy and populate variables on Conjur." | tee -a info-log.txt
   register_conjur_client_pod
   run_policy
   populate_variables
+  echo " ✅ " | tee -a info-log.txt
 
-  echo "Deploy app."
+  echo -n "Deploy App With Secretless." | tee -a info-log.txt
   kubectl --namespace "${TEST_NAMESPACE}" \
     create sa "${APP_SERVICE_ACCOUNT}"
+  echo " ✅ " | tee -a info-log.txt
 
   local APP_DEPLOYMENT
   APP_DEPLOYMENT="$(./app_secretless_deployment.yml.sh)"

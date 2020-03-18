@@ -1,5 +1,39 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+
+# Set up logging
+#
+# The following setup creates log levels; info and debug. It forces all output, by
+# default, to the debug logfile.
+#
+# 1. The info logfile is simply a file that can be copied to the original stdout by
+# tailing it via a background process (see below) i.e. `tail -f info-log.txt &`
+# 2. Redirect stdout, stderr and xtrace to the debug logfile.
+# 3. Any output for information purposes should be written to the info logfile e.g.
+# `command >> info-log.txt`.
+# 4. To write to both info and debug use tee, making sure to append, i.e.
+# `command | tee -a info-log.txt`.
+
+# Reset logfiles
+printf '' > info-log.txt > debug-log.txt > error-log.txt
+# Begin by tailing the info logfile as a background process so that the contents of the
+# info logfile are output to stdout. A trap, further down, ensures this process is
+# cleaned-up when this script exits.
+tail -f info-log.txt &
+
+# Redirect stdout to append to debug logfile
+exec 1>>debug-log.txt
+# Redirect stderr to append to debug logfile and overwrite to error logfile
+# The error logfile maintains the last write to stderr. It can be used to offer useful
+# context to a failure before digging into the debug logs
+exec 2>> >(tee -a debug-log.txt > error-log.txt)
+# Create a file descriptor for capturing xtrace. This allows us to seperate the xtrace logs
+# from stdout and stderr
+exec 3>>debug-log.txt
+# Set the script's xtrace file descriptor to the one created above (3)
+export BASH_XTRACEFD="3"
+
+# Start script
+set -xeuo pipefail
 
 cd "$(dirname "$0")"
 
@@ -16,16 +50,10 @@ function reset_infra() {
 }
 
 function complete_cleanup() {
-  # inherit exit_code or use $?
-  local exit_code="${exit_code:-$?}"
-  export exit_code
-
   local TEST_NAMESPACE
   TEST_NAMESPACE="$(store_get TEST_NAMESPACE || true)"
 
-  echo "Cleaning up."
-
-  # snapshot of workloads
+  # Snapshot of workloads
   kubectl --namespace "${TEST_NAMESPACE}" get pods || true
   kubectl --namespace "${TEST_NAMESPACE}" get events --field-selector type=Warning || true
 
@@ -49,13 +77,53 @@ function store_set_component_versions() {
   store_set SECRETLESS_RELEASE_VERSION "${SECRETLESS_RELEASE_VERSION}"
 }
 
+function cleanup() {
+  # Inherit exit_code or use $?
+  local exit_code="${exit_code:-$?}"
+  export exit_code
+
+  if [[ ! "${exit_code}" = "0" ]]; then
+    {
+      echo ""
+      echo "<< START: Last output to stderr"
+      cat error-log.txt
+      echo "<< END: Last output to stderr"
+      echo ""
+      echo "Non-zero exit code. 😞 "
+      echo ""
+      echo "For some contextual info look above from 'START: Last output to stderr'."
+      echo "You can also consult debug-log.txt to see the verbose logs."
+      echo ""
+    } >> info-log.txt
+  else
+    echo "Success. 🚀 " >> info-log.txt
+  fi
+
+  echo "Cleaning up." | tee -a info-log.txt
+  _cleanup || true
+  pkill -P $$
+}
+
+function _cleanup() {
+  echo "_cleanup is set to the default, which does nothing :(" | tee -a info-log.txt
+}
+
 function main() {
-  # exit cleans up only store, at this point, because nothing else has been created
-  trap "store_cleanup" EXIT
+  trap "cleanup" EXIT
+
+  # Ensure test go modules are downloaded
+  echo -n "Download go modules for release tests." | tee -a info-log.txt
+  go mod download
+  echo " ✅ " | tee -a info-log.txt
+
+  # Exit cleans up only store, at this point, because nothing else has been created
+  function _cleanup() {
+    store_cleanup
+  }
 
   store_init
 
-  # extract component version from suite.yml in root directory
+  # Extract component version from suite.yml in root directory
   store_set_component_versions
 
   local TEST_NAMESPACE
@@ -83,15 +151,19 @@ function main() {
 
   store_set CLI_POD_NAME "test-client"
 
-  # exit should now result in complete cleanuip
-  trap "complete_cleanup" EXIT
+  # Exit should now result in complete cleanup
+  function _cleanup() {
+    complete_cleanup
+  }
+
   reset_infra
 
-  # setup infrastructure for testing
+  # Setup infrastructure for testing
   ./prepare.sh
 
-  # execute test cases
-  go test -v -count=1 --tags=release_test ./...
+  # Execute test cases
+  echo "Execute test cases." | tee -a info-log.txt
+  go test -v -count=1 --tags=release_test ./... | tee -a info-log.txt
 }
 
 main

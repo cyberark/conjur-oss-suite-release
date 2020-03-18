@@ -3,8 +3,9 @@ package github
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 
 	"github.com/cyberark/conjur-oss-suite-release/pkg/http"
 )
@@ -51,7 +52,7 @@ func getAvailableReleases(
 		releaseVersions[index] = release.TagName
 	}
 
-	log.Printf("  Available versions: [%s]", strings.Join(releaseVersions, ", "))
+	log.OutLogger.Printf("  Available versions: [%s]", strings.Join(releaseVersions, ", "))
 
 	return releaseVersions, nil
 }

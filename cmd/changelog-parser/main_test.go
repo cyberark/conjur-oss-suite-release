@@ -2,11 +2,12 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -48,7 +49,7 @@ func TestMain(t *testing.T) {
 				Version:            "Unreleased",
 			})
 
-			log.Print("Verifying test result...")
+			log.OutLogger.Print("Verifying test result...")
 
 			outputFileContent, err := ioutil.ReadFile(outputFile)
 			if !assert.NoError(t, err) {
@@ -121,7 +122,7 @@ func TestGenerateOutputFilename(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		t.Run("GenerateOutputFilename: " + tc.description, func(t *testing.T) {
+		t.Run("GenerateOutputFilename: "+tc.description, func(t *testing.T) {
 			tc.options.generateOutputFilename()
 
 			assert.EqualValues(t, tc.expectedFilename, tc.options.OutputFilename)
