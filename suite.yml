@@ -16,7 +16,7 @@ section:
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
-        version: v1.3.7
+        version: v1.3.8
         certification: "trusted"
 #      - name: cyberark/conjur-aws
 #        url: https://github.com/cyberark/conjur-aws

@@ -1,41 +1,40 @@
 package kv
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 )
 
-type Store struct {
-	store map[string]string
-}
+// Store is an in-memory key-value store
+type Store map[string]string
 
-func NewStore() *Store {
-	return &Store{
-		store: map[string]string{},
-	}
-}
-
+// SetArg holds the arguments for the Set method on the Store
 type SetArg struct {
-	Key string
+	Key   string
 	Value string
 }
 
+// GetArg holds the arguments for the Get method on the Store
 type GetArg struct {
 	Key string
 }
 
-func (s *Store) Set(arg SetArg, _ *int) error {
+// Set inserts a key-value pair into the store
+func (s Store) Set(arg SetArg, _ *int) error {
 	log.Println("#Set")
 
-	s.store[arg.Key] = arg.Value
+	s[arg.Key] = arg.Value
 	return nil
 }
 
-func (s *Store) Get(arg GetArg, reply *string) error {
+// Get retrieves a value from the store, given a key.
+// It returns an error if the key does not exist
+func (s Store) Get(arg GetArg, reply *string) error {
 	log.Println("#Get")
 
-	val, ok := s.store[arg.Key]
+	val, ok := s[arg.Key]
 	if !ok {
 		return fmt.Errorf("key '%s' not present", arg.Key)
 	}
@@ -44,11 +43,12 @@ func (s *Store) Get(arg GetArg, reply *string) error {
 	return nil
 }
 
-func (s *Store) List(arg int, reply *[]string) error {
+// List returns a slice of strings containing each of the keys present in the store
+func (s Store) List(arg int, reply *[]string) error {
 	log.Println("#List")
 
 	var keys []string
-	for key := range s.store {
+	for key := range s {
 		keys = append(keys, key)
 	}
 
@@ -56,7 +56,18 @@ func (s *Store) List(arg int, reply *[]string) error {
 	return nil
 }
 
-func (s *Store) Destroy(arg int, _ *int) error {
+// Snapshot returns a JSON serialized string of the Store at the moment the call is made
+func (s Store) Snapshot(arg int, reply *string) error {
+	log.Println("#Snapshot")
+
+	res, err := json.Marshal(s)
+	*reply = string(res)
+
+	return err
+}
+
+// Destroy kills the process with 0 exit code
+func (s Store) Destroy(arg int, _ *int) error {
 	log.Println("#Destroy")
 	os.Exit(0)
 	return nil

@@ -2,7 +2,8 @@
 
 CURRENT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 if [[ -f "${CURRENT_DIR}/store-port" ]]; then
-    export STORE_PORT="$(cat ${CURRENT_DIR}/store-port)"
+    export STORE_PORT
+    STORE_PORT="$(cat "${CURRENT_DIR}/store-port")"
 fi
 
 # store_init initialises a store and waits for it to come online.
@@ -14,10 +15,11 @@ function store_init() {
   "${CURRENT_DIR}/store" serve &> "${CURRENT_DIR}/store-logs" &
 
   sleep 1
-  export STORE_PORT=$(
+  export STORE_PORT
+  STORE_PORT=$(
   cat "${CURRENT_DIR}/store-logs" | \
-   grep "Using port:" | \
-    awk '{ printf "%s", $5 }'
+    grep "Using port:" | \
+      awk '{ printf "%s", $5 }'
   )
   echo -n "${STORE_PORT}" > "${CURRENT_DIR}/store-port"
 }
@@ -38,4 +40,21 @@ function store_get() {
 # arg[2] = value
 function store_set() {
   "${CURRENT_DIR}/store" set -k "${1}" -v "${2}"
+}
+
+# store_snapshot provides a JSON snapshot of the store.
+function store_snapshot() {
+  "${CURRENT_DIR}/store" snapshot
+}
+
+# store_cleanup snapshots then destroys the store
+function store_cleanup() {
+  # inherit exit_code or use $?
+  local exit_code="${exit_code:-$?}"
+
+  if [[ ! "${exit_code}" = 0 ]]; then
+    echo 'snapshotting the store...'
+    store_snapshot || true
+  fi
+  store_destroy || true
 }
