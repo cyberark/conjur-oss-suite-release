@@ -23,13 +23,13 @@ and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-rel
 The CLI accepts the following arguments/parameters:
 ```
   -f string
-        Repository YAML file to parse (default "repositories.yml")
+        Repository YAML file to parse (default "suite.yml")
   -o string
-        Output filename (default "CHANGELOG.md")
+        Output filename
   -p string
         GitHub API token. This can also be passed in as the 'GITHUB_TOKEN' environment variable. The flag takes precedence.
   -t string
-        Output type. Only accepts 'changelog' and 'release'. (default "changelog")
+        Output type. Only accepts 'changelog', 'docs-release', 'release', and 'unreleased'. (default "changelog")
   -v string
         Version to embed in the changelog (default "Unreleased")
 ```
