@@ -3,7 +3,8 @@ package repositories
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 
 	"gopkg.in/yaml.v3"
 )
@@ -42,13 +43,13 @@ type Config struct {
 // NewConfig ingests a YAML file and returns a Config representing the definitions
 // in that file.
 func NewConfig(filename string) (Config, error) {
-	log.Printf("Reading %s...", filename)
+	log.OutLogger.Printf("Reading %s...", filename)
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return Config{}, fmt.Errorf("error reading YAML file: %s", err)
 	}
 
-	log.Printf("Unmarshaling data...")
+	log.OutLogger.Printf("Unmarshaling data...")
 	var repoConfig Config
 	err = yaml.Unmarshal(yamlFile, &repoConfig)
 	if err != nil {

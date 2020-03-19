@@ -49,7 +49,7 @@ function store_snapshot() {
 
 # store_cleanup snapshots then destroys the store
 function store_cleanup() {
-  # inherit exit_code or use $?
+  # Inherit exit_code or use $?
   local exit_code="${exit_code:-$?}"
 
   if [[ ! "${exit_code}" = 0 ]]; then

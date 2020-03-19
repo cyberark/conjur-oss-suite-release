@@ -3,7 +3,6 @@ package template
 import (
 	"fmt"
 	htmlTemplate "html/template"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 )
 
 // SuiteComponent represents a suite component with all of its changelogs and
@@ -92,7 +92,7 @@ func (engine *Engine) renderTemplate(
 		return fmt.Errorf("Could not read template '%s'", templatePath)
 	}
 
-	log.Printf("Generating '%s' file from template '%s'...", outputFile.Name(), templatePath)
+	log.OutLogger.Printf("Generating '%s' file from template '%s'...", outputFile.Name(), templatePath)
 
 	// Sadly while `html/template` and `text/template` share the same API, they
 	// use incompatible signatures and parameters so depending on the extension,
@@ -126,7 +126,7 @@ func (engine *Engine) WriteChangelog(
 	outputPath string) error {
 
 	// Open the target file
-	log.Printf("Opening '%s'...", outputPath)
+	log.OutLogger.Printf("Opening '%s'...", outputPath)
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		return fmt.Errorf("Error creating %s: %v", outputPath, err)

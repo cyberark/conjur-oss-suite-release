@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"strings"
 
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/repositories"
 )
 
@@ -16,20 +16,20 @@ func main() {
 
 	if suiteFile == "" {
 		flag.PrintDefaults()
-		log.Fatal("missing required -f flag")
+		log.ErrLogger.Fatal("missing required -f flag")
 		return
 	}
 
 	repoConfig, err := repositories.NewConfig(suiteFile)
 	if err != nil {
-		log.Fatal(err)
+		log.ErrLogger.Fatal(err)
 		return
 	}
 
 	for _, categories := range repoConfig.Section.Categories {
 		for _, repo := range categories.Repos {
 			key := fmt.Sprintf("RELEASE.%s.VERSION", strings.ToUpper(repo.Name))
-			log.Println("Setting store value for key: " + key)
+			log.OutLogger.Println("Setting store value for key: " + key)
 
 			err = storeClient.Set(
 				key,
@@ -37,7 +37,7 @@ func main() {
 			)
 
 			if err != nil {
-				log.Fatal(err)
+				log.ErrLogger.Fatal(err)
 				return
 			}
 		}

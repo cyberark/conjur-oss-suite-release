@@ -3,8 +3,9 @@ package http
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	stdlibHttp "net/http"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 )
 
 // Client is a wrapper around stdlibHttp client but with added storage for
@@ -35,7 +36,7 @@ func (client *Client) Get(url string) ([]byte, error) {
 		request.Header.Add("Authorization", "token "+client.AuthToken)
 	}
 
-	log.Printf("  Fetching %s...", url)
+	log.OutLogger.Printf("  Fetching %s...", url)
 	response, err := client.Do(request)
 	if err != nil {
 		return nil, err

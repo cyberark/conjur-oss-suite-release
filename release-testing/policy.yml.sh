@@ -41,7 +41,7 @@ echo "
     description: Identities permitted to authenticate
   body:
 
-  # define layer of whitelisted authn ids permitted to call authn service
+  # Define layer of whitelisted authn ids permitted to call authn service
   - !layer
     annotations:
       description: Layer of authenticator identities permitted to call authn svc
@@ -84,7 +84,7 @@ echo "
       privileges: [ read, execute ]
       resources: *variables
 
-# add authn identities to application layer so authn roles inherit app's permissions
+# Add authn identities to application layer so authn roles inherit app's permissions
 - !grant
   role: !layer test-app
   members:

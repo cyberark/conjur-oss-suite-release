@@ -3,8 +3,9 @@ package kv
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
+
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 )
 
 // Store is an in-memory key-value store
@@ -23,7 +24,7 @@ type GetArg struct {
 
 // Set inserts a key-value pair into the store
 func (s Store) Set(arg SetArg, _ *int) error {
-	log.Println("#Set")
+	log.OutLogger.Println("#Set")
 
 	s[arg.Key] = arg.Value
 	return nil
@@ -32,7 +33,7 @@ func (s Store) Set(arg SetArg, _ *int) error {
 // Get retrieves a value from the store, given a key.
 // It returns an error if the key does not exist
 func (s Store) Get(arg GetArg, reply *string) error {
-	log.Println("#Get")
+	log.OutLogger.Println("#Get")
 
 	val, ok := s[arg.Key]
 	if !ok {
@@ -45,7 +46,7 @@ func (s Store) Get(arg GetArg, reply *string) error {
 
 // List returns a slice of strings containing each of the keys present in the store
 func (s Store) List(arg int, reply *[]string) error {
-	log.Println("#List")
+	log.OutLogger.Println("#List")
 
 	var keys []string
 	for key := range s {
@@ -58,7 +59,7 @@ func (s Store) List(arg int, reply *[]string) error {
 
 // Snapshot returns a JSON serialized string of the Store at the moment the call is made
 func (s Store) Snapshot(arg int, reply *string) error {
-	log.Println("#Snapshot")
+	log.OutLogger.Println("#Snapshot")
 
 	res, err := json.Marshal(s)
 	*reply = string(res)
@@ -68,7 +69,7 @@ func (s Store) Snapshot(arg int, reply *string) error {
 
 // Destroy kills the process with 0 exit code
 func (s Store) Destroy(arg int, _ *int) error {
-	log.Println("#Destroy")
+	log.OutLogger.Println("#Destroy")
 	os.Exit(0)
 	return nil
 }

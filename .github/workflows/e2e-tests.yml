@@ -38,3 +38,8 @@ jobs:
       - name: Run releases test
         working-directory: ./release-testing
         run: ./test
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: debug-log
+          path: ./release-testing/debug-log.txt

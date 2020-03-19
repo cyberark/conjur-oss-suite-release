@@ -48,7 +48,7 @@ exec_conjur_client conjur variable values add test-app-secrets/username ` + expe
 		out, err := callBashScript(
 			// language=bash
 			`
-exec_app bash -c '
+exec_app bash -exc '
 export http_proxy=http://localhost:8080
 
 curl -s "http://httpbin.org/anything" | jq -j ".headers.Authorization"

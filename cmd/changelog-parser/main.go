@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"time"
@@ -12,6 +11,7 @@ import (
 	changelogPkg "github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/github"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/http"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/repositories"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/template"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/version"
@@ -72,7 +72,7 @@ func latestVersionToExactVersion(client *http.Client, provider string, repo stri
 		return "", err
 	}
 
-	log.Printf("  'latest' resolved as '%s'", releaseInfo.TagName)
+	log.OutLogger.Printf("  'latest' resolved as '%s'", releaseInfo.TagName)
 
 	return releaseInfo.TagName, nil
 }
@@ -135,7 +135,7 @@ func componentFromRepo(
 		return component, err
 	}
 
-	log.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
+	log.OutLogger.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
 
 	// TODO: This should be somehow transformed from repo url
 	completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, "master")
@@ -145,7 +145,7 @@ func componentFromRepo(
 
 	// XXX: This still doesn't address releases and how we include that data in yet.
 	for _, relevantVersion := range relevantVersions {
-		log.Printf("  Extracting changelog data from %s...", relevantVersion)
+		log.OutLogger.Printf("  Extracting changelog data from %s...", relevantVersion)
 		versionChangelog, err := extractVersionChangeLog(
 			repo.Name,
 			relevantVersion,
@@ -156,7 +156,7 @@ func componentFromRepo(
 		}
 
 		if versionChangelog == nil {
-			log.Printf(
+			log.OutLogger.Printf(
 				"  CHANGELOG not found for %s@%s",
 				repo.Name,
 				relevantVersion,
@@ -186,9 +186,9 @@ func collectComponents(repoConfig repositories.Config, httpClient *http.Client) 
 ) {
 	var components []template.SuiteComponent
 	for _, category := range repoConfig.Section.Categories {
-		log.Printf("Processing category: %s", category.Name)
+		log.OutLogger.Printf("Processing category: %s", category.Name)
 		for _, repo := range category.Repos {
-			log.Printf("- Processing repo: %s", repo.Name)
+			log.OutLogger.Printf("- Processing repo: %s", repo.Name)
 
 			component, err := componentFromRepo(httpClient, repo)
 			if err != nil {
@@ -222,14 +222,14 @@ func extractVersionChangeLog(
 
 func runParser(options cliOptions) {
 	if _, ok := templates[options.OutputType]; !ok {
-		log.Fatal(fmt.Errorf("%s is not a valid output type", options.OutputType))
+		log.ErrLogger.Fatal(fmt.Errorf("%s is not a valid output type", options.OutputType))
 		return
 	}
 
-	log.Printf("Parsing linked repositories...")
+	log.OutLogger.Printf("Parsing linked repositories...")
 	repoConfig, err := repositories.NewConfig(options.RepositoryFilename)
 	if err != nil {
-		log.Fatal(err)
+		log.ErrLogger.Fatal(err)
 		return
 	}
 
@@ -240,7 +240,7 @@ func runParser(options cliOptions) {
 
 	options.generateOutputFilename()
 
-	log.Printf("Collecting changelogs...")
+	log.OutLogger.Printf("Collecting changelogs...")
 	httpClient := http.NewClient()
 
 	githubAPIToken := options.APIToken
@@ -251,7 +251,7 @@ func runParser(options cliOptions) {
 
 	components, err := collectComponents(repoConfig, httpClient)
 	if err != nil {
-		log.Fatalf("ERROR: %v", err)
+		log.ErrLogger.Fatalf("ERROR: %v", err)
 		return
 	}
 
@@ -280,11 +280,11 @@ func runParser(options cliOptions) {
 		templateData,
 		options.OutputFilename)
 	if err != nil {
-		log.Fatal(err)
+		log.ErrLogger.Fatal(err)
 		return
 	}
 
-	log.Printf("Changelog parser completed!")
+	log.OutLogger.Printf("Changelog parser completed!")
 }
 
 // If no filename is provided, we generate one based on the file type
@@ -301,7 +301,7 @@ func (options *cliOptions) generateOutputFilename() {
 }
 
 func main() {
-	log.Printf("Starting changelog parser...")
+	log.OutLogger.Printf("Starting changelog parser...")
 
 	options := cliOptions{}
 
