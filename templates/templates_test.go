@@ -111,7 +111,7 @@ func TestTemplates(t *testing.T) {
 
 	for _, tt := range templates {
 		t.Run(tt, func(t *testing.T) {
-			outputFile := filepath.Join(dir, tt+"_output.md")
+			outputFile := filepath.Join(dir, tt+"_output")
 
 			tmpl := template.New(".")
 			err = tmpl.WriteChangelog(tt, testData, outputFile)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -28,7 +29,7 @@ func TestMain(t *testing.T) {
 	// We have to run from toplevel dir to be able to use the defaults
 	os.Chdir("../..")
 
-	for _, tt := range []string{"changelog", "release"} {
+	for _, tt := range []string{"changelog", "docs-release", "release"} {
 		t.Run(tt, func(t *testing.T) {
 			// Create a tempdir to write the out output to
 			outputDir, err := ioutil.TempDir("", "main_test")
@@ -37,7 +38,7 @@ func TestMain(t *testing.T) {
 			}
 			defer os.RemoveAll(outputDir)
 
-			outputFile := filepath.Join(outputDir, tt+"_output.md")
+			outputFile := filepath.Join(outputDir, tt+"_output.txt")
 			outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
 
 			// Run the test
@@ -56,8 +57,8 @@ func TestMain(t *testing.T) {
 				return
 			}
 
-			// Tests are expected at "./testdata/expected_<type>_output.md"
-			expectedOutputFile := filepath.Join(thisDir, "testdata", "expected_"+tt+"_output.md")
+			// Tests are expected at "./testdata/expected_<type>_output.txt"
+			expectedOutputFile := filepath.Join(thisDir, "testdata", "expected_"+tt+"_output.txt")
 			expectedOutput, err := ioutil.ReadFile(expectedOutputFile)
 			if !assert.NoError(t, err) {
 				return
@@ -71,61 +72,80 @@ func TestMain(t *testing.T) {
 func TestGenerateOutputFilename(t *testing.T) {
 	outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
 	testCases := []struct {
-		description      string
+		outputType       string
+		version          string
+		outputFilename   string
 		expectedFilename string
-		options          cliOptions
 	}{
 		{
-			description:      "Output type is release, no filename given",
-			expectedFilename: "RELEASE_NOTES_Unreleased.md",
-			options: cliOptions{
-				Date:               outputDate,
-				OutputFilename:     "",
-				OutputType:         "release",
-				RepositoryFilename: "bar",
-				Version:            "Unreleased",
-			},
+			outputType:       "changelog",
+			version:          "mychangelogversion",
+			outputFilename:   "",
+			expectedFilename: "CHANGELOG_mychangelogversion.md",
 		},
 		{
-			description:      "Output type is changelog, no filename given",
-			expectedFilename: "CHANGELOG_Unreleased.md",
-			options: cliOptions{
-				Date:               outputDate,
-				OutputFilename:     "",
-				OutputType:         "changelog",
-				RepositoryFilename: "bar",
-				Version:            "Unreleased",
-			},
+			outputType:       "changelog",
+			version:          "foo",
+			outputFilename:   "outputname1",
+			expectedFilename: "outputname1",
 		},
 		{
-			description: "Output type is unreleased, no filename given",
-			options: cliOptions{
-				Date:               outputDate,
-				OutputFilename:     "",
-				OutputType:         "unreleased",
-				RepositoryFilename: "bar",
-				Version:            "Unreleased",
-			},
+			outputType:       "docs-release",
+			version:          "mydocsreleaseversion",
+			outputFilename:   "",
+			expectedFilename: "ConjurSuite_mydocsreleaseversion.htm",
+		},
+		{
+			outputType:       "docs-release",
+			version:          "bar",
+			outputFilename:   "outputname2",
+			expectedFilename: "outputname2",
+		},
+		{
+			outputType:       "release",
+			version:          "myreleaseversion",
+			outputFilename:   "",
+			expectedFilename: "RELEASE_NOTES_myreleaseversion.md",
+		},
+		{
+			outputType:       "release",
+			version:          "baz",
+			outputFilename:   "outputname3",
+			expectedFilename: "outputname3",
+		},
+		{
+			outputType:       "unreleased",
+			version:          "notused",
+			outputFilename:   "",
 			expectedFilename: "UNRELEASED.md",
 		},
 		{
-			description: "Output type is release, filename is given",
-			options: cliOptions{
-				Date:               outputDate,
-				OutputFilename:     "foo.md",
-				OutputType:         "release",
-				RepositoryFilename: "bar",
-				Version:            "Unreleased",
-			},
-			expectedFilename: "foo.md",
+			outputType:       "unreleased",
+			version:          "notused",
+			outputFilename:   "outputname4",
+			expectedFilename: "outputname4",
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run("GenerateOutputFilename: "+tc.description, func(t *testing.T) {
-			tc.options.generateOutputFilename()
+		options := cliOptions{
+			Date:               outputDate,
+			OutputFilename:     tc.outputFilename,
+			OutputType:         tc.outputType,
+			RepositoryFilename: "bar",
+			Version:            tc.version,
+		}
 
-			assert.EqualValues(t, tc.expectedFilename, tc.options.OutputFilename)
+		testName := fmt.Sprintf(
+			"GenerateOutputFilename: %s/'%s'",
+			tc.outputType,
+			tc.expectedFilename,
+		)
+
+		t.Run(testName, func(t *testing.T) {
+			options.generateOutputFilename()
+
+			assert.EqualValues(t, tc.expectedFilename, options.OutputFilename)
 		})
 	}
 }
