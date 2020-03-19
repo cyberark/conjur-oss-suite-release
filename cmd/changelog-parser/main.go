@@ -27,26 +27,31 @@ type cliOptions struct {
 }
 
 type templateInfo struct {
-	TemplateName string
-	OutputName   string
+	TemplateName        string
+	OutputName          string
+	VersionInOutputName bool
 }
 
 var templates = map[string]templateInfo{
 	"changelog": {
-		TemplateName: "CHANGELOG_unified.md.tmpl",
-		OutputName:   "CHANGELOG_%s.md",
+		TemplateName:        "CHANGELOG_unified.md.tmpl",
+		OutputName:          "CHANGELOG_%s.md",
+		VersionInOutputName: true,
 	},
 	"docs-release": {
-		TemplateName: "RELEASE_NOTES_unified.htm.tmpl",
-		OutputName:   "ConjurSuite_%s.htm",
+		TemplateName:        "RELEASE_NOTES_unified.htm.tmpl",
+		OutputName:          "ConjurSuite_%s.htm",
+		VersionInOutputName: true,
 	},
 	"release": {
-		TemplateName: "RELEASE_NOTES_unified.md.tmpl",
-		OutputName:   "RELEASE_NOTES_%s.md",
+		TemplateName:        "RELEASE_NOTES_unified.md.tmpl",
+		OutputName:          "RELEASE_NOTES_%s.md",
+		VersionInOutputName: true,
 	},
 	"unreleased": {
-		TemplateName: "UNRELEASED_CHANGES_unified.md.tmpl",
-		OutputName:   "UNRELEASED.md",
+		TemplateName:        "UNRELEASED_CHANGES_unified.md.tmpl",
+		OutputName:          "UNRELEASED.md",
+		VersionInOutputName: false,
 	},
 }
 
@@ -294,9 +299,8 @@ func runParser(options cliOptions) {
 // If no filename is provided, we generate one based on the file type
 func (options *cliOptions) generateOutputFilename() {
 	if options.OutputFilename == "" {
-		if options.OutputType == "unreleased" {
-			options.OutputFilename = templates[options.OutputType].OutputName
-		} else {
+		options.OutputFilename = templates[options.OutputType].OutputName
+		if templates[options.OutputType].VersionInOutputName {
 			options.OutputFilename = fmt.Sprintf(
 				templates[options.OutputType].OutputName,
 				options.Version)
