@@ -42,13 +42,16 @@ func TestMain(t *testing.T) {
 			outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
 
 			// Run the test
-			cli.RunParser(cli.Options{
+			err = cli.RunParser(cli.Options{
 				Date:               outputDate,
 				OutputFilename:     outputFile,
 				OutputType:         tt,
 				RepositoryFilename: testRepositoriesYml,
 				Version:            "Unreleased",
 			})
+			if !assert.NoError(t, err) {
+				return
+			}
 
 			log.OutLogger.Print("Verifying test result...")
 
