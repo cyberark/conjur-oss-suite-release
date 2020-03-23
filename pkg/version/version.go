@@ -2,14 +2,81 @@ package version
 
 import (
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/coreos/go-semver/semver"
 )
 
+// ReleasesPrefix denotes the expected prefix for all release files
+const ReleasesPrefix = "suite_"
+
 func versionFromString(versionStr string) (*semver.Version, error) {
 	// Strip the 'v' from the beginning, if present
 	return semver.NewVersion(strings.TrimPrefix(versionStr, "v"))
+}
+
+// LatestReleaseInDir returns the file matching the highest semver for a
+// group of files in the specified `releasesDir`.
+func LatestReleaseInDir(releasesDir string) (string, error) {
+	files, err := ioutil.ReadDir(releasesDir)
+	if err != nil {
+		return "", fmt.Errorf(
+			"could not read releases directory %s: %s",
+			releasesDir,
+			err,
+		)
+	}
+
+	if len(files) == 0 {
+		return "", fmt.Errorf(
+			"could not find any release files in '%s'",
+			releasesDir,
+		)
+	}
+
+	highestVersion, _ := versionFromString("0.0.0")
+	highestReleaseFile := files[0].Name()
+	for _, file := range files {
+		filename := file.Name()
+
+		if !strings.HasPrefix(filename, ReleasesPrefix) {
+			return "", fmt.Errorf(
+				"found non-release prefix ('%s') file '%s' in '%s'",
+				ReleasesPrefix,
+				filename,
+				releasesDir,
+			)
+		}
+
+		// Turns `suite_x.y.z.yml` into `x.y.z`
+		versionText := strings.Replace(
+			strings.TrimSuffix(filename, filepath.Ext(filename)),
+			ReleasesPrefix,
+			"",
+			1,
+		)
+
+		version, err := versionFromString(versionText)
+		if err != nil {
+			return "", fmt.Errorf(
+				"could not parse semver from '%s' in %s (%s)",
+				filename,
+				releasesDir,
+				err,
+			)
+		}
+
+		if highestVersion.LessThan(*version) {
+			highestVersion = version
+			highestReleaseFile = filename
+		}
+	}
+
+	highestReleasePath := filepath.Join(releasesDir, highestReleaseFile)
+
+	return highestReleasePath, nil
 }
 
 // GetRelevantVersions sorts and returns the list of versions from highest
