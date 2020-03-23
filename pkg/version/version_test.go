@@ -1,6 +1,8 @@
 package version
 
 import (
+	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,6 +15,76 @@ var versionFixtureData = []string{
 	"v0.29.20",
 	"v0.2.0",
 	"v0.1.3",
+}
+
+func TestLatestReleaseInDir(t *testing.T) {
+	latest, err := LatestReleaseInDir("testdata/latest_releases")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, "testdata/latest_releases/suite_11.5.12.yml", latest)
+}
+
+func TestLatestReleaseInDirBadDirectoryError(t *testing.T) {
+	_, err := LatestReleaseInDir("doesnotexist")
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"could not read releases directory doesnotexist: "+
+			"open doesnotexist: no such file or directory",
+	)
+}
+
+func TestLatestReleaseInDirEmptydirectoryError(t *testing.T) {
+	tempDir, err := ioutil.TempDir("", "version_test")
+	if !assert.NoError(t, err) {
+		return
+	}
+	defer os.RemoveAll(tempDir)
+
+	_, err = LatestReleaseInDir(tempDir)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"could not find any release files in '"+tempDir+"'",
+	)
+}
+
+func TestLatestReleaseInDirBadSemverReleaseFileError(t *testing.T) {
+	_, err := LatestReleaseInDir("testdata/latest_releases_bad_semver")
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"could not parse semver from 'suite_3.4.yml' in "+
+			"testdata/latest_releases_bad_semver (3.4 is not in dotted-tri format)",
+	)
+}
+
+func TestLatestReleaseInDirBadReleasePrefixFile(t *testing.T) {
+	_, err := LatestReleaseInDir("testdata/latest_releases_extra_files")
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"found non-release prefix ('suite_') file 'notsuite_5.4.3.yml' "+
+			"in 'testdata/latest_releases_extra_files'",
+	)
 }
 
 func TestGetRelevantVersions(t *testing.T) {
