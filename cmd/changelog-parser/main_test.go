@@ -24,7 +24,7 @@ func TestMain(t *testing.T) {
 		return
 	}
 
-	testRepositoriesYml := filepath.Join(thisDir, "testdata", "repositories.yml")
+	testRepositoriesYml := filepath.Join(thisDir, "testdata", "suite.yml")
 
 	// We have to run from toplevel dir to be able to use the defaults
 	os.Chdir("../..")
