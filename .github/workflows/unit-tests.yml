@@ -40,6 +40,8 @@ jobs:
         ./cc-test-reporter before-build
 
     - name: Run Tests
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: go test -v -coverprofile=c.out -count=1 ./...
 
     - name: Submit CC Report
