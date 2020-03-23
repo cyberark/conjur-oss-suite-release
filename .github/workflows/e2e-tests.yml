@@ -31,6 +31,8 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@v1
+        with:
+          version: 3.1.2
 
       - name: Add Helm 'stable' repository
         run: helm repo add stable https://kubernetes-charts.storage.googleapis.com/ && helm repo update
