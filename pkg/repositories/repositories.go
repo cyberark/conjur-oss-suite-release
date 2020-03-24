@@ -18,10 +18,10 @@ type describedObject struct {
 type Repository struct {
 	describedObject    `yaml:",inline"`
 	URL                string
-	CertificationLevel string `yaml:"certification",omitempty`
-	Version            string `yaml:omitempty`
-	AfterVersion       string `yaml:"after",omitempty`
-	UpgradeURL         string `yaml:"upgrade_url",omitempty`
+	CertificationLevel string `yaml:"certification,omitempty"`
+	Version            string `yaml:"version,omitempty"`
+	AfterVersion       string `yaml:"after,omitempty"`
+	UpgradeURL         string `yaml:"upgrade_url,omitempty"`
 }
 
 type category struct {
