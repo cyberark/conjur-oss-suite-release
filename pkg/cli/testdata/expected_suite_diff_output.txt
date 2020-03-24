@@ -1,0 +1,94 @@
+# Release Notes
+All notable changes to this project will be documented in this file.
+
+## [Unreleased] - 2020-02-19
+
+## Table of Contents
+
+- [Components](#components)
+- [Installation Instructions for the Suite Release Version of Conjur](#installation-instructions-for-the-suite-release-version-of-conjur)
+- [Upgrade Instructions](#upgrade-instructions)
+- [Changes](#changes)
+
+## Components
+
+These are the components that combine to create this Conjur OSS Suite release and links
+to their releases:
+
+- **[cyberark/conjur v1.4.7](https://github.com/cyberark/conjur/releases/tag/v1.4.7)** (2020-03-12) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-Blue)](https://github.com/cyberark/conjur)
+- **[cyberark/conjur-oss-helm-chart v1.3.8](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8)** (2019-12-20) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-Green)](https://github.com/cyberark/conjur-oss-helm-chart)
+- **[cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5)** (2019-12-06) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-Yellow)](https://github.com/cyberark/conjur-api-python3)
+
+## Installation Instructions for the Suite Release Version of Conjur
+
+Installing the Suite Release Version of Conjur requires setting the container image tag. Below are more specific instructions depending on environment.
+
++ **Docker or docker-compose**
+
+  Set the container image tag to `cyberark/conjur:1.4.7`.
+  For example, make the following update to the conjur service in the [quickstart docker-compose.yml](https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml)
+  ```
+  image: cyberark/conjur:1.4.7
+  ```
+
++ [**Cloud Formation templates for AWS**](https://github.com/cyberark/conjur-aws)
+
+  Set the environment variable CONJUR_VERSION before building the AMI:
+  ```
+  export CONJUR_VERSION="1.4.7"
+  ./build-ami.sh
+  ```
+
++ [**Conjur OSS Helm chart**](https://github.com/cyberark/conjur-oss-helm-chart)
+
+  Update the `image.tag` value and use the appropriate release of the helm chart:
+  ```
+  helm install ... \
+    --set image.tag="1.4.7" \
+    ...
+    https://github.com/cyberark/conjur-oss-helm-chart/releases/download/v1.3.8/conjur-oss-1.3.8.tgz
+  ```
+
+## Upgrade Instructions
+
+Upgrade instructions are available for the following components:
+
+- [cyberark/conjur](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm)
+
+## Changes
+The following are changes to the constituent components since the last Conjur
+OSS Suite release:
+- [cyberark/conjur](#cyberarkconjur)
+- [cyberark/conjur-oss-helm-chart](#cyberarkconjur-oss-helm-chart)
+- [cyberark/conjur-api-python3](#cyberarkconjur-api-python3)
+
+### cyberark/conjur
+
+#### [v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6) (2020-01-21)
+* **Changed**
+    - K8s hosts' application identity is extracted from annotations or id. If it is
+defined in annotations it will taken from there and if not, it will be taken
+from the id.
+#### [v1.4.7](https://github.com/cyberark/conjur/releases/tag/v1.4.7) (2020-03-12)
+* **Changed**
+    - Improved flows and rules around user creation (#1272)
+    - Kubernetes authenticator now returns 403 on unpermitted hosts instead of a 401 (#1283)
+    - Conjur hosts can authenticate with authn-k8s from anywhere in the policy branch (#1189)
+* **Fixed**
+    - Updated broken links on server status page (#1341)
+### cyberark/conjur-oss-helm-chart
+
+#### [v1.3.8](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8) (2019-12-20)
+* **Added**
+    - Added basic instructions on how to package the chart
+    - Added gitleaks config to repo
+* **Changed**
+    - Updated deployments to be able to run on Kubernetes 1.16+
+    - Updated e2e scripts to support newest helm (v.1.3.8)
+* **Removed**
+    - Removed GitLab pipeline (it wasn't working anyways)
+### cyberark/conjur-api-python3
+
+#### [v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5) (2019-12-06)
+* **Added**
+    - Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)
