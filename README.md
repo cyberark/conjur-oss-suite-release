@@ -28,6 +28,8 @@ The CLI accepts the following arguments/parameters:
         Output filename
   -p string
         GitHub API token. This can also be passed in as the 'GITHUB_TOKEN' environment variable. The flag takes precedence.
+  -r string
+        Directory of releases (containinng 'suite_<semver>.yml') files. Set this to empty string to skip suite version diffing. (default "releases")
   -t string
         Output type. Only accepts 'changelog', 'docs-release', 'release', and 'unreleased'. (default "changelog")
   -v string
