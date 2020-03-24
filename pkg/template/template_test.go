@@ -132,3 +132,40 @@ func TestWriteChangelogTemplateResolutionError(t *testing.T) {
 		})
 	}
 }
+
+func TestMarkdownHyperlinksToHTMLHyperlinks(t *testing.T) {
+	testData := []struct {
+		description    string
+		inputString    string
+		expectedString string
+	}{
+		{
+			description:    "no url in input",
+			inputString:    "foo",
+			expectedString: "foo",
+		},
+		{
+			description:    "input includes words in perentheses",
+			inputString:    "foo (bar)",
+			expectedString: "foo (bar)",
+		},
+		{
+			description:    `input contains a single url`,
+			inputString:    `foo [bar](baz)`,
+			expectedString: `foo <a href="baz">bar</a>`,
+		},
+		{
+			description:    `input contains multiple urls`,
+			inputString:    `foo [bar](baz) & [jack](box)`,
+			expectedString: `foo <a href="baz">bar</a> & <a href="box">jack</a>`,
+		},
+	}
+
+	for _, td := range testData {
+		t.Run(td.description, func(t *testing.T) {
+			actualString := markdownHyperlinksToHTMLHyperlinks(td.inputString)
+
+			assert.EqualValues(t, td.expectedString, actualString)
+		})
+	}
+}

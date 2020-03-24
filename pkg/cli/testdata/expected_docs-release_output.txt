@@ -110,7 +110,7 @@ from the id.</li>
           <ul>
               <li><strong>Added</strong>
                 <ul>
-                  <li>Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)</li>
+                  <li>Added ability to delete policies <a href="https://github.com/cyberark/conjur-api-python3/issues/23">#23</a></li>
                 </ul>
               </li>
           </ul>
