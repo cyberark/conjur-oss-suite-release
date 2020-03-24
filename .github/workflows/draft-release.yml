@@ -42,11 +42,38 @@ jobs:
     - name: Set GIT_BRANCH
       run: echo "::set-env name=GIT_BRANCH::${GITHUB_REF#refs/tags/}"
 
+    - name: Add suite.yml to artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        path: ./suite.yml
+        name: suite.yml
+
     - name: Generate RELEASE_NOTES.md
       run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -t release -o tmp_RELEASE_NOTES.md
 
+    - name: Add RELEASE_NOTES to artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        path: ./tmp_RELEASE_NOTES.md
+        name: RELEASE_NOTES.md
+
     - name: Generate CHANGELOG.md
       run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -o tmp_CHANGELOG.md
+
+    - name: Add CHANGELOG to artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        path: ./tmp_CHANGELOG.md
+        name: CHANGELOG.md
+
+    - name: Generate ConjurSuite.htm
+      run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -t docs-release -o tmp_ConjurSuite.htm
+
+    - name: Add ConjurSuite to artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        path: ./tmp_ConjurSuite.htm
+        name: ConjurSuite.htm
 
     - name: Capture release notes into a variable
       id: release_notes
@@ -85,3 +112,23 @@ jobs:
         asset_path: ./tmp_CHANGELOG.md
         asset_name: CHANGELOG.md
         asset_content_type: text/markdown
+
+    - name: Upload ConjurSuite to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./tmp_ConjurSuite.htm
+        asset_name: ConjurSuite.htm
+        asset_content_type: text/html
+
+    - name: Upload suite.yml to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./suite.yml
+        asset_name: suite.yml
+        asset_content_type: text/x-yaml
