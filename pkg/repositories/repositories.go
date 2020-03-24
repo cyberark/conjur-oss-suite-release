@@ -34,7 +34,7 @@ type section struct {
 	Categories      []category
 }
 
-// Config is the toplevel object containing the layout of a repositories.yml
+// Config is the toplevel object containing the layout of a suite.yml
 // file
 type Config struct {
 	Section section
