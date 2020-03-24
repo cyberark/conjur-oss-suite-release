@@ -5,6 +5,7 @@ import (
 	htmlTemplate "html/template"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	textTemplate "text/template"
 	"time"
@@ -39,8 +40,9 @@ type Engine struct {
 
 // Define helper methods for templates
 var funcMap = map[string]interface{}{
-	"toLower":            strings.ToLower,
-	"markdownHeaderLink": markdownHeaderLink,
+	"toLower":                            strings.ToLower,
+	"markdownHeaderLink":                 markdownHeaderLink,
+	"markdownHyperlinksToHTMLHyperlinks": markdownHyperlinksToHTMLHyperlinks,
 }
 
 func markdownHeaderLink(repo string) string {
@@ -133,4 +135,30 @@ func (r ReleaseSuite) ComponentReleaseVersion(repo string) string {
 	}
 
 	return ""
+}
+
+func markdownHyperlinksToHTMLHyperlinks(sectionItem string) string {
+	linkTemplate := `<a href="%s">%s</a>`
+
+	markdownRegex := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+	nameRegex := regexp.MustCompile(`\[(.*)\]`)
+	urlRegex := regexp.MustCompile(`\((.*)\)`)
+
+	links := markdownRegex.FindAllString(sectionItem, -1)
+
+	for _, markdownLink := range links {
+		url := urlRegex.FindString(markdownLink)
+		url = strings.Replace(url, "(", "", 1)
+		url = strings.Replace(url, ")", "", 1)
+
+		name := nameRegex.FindString(markdownLink)
+		name = strings.Replace(name, "[", "", 1)
+		name = strings.Replace(name, "]", "", 1)
+
+		htmlLink := fmt.Sprintf(linkTemplate, url, name)
+
+		sectionItem = strings.Replace(sectionItem, markdownLink, htmlLink, 1)
+	}
+
+	return sectionItem
 }

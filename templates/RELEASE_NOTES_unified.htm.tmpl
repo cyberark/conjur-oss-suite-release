@@ -48,7 +48,7 @@
               <li><strong>{{ $sectionKey }}</strong>
                 <ul>
                 {{- range $sectionItem := $sectionValues }}
-                  <li>{{ $sectionItem -}}</li>
+                  <li>{{ markdownHyperlinksToHTMLHyperlinks $sectionItem -}}</li>
                 {{- end }}
                 </ul>
               </li>
