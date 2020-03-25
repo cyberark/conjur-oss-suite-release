@@ -133,22 +133,22 @@ func componentFromRepo(
 
 	var changelogs []*changelog.VersionChangelog
 
-	if repo.Version == "" {
-		// TODO: This should be somehow transformed from repo url
-		version, err := latestVersionToExactVersion(httpClient, "github", repo.Name)
-		if err != nil {
-			return component, err
-		}
-
-		repo.Version = version
-	}
-
 	// Repo version is the linked component release version
 	component.ReleaseName = repo.Version
 
 	availableVersions, err := GetAvailableReleases(httpClient, repo.Name)
 	if err != nil {
 		return component, err
+	}
+
+	if repo.Version == "" {
+		highestVersion, err := version.HighestVersion(availableVersions)
+		if err != nil {
+			return component, err
+		}
+
+		log.OutLogger.Printf("  Repo 'latest' release resolved as '%s'", highestVersion)
+		repo.Version = highestVersion
 	}
 
 	relevantVersions, err := version.GetRelevantVersions(
@@ -222,25 +222,4 @@ func extractVersionChangelog(
 	}
 
 	return nil, nil
-}
-
-// LatestVersionToExactVersion retrieves the specific version number for a given repo's
-// latest version
-// https://api.github.com/repos/cyberark/secretless-broker/releases/latest
-func latestVersionToExactVersion(client *http.Client, provider string, repo string) (string, error) {
-	releaseURL := fmt.Sprintf(providerVersionResolutionTemplate[provider], repo)
-	contents, err := client.Get(releaseURL)
-	if err != nil {
-		return "", err
-	}
-
-	var releaseInfo = ReleaseInfo{}
-	err = json.Unmarshal(contents, &releaseInfo)
-	if err != nil {
-		return "", err
-	}
-
-	log.OutLogger.Printf("  'latest' resolved as '%s'", releaseInfo.TagName)
-
-	return releaseInfo.TagName, nil
 }
