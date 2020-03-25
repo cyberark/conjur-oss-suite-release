@@ -18,7 +18,7 @@ and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-rel
 ```
 - Resulting changelog will be placed in `CHANGELOG.md`
 
-## Advanced usage
+## Advanced usage TEST
 
 The CLI accepts the following arguments/parameters:
 ```
