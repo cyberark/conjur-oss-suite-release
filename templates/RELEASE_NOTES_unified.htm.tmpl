@@ -3,58 +3,49 @@
   <head></head>
   <body>
     <h1>Release Notes</h1>
-    <p>The following features were introduced or enhanced in the {{ toLower .Version }} Conjur OSS suite.</p>
+    <p>The following components were included or enhanced in the {{ toLower .Version }} Conjur OSS suite.</p>
 
     <h2>Components</h2>
     <p>These are the components that comprise the Conjur Open Source Suite with links to their GitHub releases:</p>
-    <p>
-      <ul>
-         {{- range .Components }}
-         <li><a href="https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }}">{{ .Repo }} {{ .ReleaseName }}</a> ({{ .ReleaseDate }})</li>
-         {{- end }}
-      </ul>
-    </p>
+    <ul>
+      {{- range .Components }}
+      <li>
+        <p><a href="https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }}">{{ .Repo }} {{ .ReleaseName }}</a> ({{ .ReleaseDate }})</p>
+      </li>
+      {{- end }}
+    </ul>
 
     <h2>Upgrade Instructions</h2>
     <p>Upgrade instructions are available for the following suite components:</p>
-    <p>
-      <ul>
-        {{- range .Components }}
-        {{- if .UpgradeURL }}
-        <li><a href="{{ .UpgradeURL }} ">{{ .Repo }}</a></li>
-        {{- end }}
-        {{- end }}
-      </ul>
-    </p>
+    <ul>
+      {{- range .Components }}
+      {{- if .UpgradeURL }}
+      <li>
+        <p><a href="{{ .UpgradeURL }} ">{{ .Repo }}</a></p>
+      </li>
+      {{- end }}
+      {{- end }}
+    </ul>
 
     <h2>What's New by Component</h2>
-    <p>
+    <p>The following components were introduced or enhanced in the {{ toLower .Version }} Conjur OSS suite.</p>
+    <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
+
+    {{- range .Components }}
+
+    <h3 class="list">{{ .Repo }}</h3>
+      {{- range .Changelogs }}
+      <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}">v{{ .Version }}</a> ({{ .Date }})</h4>
+      {{- range $sectionKey, $sectionValues := .Sections }}
+      <p><strong>{{ $sectionKey }}</strong></p>
       <ul>
-        {{ range .Components -}}
-          <!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
-          <li><MadCap:xref href="#{{ .Repo }}">{{ .Repo }}</MadCap:xref></li>
+        {{- range $sectionItem := $sectionValues }}
+        <li>
+          <p>{{ markdownHyperlinksToHTMLHyperlinks $sectionItem -}}</p>
+        </li>
         {{- end }}
       </ul>
-    </p>
-
-    {{ range .Components -}}
-    <!-- href target here does not work as it doesn't yet escape the spaces/slashes -->
-    <h3><a name="cyberark-{{ .Repo }}"></a>{{ .Repo }}</h3>
-      {{- range .Changelogs }}
-        <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}">v{{ .Version }}</a> ({{ .Date }})</h4>
-        <p>
-          <ul>
-            {{- range $sectionKey, $sectionValues := .Sections }}
-              <li><strong>{{ $sectionKey }}</strong>
-                <ul>
-                {{- range $sectionItem := $sectionValues }}
-                  <li>{{ markdownHyperlinksToHTMLHyperlinks $sectionItem -}}</li>
-                {{- end }}
-                </ul>
-              </li>
-            {{- end }}
-          </ul>
-        </p>
+      {{- end }}
       {{- end }}
     {{- end }}
   </body>

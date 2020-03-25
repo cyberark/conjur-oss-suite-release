@@ -11,7 +11,7 @@ and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-rel
 
 ## Usage
 
-- Edit the file `repositories.yml` as needed
+- Edit the file `suite.yml` as needed
 - Run the CHANGELOG generator:
 ```
 ./parse-changelogs

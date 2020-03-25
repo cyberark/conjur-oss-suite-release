@@ -51,7 +51,7 @@ func testfileExpectedConfig(expectedRepos ...Repository) Config {
 }
 
 func TestNewConfig(t *testing.T) {
-	testPath := "testdata/repositories.yml"
+	testPath := "testdata/suite.yml"
 
 	reposConfig, err := NewConfig(testPath)
 	if !assert.NoError(t, err) {
@@ -70,8 +70,9 @@ func TestNewConfig(t *testing.T) {
 }
 
 func TestSetBaselineRepoVersions(t *testing.T) {
-	currentTestPath := "testdata/repositories_current.yml"
-	oldTestPath := "testdata/repositories_old.yml"
+
+	currentTestPath := "testdata/suite_current.yml"
+	oldTestPath := "testdata/suite_old.yml"
 
 	currentConfig, err := NewConfig(currentTestPath)
 	if !assert.NoError(t, err) {
@@ -114,7 +115,7 @@ func TestNewConfigReadFileProblems(t *testing.T) {
 }
 
 func TestNewConfigUnmarshalingProblem(t *testing.T) {
-	_, err := NewConfig("./testdata/bad_repositories.yml")
+	_, err := NewConfig("./testdata/bad_suite.yml")
 	if !assert.Error(t, err) {
 		return
 	}
@@ -142,7 +143,7 @@ func TestSelectUnreleased(t *testing.T) {
 	expectedConfig.Section.Categories[1].Repos[0].Version = ""
 	expectedConfig.Section.Categories[1].Repos[0].AfterVersion = "Repo3 Version"
 
-	config, err := NewConfig("./testdata/repositories.yml")
+	config, err := NewConfig("./testdata/suite.yml")
 	if !assert.NoError(t, err) {
 		return
 	}
