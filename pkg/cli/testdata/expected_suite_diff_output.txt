@@ -88,7 +88,3 @@ from the id.
 * **Removed**
     - Removed GitLab pipeline (it wasn't working anyways)
 ### cyberark/conjur-api-python3
-
-#### [v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5) (2019-12-06)
-* **Added**
-    - Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)

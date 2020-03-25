@@ -156,6 +156,11 @@ func CollectComponents(repoConfig repositories.Config, httpClient *http.Client) 
 				return nil, err
 			}
 
+			// No new version between previous and current suite - discard change notes
+			if repo.Version == repo.AfterVersion {
+				component.Changelogs = nil
+			}
+
 			components = append(components, component)
 		}
 	}
