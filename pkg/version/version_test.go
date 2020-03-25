@@ -235,3 +235,55 @@ func TestGetRelevantVersionsWithNoVersionsWithinRange(t *testing.T) {
 			"in available versions ([v1.3.4 v1.3.3 v1.20.0 v0.29.20 v0.2.0 v0.1.3])",
 	)
 }
+
+func TestHighestVersion(t *testing.T) {
+	highestVersion, err := HighestVersion(versionFixtureData)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, highestVersion, "v1.20.0")
+}
+
+func TestHighestVersionSingleVersionArg(t *testing.T) {
+	highestVersion, err := HighestVersion([]string{"v2.3.4"})
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, highestVersion, "v2.3.4")
+}
+
+func TestHighestVersionNoVersionsPassedIn(t *testing.T) {
+	_, err := HighestVersion([]string{})
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(t, err, "cannot ascertain highest version - no versions provided")
+}
+
+func TestHighestVersionFirstVersionBadInArg(t *testing.T) {
+	_, err := HighestVersion([]string{"abcd"})
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(t, err, "abcd is not in dotted-tri format")
+}
+
+func TestHighestVersionBadVersionsInArg(t *testing.T) {
+	_, err := HighestVersion(
+		[]string{
+			"1.2.3",
+			"2.3.4",
+			"9",
+			"3.4.5",
+		},
+	)
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(t, err, "9 is not in dotted-tri format")
+}

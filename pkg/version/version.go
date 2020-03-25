@@ -79,6 +79,33 @@ func LatestReleaseInDir(releasesDir string) (string, error) {
 	return highestReleasePath, nil
 }
 
+// HighestVersion returns the highest version string from an array of
+// version strings
+func HighestVersion(versions []string) (string, error) {
+	if len(versions) == 0 {
+		return "",
+			fmt.Errorf("cannot ascertain highest version - no versions provided")
+	}
+
+	highestVersion, err := versionFromString(versions[0])
+	if err != nil {
+		return "", err
+	}
+
+	for _, versionStr := range versions {
+		version, err := versionFromString(versionStr)
+		if err != nil {
+			return "", err
+		}
+
+		if highestVersion.LessThan(*version) {
+			highestVersion = version
+		}
+	}
+
+	return "v" + (*highestVersion).String(), nil
+}
+
 // GetRelevantVersions sorts and returns the list of versions from highest
 // (included) to the lowest (excluded). The method auto-detects what's the
 // lower and what's the higher range bound.
