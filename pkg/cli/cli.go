@@ -12,6 +12,7 @@ import (
 	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/repositories"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/template"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/version"
 )
 
 // Options represents the command line values a user can pass in
@@ -21,6 +22,7 @@ type Options struct {
 	OutputFilename     string
 	OutputType         string
 	RepositoryFilename string
+	ReleasesDir        string
 	Version            string
 }
 
@@ -55,6 +57,7 @@ var templates = map[string]templateInfo{
 
 const defaultOutputType = "changelog"
 const defaultRepositoryFilename = "suite.yml"
+const defaultReleasesDir = "releases"
 const defaultVersionString = "Unreleased"
 
 // RunParser kicks off the process for writing a new changelog
@@ -72,6 +75,22 @@ func RunParser(options Options) error {
 	if options.OutputType == "unreleased" {
 		// This is an in-place operation
 		repoConfig.SelectUnreleased()
+	} else if options.ReleasesDir != "" {
+		log.OutLogger.Printf("Releases dir: %s", options.ReleasesDir)
+
+		latestReleaseFile, err := version.LatestReleaseInDir(options.ReleasesDir)
+		if err != nil {
+			return err
+		}
+
+		log.OutLogger.Printf("Using %s as previous release for pinning", latestReleaseFile)
+
+		previousReleaseConfig, err := repositories.NewConfig(latestReleaseFile)
+		if err != nil {
+			return err
+		}
+
+		repoConfig.SetBaselineRepoVersions(&previousReleaseConfig)
 	}
 
 	log.OutLogger.Printf("Collecting changelogs...")
@@ -124,6 +143,9 @@ func RunParser(options Options) error {
 func (options *Options) HandleInput() error {
 	flag.StringVar(&options.RepositoryFilename, "f", defaultRepositoryFilename,
 		"Repository YAML file to parse")
+	flag.StringVar(&options.ReleasesDir, "r", defaultReleasesDir,
+		"Directory of releases (containinng 'suite_<semver>.yml') files. "+
+			"Set this to empty string to skip suite version diffing.")
 	flag.StringVar(&options.OutputType, "t", defaultOutputType,
 		"Output type. Only accepts 'changelog', 'docs-release', 'release', and 'unreleased'.")
 	flag.StringVar(&options.OutputFilename, "o", "",

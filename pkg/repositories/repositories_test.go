@@ -20,7 +20,6 @@ func newTestRepoObject(name string) Repository {
 }
 
 func testfileExpectedConfig(expectedRepos ...Repository) Config {
-
 	expectedCategories := []category{
 		category{
 			describedObject: describedObject{
@@ -49,7 +48,6 @@ func testfileExpectedConfig(expectedRepos ...Repository) Config {
 			Categories: expectedCategories,
 		},
 	}
-
 }
 
 func TestNewConfig(t *testing.T) {
@@ -71,27 +69,28 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, expectedRepos, reposConfig)
 }
 
-func TestUpdateConfigVersions(t *testing.T) {
+func TestSetBaselineRepoVersions(t *testing.T) {
 	currentTestPath := "testdata/repositories_current.yml"
-	newTestPath := "testdata/repositories_new.yml"
+	oldTestPath := "testdata/repositories_old.yml"
 
 	currentConfig, err := NewConfig(currentTestPath)
 	if !assert.NoError(t, err) {
 		return
 	}
 
-	newConfig, err := NewConfig(newTestPath)
+	oldConfig, err := NewConfig(oldTestPath)
 	if !assert.NoError(t, err) {
 		return
 	}
 
-	currentConfig.UpdateConfigVersions(&newConfig)
+	currentConfig.SetBaselineRepoVersions(&oldConfig)
 
 	expectedRepo1 := newTestRepoObject("Repo1")
-	expectedRepo1.AfterVersion = "Repo1 After Version"
+	expectedRepo1.AfterVersion = "Repo1 Old Version"
+	expectedRepo1.Version = "Repo1 New Version"
 
 	expectedRepo2 := newTestRepoObject("Repo2")
-	expectedRepo2.AfterVersion = "Repo2 Version"
+	expectedRepo2.AfterVersion = "Repo2 Old Version"
 	expectedRepo2.CertificationLevel = ""
 	expectedRepo2.Version = "Repo2 New Version"
 	expectedRepo2.UpgradeURL = ""

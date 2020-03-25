@@ -18,10 +18,10 @@ type describedObject struct {
 type Repository struct {
 	describedObject    `yaml:",inline"`
 	URL                string
-	CertificationLevel string `yaml:"certification",omitempty`
-	Version            string `yaml:omitempty`
-	AfterVersion       string `yaml:"after",omitempty`
-	UpgradeURL         string `yaml:"upgrade_url",omitempty`
+	CertificationLevel string `yaml:"certification,omitempty"`
+	Version            string `yaml:"version,omitempty"`
+	AfterVersion       string `yaml:"after,omitempty"`
+	UpgradeURL         string `yaml:"upgrade_url,omitempty"`
 }
 
 type category struct {
@@ -59,17 +59,14 @@ func NewConfig(filename string) (Config, error) {
 	return repoConfig, nil
 }
 
-// UpdateConfigVersions updates a config's repos' versions in-place, if the repo has a newer
-// version in the supplied config. It does this through the following steps:
-// 1. Sets the 'afterVersion' to the current 'version' of a repo
-// 2. Updates the 'version' to the newer one
-func (config *Config) UpdateConfigVersions(configWithNewVersions *Config) {
-	// Extract repos and their new versions regardless of category
-	newVersions := make(map[string]string)
-
-	for _, category := range configWithNewVersions.Section.Categories {
+// SetBaselineRepoVersions updates the current object with new values for AfterVersion
+// field based on the passed in old release config
+func (config *Config) SetBaselineRepoVersions(oldConfig *Config) {
+	// Extract repos and their old versions regardless of category
+	oldVersions := make(map[string]string)
+	for _, category := range oldConfig.Section.Categories {
 		for _, repo := range category.Repos {
-			newVersions[repo.URL] = repo.Version
+			oldVersions[repo.URL] = repo.Version
 		}
 	}
 
@@ -78,13 +75,12 @@ func (config *Config) UpdateConfigVersions(configWithNewVersions *Config) {
 	// More info: https://github.com/golang/go/wiki/CommonMistakes#using-reference-to-loop-iterator-variable
 	for _, category := range config.Section.Categories {
 		for repoIndex, repo := range category.Repos {
-			newVersion, present := newVersions[repo.URL]
+			oldVersion, present := oldVersions[repo.URL]
 			if !present {
 				continue
 			}
 			remappedRepo := repo
-			remappedRepo.Version = newVersion
-			remappedRepo.AfterVersion = repo.Version
+			remappedRepo.AfterVersion = oldVersion
 
 			category.Repos[repoIndex] = remappedRepo
 		}
