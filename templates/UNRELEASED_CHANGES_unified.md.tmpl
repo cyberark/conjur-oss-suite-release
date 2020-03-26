@@ -15,6 +15,9 @@ These are the component versions that have yet not been included in the Conjur O
 {{ range .Changelogs }}
 - [{{ .Repo }} v{{ .Version}} ({{ .Date }})](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }})
 {{- end }}
+{{- if .UnreleasedChangesURL }}
+- [{{ .Repo }} @HEAD]({{ .UnreleasedChangesURL }})
+{{- end }}
 {{- end }}
 
 ## Unreleased Changes

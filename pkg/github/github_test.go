@@ -72,6 +72,36 @@ func TestReleasesParsing(t *testing.T) {
 	}
 }
 
+func Test_comparisonFromURL(t *testing.T) {
+	expectedComparison := &ComparisonInfo{
+		URL:     "https://github.com/octocat/Hello-World/compare/master...topic",
+		AheadBy: 1,
+	}
+
+	transportWithFileSupport := &stdlibHttp.Transport{}
+	transportWithFileSupport.RegisterProtocol(
+		"file",
+		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
+	)
+
+	httpClient := &pkgHttp.Client{
+		&stdlibHttp.Client{
+			Transport: transportWithFileSupport,
+		},
+		"",
+	}
+
+	actualComparison, err := comparisonFromURL(
+		httpClient,
+		"file://./testdata/compare_v3.json",
+	)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, expectedComparison, actualComparison)
+}
+
 func TestGetAvailableReleases(t *testing.T) {
 	expectedReleases := []string{
 		"v0.0.5",

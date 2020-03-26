@@ -58,12 +58,13 @@ func TestTemplates(t *testing.T) {
 		UnifiedChangelog: "@@@Unified changelog content@@@",
 		Components: []github.SuiteComponent{
 			github.SuiteComponent{
-				Repo:               "cyberark/conjur",
-				URL:                "https://github.com/cyberark/conjur",
-				ReleaseName:        "v1.4.4",
-				ReleaseDate:        date2.Format("2006-01-02"),
-				CertificationLevel: "trusted",
-				UpgradeURL:         "https://conjur_upgrade_url",
+				Repo:                 "cyberark/conjur",
+				URL:                  "https://github.com/cyberark/conjur",
+				UnreleasedChangesURL: "https://github.com/cyberark/conjur/compare/v1.4.4...HEAD",
+				ReleaseName:          "v1.4.4",
+				ReleaseDate:          date2.Format("2006-01-02"),
+				CertificationLevel:   "trusted",
+				UpgradeURL:           "https://conjur_upgrade_url",
 				Changelogs: []*changelog.VersionChangelog{
 					&changelog.VersionChangelog{
 						Repo:    "cyberark/conjur",

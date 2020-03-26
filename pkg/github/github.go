@@ -15,17 +15,18 @@ import (
 // SuiteComponent represents a suite component with all of its changelogs and
 // relevant pin data
 type SuiteComponent struct {
-	CertificationLevel string
-	Changelogs         []*changelog.VersionChangelog
-	ReleaseName        string
-	ReleaseDate        string
-	Repo               string
-	UpgradeURL         string
-	URL                string
+	CertificationLevel   string
+	Changelogs           []*changelog.VersionChangelog
+	ReleaseName          string
+	ReleaseDate          string
+	Repo                 string
+	UnreleasedChangesURL string
+	UpgradeURL           string
+	URL                  string
 }
 
 // ReleaseInfo is a representation of a v3 GitHub API JSON
-// structure denitong a release. We only are interested in
+// structure denoting a release. We only are interested in
 // a small subsection of the field so this list is trimmed
 // from the full one that the API returns.
 type ReleaseInfo struct {
@@ -35,8 +36,20 @@ type ReleaseInfo struct {
 	TagName     string `json:"tag_name"`
 }
 
-// eg. https://api.github.com/repos/cyberark/secretless-broker/releases
-var releasesURLTemplate = "https://api.github.com/repos/%s/releases"
+// ComparisonInfo is a representation of a v3 GitHub API JSON
+// structure denoting a comparison. We only are interested in
+// a small subsection of the field so this list is trimmed
+// from the full one that the API returns.
+type ComparisonInfo struct {
+	URL     string `json:"html_url"`
+	AheadBy int    `json:"ahead_by"`
+}
+
+// e.g. https://api.github.com/repos/cyberark/secretless-broker/releases
+const releasesURLTemplate = "https://api.github.com/repos/%s/releases"
+
+// e.g. https://api.github.com/repos/cyberark/secretless-broker/compare/v1.5.2...HEAD
+const compareURLTemplate = "https://api.github.com/repos/%s/compare/%s...%s"
 
 var providerToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
@@ -52,6 +65,36 @@ func GetAvailableReleases(client *http.Client, repoName string) ([]string, error
 	return getAvailableReleases(client, fmt.Sprintf(releasesURLTemplate, repoName))
 }
 
+func compareRefs(
+	client *http.Client,
+	repoName string,
+	fromRef string,
+	toRef string,
+) (*ComparisonInfo, error) {
+	return comparisonFromURL(
+		client,
+		fmt.Sprintf(compareURLTemplate, repoName, fromRef, toRef),
+	)
+}
+
+func comparisonFromURL(
+	client *http.Client,
+	url string,
+) (*ComparisonInfo, error) {
+	contents, err := client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	comparison := &ComparisonInfo{}
+	err = json.Unmarshal(contents, comparison)
+	if err != nil {
+		return nil, err
+	}
+
+	return comparison, nil
+}
+
 func getAvailableReleases(
 	client *http.Client,
 	releasesURL string,
@@ -62,7 +105,7 @@ func getAvailableReleases(
 		return nil, err
 	}
 
-	var releases = []ReleaseInfo{}
+	var releases []ReleaseInfo
 	err = json.Unmarshal(contents, &releases)
 	if err != nil {
 		return nil, err
@@ -89,12 +132,12 @@ func fetchChangelog(
 
 	// `https://raw.githubusercontent.com/cyberark/secretless-broker/master/CHANGELOG.md`
 	changelogURL := fmt.Sprintf("%s/%s/%s/CHANGELOG.md", providerToEndpointPrefix[provider], repo, version)
-	changelog, err := client.Get(changelogURL)
+	changelogBytes, err := client.Get(changelogURL)
 	if err != nil {
 		return "", err
 	}
 
-	return string(changelog), nil
+	return string(changelogBytes), nil
 }
 
 // CollectComponents retrieves all components specified within a config
@@ -141,14 +184,25 @@ func componentFromRepo(
 		return component, err
 	}
 
-	if repo.Version == "" {
-		highestVersion, err := version.HighestVersion(availableVersions)
-		if err != nil {
-			return component, err
-		}
+	highestVersion, err := version.HighestVersion(availableVersions)
+	if err != nil {
+		return component, err
+	}
 
+	if repo.Version == "" {
 		log.OutLogger.Printf("  Repo 'latest' release resolved as '%s'", highestVersion)
 		repo.Version = highestVersion
+	}
+
+	// Get a comparison between the highest version and HEAD
+	comparison, err := compareRefs(httpClient, repo.Name, highestVersion, "HEAD")
+	if err != nil {
+		return component, err
+	}
+
+	// Set UnreleasedChangesURL if there are new commits beyond the highest version
+	if comparison.AheadBy > 0 {
+		component.UnreleasedChangesURL = comparison.URL
 	}
 
 	relevantVersions, err := version.GetRelevantVersions(

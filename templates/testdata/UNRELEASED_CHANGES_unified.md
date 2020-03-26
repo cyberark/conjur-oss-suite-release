@@ -14,6 +14,7 @@ These are the component versions that have yet not been included in the Conjur O
 
 - [cyberark/conjur v1.3.6 (2020-02-01)](https://github.com/cyberark/conjur/releases/tag/v1.3.6)
 - [cyberark/conjur v1.4.4 (2020-01-03)](https://github.com/cyberark/conjur/releases/tag/v1.4.4)
+- [cyberark/conjur @HEAD](https://github.com/cyberark/conjur/compare/v1.4.4...HEAD)
 - [cyberark/secretless-broker v1.4.2 (2020-01-08)](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2)
 
 ## Unreleased Changes
