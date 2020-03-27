@@ -61,12 +61,12 @@ var providerVersionResolutionTemplate = map[string]string{
 
 // GetAvailableReleases fetches the JSON at the appropriate URL and returns just
 // the available releases as a string array.
-func GetAvailableReleases(client *http.Client, repoName string) ([]string, error) {
+func GetAvailableReleases(client http.IClient, repoName string) ([]string, error) {
 	return getAvailableReleases(client, fmt.Sprintf(releasesURLTemplate, repoName))
 }
 
 func compareRefs(
-	client *http.Client,
+	client http.IClient,
 	repoName string,
 	fromRef string,
 	toRef string,
@@ -78,7 +78,7 @@ func compareRefs(
 }
 
 func comparisonFromURL(
-	client *http.Client,
+	client http.IClient,
 	url string,
 ) (*ComparisonInfo, error) {
 	contents, err := client.Get(url)
@@ -96,10 +96,9 @@ func comparisonFromURL(
 }
 
 func getAvailableReleases(
-	client *http.Client,
+	client http.IClient,
 	releasesURL string,
 ) ([]string, error) {
-
 	contents, err := client.Get(releasesURL)
 	if err != nil {
 		return nil, err
@@ -124,7 +123,7 @@ func getAvailableReleases(
 
 // FetchChangelog retrieves an existing changelog from a given provider and repository
 func fetchChangelog(
-	client *http.Client,
+	client http.IClient,
 	provider string,
 	repo string,
 	version string,
@@ -141,7 +140,7 @@ func fetchChangelog(
 }
 
 // CollectComponents retrieves all components specified within a config
-func CollectComponents(repoConfig repositories.Config, httpClient *http.Client) (
+func CollectComponents(repoConfig repositories.Config, httpClient http.IClient) (
 	[]SuiteComponent,
 	error,
 ) {
@@ -168,7 +167,7 @@ func CollectComponents(repoConfig repositories.Config, httpClient *http.Client) 
 }
 
 func componentFromRepo(
-	httpClient *http.Client,
+	httpClient http.IClient,
 	repo repositories.Repository,
 ) (SuiteComponent, error) {
 
