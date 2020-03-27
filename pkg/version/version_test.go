@@ -251,7 +251,7 @@ func TestHighestVersionSingleVersionArg(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, highestVersion, "v2.3.4")
+	assert.Equal(t, "v2.3.4", highestVersion)
 }
 
 func TestHighestVersionNoVersionsPassedIn(t *testing.T) {

@@ -88,6 +88,7 @@ func HighestVersion(versions []string) (string, error) {
 	}
 
 	highestVersion, err := versionFromString(versions[0])
+	highestVersionStr := versions[0]
 	if err != nil {
 		return "", err
 	}
@@ -100,10 +101,11 @@ func HighestVersion(versions []string) (string, error) {
 
 		if highestVersion.LessThan(*version) {
 			highestVersion = version
+			highestVersionStr = versionStr
 		}
 	}
 
-	return "v" + (*highestVersion).String(), nil
+	return highestVersionStr, nil
 }
 
 // GetRelevantVersions sorts and returns the list of versions from highest
