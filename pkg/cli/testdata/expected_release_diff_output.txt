@@ -87,4 +87,3 @@ from the id.
     - Updated e2e scripts to support newest helm (v.1.3.8)
 * **Removed**
     - Removed GitLab pipeline (it wasn't working anyways)
-### cyberark/conjur-api-python3

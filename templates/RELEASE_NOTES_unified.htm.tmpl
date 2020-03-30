@@ -32,7 +32,7 @@
     <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
 
     {{- range .Components }}
-
+    {{- if ne (len .Changelogs) 0 }}
     <h3 class="list">{{ .Repo }}</h3>
       {{- range .Changelogs }}
       <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}">v{{ .Version }}</a> ({{ .Date }})</h4>
@@ -45,6 +45,7 @@
         </li>
         {{- end }}
       </ul>
+      {{- end }}
       {{- end }}
       {{- end }}
     {{- end }}

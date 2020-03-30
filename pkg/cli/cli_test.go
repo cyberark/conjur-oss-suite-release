@@ -97,34 +97,38 @@ func TestRunParserWithReleaseDiffing(t *testing.T) {
 	}
 	defer os.RemoveAll(outputDir)
 
-	outputFile := filepath.Join(outputDir, "output.txt")
-	outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
+	for _, tt := range []string{"changelog", "docs-release", "release"} {
+		t.Run(tt, func(t *testing.T) {
+			outputFile := filepath.Join(outputDir, tt+"output.txt")
+			outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T12:00:00Z")
 
-	// Run the test
-	err = RunParser(Options{
-		Date:               outputDate,
-		OutputFilename:     outputFile,
-		OutputType:         "release",
-		RepositoryFilename: testRepositoriesYml,
-		ReleasesDir:        filepath.Join(thisDir, "testdata", "mock_releases"),
-		Version:            "Unreleased",
-	})
-	if !assert.NoError(t, err) {
-		return
+			// Run the test
+			err = RunParser(Options{
+				Date:               outputDate,
+				OutputFilename:     outputFile,
+				OutputType:         tt,
+				RepositoryFilename: testRepositoriesYml,
+				ReleasesDir:        filepath.Join(thisDir, "testdata", "mock_releases"),
+				Version:            "Unreleased",
+			})
+			if !assert.NoError(t, err) {
+				return
+			}
+
+			outputFileContent, err := ioutil.ReadFile(outputFile)
+			if !assert.NoError(t, err) {
+				return
+			}
+
+			expectedOutputFile := filepath.Join(thisDir, "testdata", "expected_"+tt+"_diff_output.txt")
+			expectedOutput, err := ioutil.ReadFile(expectedOutputFile)
+			if !assert.NoError(t, err) {
+				return
+			}
+
+			assert.Equal(t, string(expectedOutput), string(outputFileContent))
+		})
 	}
-
-	outputFileContent, err := ioutil.ReadFile(outputFile)
-	if !assert.NoError(t, err) {
-		return
-	}
-
-	expectedOutputFile := filepath.Join(thisDir, "testdata", "expected_suite_diff_output.txt")
-	expectedOutput, err := ioutil.ReadFile(expectedOutputFile)
-	if !assert.NoError(t, err) {
-		return
-	}
-
-	assert.Equal(t, string(expectedOutput), string(outputFileContent))
 }
 
 func TestSettingOutputFilename(t *testing.T) {
