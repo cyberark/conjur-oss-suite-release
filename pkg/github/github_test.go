@@ -4,13 +4,43 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	stdlibHttp "net/http"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	pkgHttp "github.com/cyberark/conjur-oss-suite-release/pkg/http"
+	"github.com/cyberark/conjur-oss-suite-release/pkg/repositories"
 )
+
+type MockClient struct {
+	*stdlibHttp.Client
+	AuthToken string
+}
+
+// NewClient creates a Client with an initialized parent stdlibHttp.Client
+// object
+func NewMockClient() *MockClient {
+	return &MockClient{
+		&stdlibHttp.Client{},
+		"",
+	}
+}
+
+func (client *MockClient) Get(url string) ([]byte, error) {
+	httpClient := generateHTTPClientWithFileSupportTransport()
+
+	if strings.Contains(url, "compare") {
+		return httpClient.Get("file://./testdata/compare_v3.json")
+	} else if strings.Contains(url, "CHANGELOG") {
+		return httpClient.Get("file://./testdata/simple_changelog.md")
+	}
+	// Return local data only
+	return httpClient.Get("file://./testdata/releases_v3.json")
+}
 
 func TestReleaseParsing(t *testing.T) {
 	releaseJSON, err := ioutil.ReadFile("testdata/release_v3.json")
@@ -78,18 +108,7 @@ func Test_comparisonFromURL(t *testing.T) {
 		AheadBy: 1,
 	}
 
-	transportWithFileSupport := &stdlibHttp.Transport{}
-	transportWithFileSupport.RegisterProtocol(
-		"file",
-		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
-	)
-
-	httpClient := &pkgHttp.Client{
-		&stdlibHttp.Client{
-			Transport: transportWithFileSupport,
-		},
-		"",
-	}
+	httpClient := generateHTTPClientWithFileSupportTransport()
 
 	actualComparison, err := comparisonFromURL(
 		httpClient,
@@ -109,18 +128,7 @@ func TestGetAvailableReleases(t *testing.T) {
 		"v0.0.3",
 	}
 
-	transportWithFileSupport := &stdlibHttp.Transport{}
-	transportWithFileSupport.RegisterProtocol(
-		"file",
-		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
-	)
-
-	httpClient := &pkgHttp.Client{
-		&stdlibHttp.Client{
-			Transport: transportWithFileSupport,
-		},
-		"",
-	}
+	httpClient := generateHTTPClientWithFileSupportTransport()
 
 	actualReleases, err := getAvailableReleases(
 		httpClient,
@@ -155,18 +163,7 @@ func TestGetAvailableReleasesFetchingProblem(t *testing.T) {
 }
 
 func TestGetAvailableReleasesUnmarshalingProblem(t *testing.T) {
-	transportWithFileSupport := &stdlibHttp.Transport{}
-	transportWithFileSupport.RegisterProtocol(
-		"file",
-		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
-	)
-
-	httpClient := &pkgHttp.Client{
-		&stdlibHttp.Client{
-			Transport: transportWithFileSupport,
-		},
-		"",
-	}
+	httpClient := generateHTTPClientWithFileSupportTransport()
 
 	// release_v3.json (vs releases_v3.json) should fail unmarshaling since it's
 	// not an array
@@ -183,4 +180,90 @@ func TestGetAvailableReleasesUnmarshalingProblem(t *testing.T) {
 		err,
 		"json: cannot unmarshal object into Go value of type []github.ReleaseInfo",
 	)
+}
+func TestCollectComponents(t *testing.T) {
+	mockClient := NewMockClient()
+
+	testCases := []struct {
+		description            string
+		shouldIncludChangelogs bool
+		oldSuiteFileName       string
+		newSuiteFileName       string
+	}{
+		{
+			description:            "changes between repo versions",
+			shouldIncludChangelogs: true,
+			oldSuiteFileName:       "old_suite.yml",
+			newSuiteFileName:       "new_suite.yml",
+		},
+		{
+			description:            "no changes between repo versions",
+			shouldIncludChangelogs: false,
+			oldSuiteFileName:       "new_suite.yml",
+			newSuiteFileName:       "new_suite.yml",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			repoConfig, err := generateRepoConfig(t, tc.oldSuiteFileName, tc.newSuiteFileName)
+			if !assert.NoError(t, err) {
+				return
+			}
+
+			actualSuiteComponents, err := CollectComponents(repoConfig, mockClient)
+
+			assert.NotNil(t, actualSuiteComponents)
+
+			if tc.shouldIncludChangelogs {
+				assert.NotNil(t, actualSuiteComponents[0].Changelogs)
+			}
+		})
+	}
+}
+
+func generateHTTPClientWithFileSupportTransport() *pkgHttp.Client {
+	transportWithFileSupport := &stdlibHttp.Transport{}
+	transportWithFileSupport.RegisterProtocol(
+		"file",
+		stdlibHttp.NewFileTransport(stdlibHttp.Dir(".")),
+	)
+
+	return &pkgHttp.Client{
+		Client: &stdlibHttp.Client{
+			Transport: transportWithFileSupport,
+		},
+		AuthToken: "",
+	}
+}
+
+func generateRepoConfig(t *testing.T,
+	oldSuiteFileName string,
+	newSuiteFileName string) (repositories.Config, error) {
+	previousConfig := repositories.Config{}
+
+	// Construct a path to our test repositories yaml
+	thisDir, err := os.Getwd()
+	if !assert.NoError(t, err) {
+		return previousConfig, err
+	}
+
+	oldSuiteFilePath := filepath.Join(thisDir, "testdata", oldSuiteFileName)
+	previousConfig, err = repositories.NewConfig(oldSuiteFilePath)
+	if !assert.NoError(t, err) {
+		return previousConfig, err
+	}
+
+	if newSuiteFileName != "" {
+		testFilepath := filepath.Join(thisDir, "testdata", newSuiteFileName)
+		updatedConfig, err := repositories.NewConfig(testFilepath)
+		if !assert.NoError(t, err) {
+			return previousConfig, err
+		}
+		updatedConfig.SetBaselineRepoVersions(&previousConfig)
+
+		return updatedConfig, nil
+	}
+
+	return previousConfig, nil
 }

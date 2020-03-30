@@ -110,7 +110,9 @@ func RunParser(options Options) error {
 	// Combine all changelogs into a single array to generate the unified changelog
 	changelogs := []*changelog.VersionChangelog{}
 	for _, component := range components {
-		changelogs = append(changelogs, component.Changelogs...)
+		if component.Changelogs != nil {
+			changelogs = append(changelogs, component.Changelogs...)
+		}
 	}
 	unifiedChangelog := changelog.NewUnifiedChangelog(changelogs...)
 

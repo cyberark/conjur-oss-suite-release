@@ -8,6 +8,12 @@ import (
 	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
 )
 
+// IClient outlines the requirement for an HTTP Client
+type IClient interface {
+	// Get defines a function that retrieves the contents of a url
+	Get(url string) ([]byte, error)
+}
+
 // Client is a wrapper around stdlibHttp client but with added storage for
 // an auth token
 type Client struct {

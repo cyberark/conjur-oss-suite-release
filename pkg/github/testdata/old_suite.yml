@@ -1,0 +1,13 @@
+---
+section:
+  name: Conjur OSS Suite Release
+  description: These are the primary repositories for Conjur Open Source and its SDK.
+  categories:
+  - name: Conjur SDK
+    description: Conjur Command Line Interface (CLI) and Client Libraries
+    repos:
+      - name: cyberark/conjur-api-python3
+        url: https://github.com/cyberark/conjur-api-python3
+        description: Conjur Python Client Library
+        version: v0.0.3
+        certification: "community"
