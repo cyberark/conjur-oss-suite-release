@@ -38,6 +38,7 @@ OSS Suite release:
 - [{{ .Repo }}](#{{ markdownHeaderLink .Repo }})
 {{ end -}}
 {{- range .Components }}
+{{- if ne (len .Changelogs) 0 }}
 ### {{ .Repo }}
 {{ range .Changelogs }}
 #### [v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{.Date }})
@@ -47,6 +48,6 @@ OSS Suite release:
     - {{ $sectionItem }}
 {{- end }}
 {{- end }}
-
+{{- end }}
 {{- end }}
 {{- end -}}

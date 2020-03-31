@@ -30,7 +30,6 @@
     <h2>What's New by Component</h2>
     <p>The following components were introduced or enhanced in the unreleased Conjur OSS suite.</p>
     <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
-
     <h3 class="list">cyberark/conjur</h3>
       <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.3.6">v1.3.6</a> (2019-02-19)</h4>
       <p><strong>Changed</strong></p>
@@ -97,7 +96,6 @@ defined in annotations it will taken from there and if not, it will be taken
 from the id.</p>
         </li>
       </ul>
-
     <h3 class="list">cyberark/conjur-oss-helm-chart</h3>
       <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">v1.3.7</a> (2019-01-31)</h4>
       <p><strong>Changed</strong></p>
@@ -106,7 +104,6 @@ from the id.</p>
           <p>Server ciphers have been upgraded to TLS1.2 levels.</p>
         </li>
       </ul>
-
     <h3 class="list">cyberark/conjur-api-python3</h3>
       <h4><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">v0.0.5</a> (2019-12-06)</h4>
       <p><strong>Added</strong></p>
