@@ -3,10 +3,10 @@
   <head></head>
   <body>
     <h1>Release Notes</h1>
-    <p>The following components were included or enhanced in the unreleased Conjur OSS suite.</p>
+    <p>The following components were included or enhanced in the Conjur OSS suite version unreleased.</p>
 
     <h2>Components</h2>
-    <p>These are the components that comprise the Conjur Open Source Suite with links to their GitHub releases:</p>
+    <p>The following components, with links to their GitHub releases, comprise the Conjur Open Source Suite:</p>
     <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">cyberark/conjur v1.4.6</a> (2020-01-21)</p>
@@ -28,7 +28,7 @@
     </ul>
 
     <h2>What's New by Component</h2>
-    <p>The following components were introduced or enhanced in the unreleased Conjur OSS suite.</p>
+    <p>The following components were introduced or enhanced in the Conjur OSS suite version unreleased.</p>
     <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
     <h3 class="list">cyberark/conjur</h3>
       <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.3.6">v1.3.6</a> (2019-02-19)</h4>
