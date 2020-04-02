@@ -75,16 +75,79 @@ $ go test -v -short ./...
 
 ## Releasing
 
-Releases are automatically prepared using GitHub actions [here](.github/workflows/release.yml).
-In general terms, whenever a tag with `v*` pattern is pushed up, the following steps
-are automatically run:
-- Tests are re-run
-- If tests fail, release process is halted
-- Release notes and changelog files are generated
-- Draft release is created on GitHub
-- Release notes and the changelog are attached as assets to that release
+1. Determine whether there are component changes since the last suite release
+   that merit a new suite release.
 
-To view the progress of the actions, you can take a look at [this](https://github.com/cyberark/conjur-oss-suite-release/actions) page.
+   - Check the [wiki](https://github.com/cyberark/conjur-oss-suite-release/wiki/Unreleased-Changes)
+     to see the daily report on which components have had new tagged
+     versions since the last release, and which components have unreleased changes.
+     - Note: Entries for components with unreleased changes (changes on the master
+       branch that are not yet available in a GitHub release) show in this report as
+       `org/repo @HEAD`. The links take you to the commit history for all commits on
+       master that are not included in the latest GitHub release.
 
-After these steps run and they encounter no problems, manual publishing of release will make it
-public for consumers of this repo.
+   - If there are any components with unreleased changes that should be tagged,
+     open an issue in that component's repository for adding a new tag.
+
+1. Ensure the components have green builds.
+
+   - Check the [Jenkins dashboard](https://jenkins.conjur.net/view/OSS%20Suite%20Components/)
+     to make sure there are no ongoing build failures for any of the OSS suite
+     components.
+
+     Note: The Jenkins dashboard does not include the following components at
+     this time:
+     - [Jenkins plugin](https://github.com/cyberark/conjur-credentials-plugin)
+
+1. Update the versions included in the suite release.
+
+   - Edit the [suite release config](https://github.com/cyberark/conjur-oss-suite-release/blob/master/suite.yml)
+     to bump the versions of any components with new tags and/or to add any new components
+     to the next suite release.
+
+   - [Submit your changes in a pull request (PR)](https://docs.joomla.org/Using_the_Github_UI_to_Make_Pull_Requests)
+     as per our [contributor guidelines](https://github.com/cyberark/community).
+     - **Important:** the PR description **must** include the suite release version (following
+       [semantic versioning](https://semver.org/) of the new suite. The maintainers
+       of this project will use this info to complete the release.
+     - The PR to modify the `suite.yml` will automatically kick off the end-to-end
+       tests for the suite against the pinned suite component versions. If the tests
+       don't pass, they'll need to be fixed before the new suite release can be created.
+     - To see the status of the automated tests, you can check the
+       [status tab](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-status-checks)
+       in the pull request.
+
+   - A maintainer of this project will review the PR to make sure the release is
+     ready to move forward. In particular, they will do the following before
+     approving and merging the PR:
+     - Check that the PR description includes the desired suite release version.
+     - Review the status of the automated tests, to make sure they are passing.
+     - Check the [Jenkins dashboard](https://jenkins.conjur.net/view/OSS%20Suite%20Components/)
+       to make sure there are no ongoing build failures for any of the OSS suite
+       components.
+
+   - Once the changes to update the suite are approved and merged to master, the
+     maintainer will create a new git tag. Creating a git tag (as outlined in the
+     [maintainer docs](https://github.com/cyberark/community/blob/master/Conjur/CONTRIBUTING.md#tagging)):
+     - Re-runs the automated end-to-end tests against the current pinned versions
+       in `suite.yml`
+     - Auto-generates HTML release notes for the docs website
+     - Auto-generates a draft GitHub release; that is, the automated process:
+       - Creates the suite `CHANGELOG.md`
+       - Creates GitHub release notes
+       - Creates draft GitHub release populated with release notes and with attached
+         artifacts, including `CHANGELOG.md`, `suite.yml`, HTML release notes, etc
+     - Note: To view the progress of the GitHub actions that automatically run post-tag,
+       you can take a look at
+       [this page](https://github.com/cyberark/conjur-oss-suite-release/actions).
+
+ 1. [Publish](https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository)
+    the [draft GitHub release](https://github.com/cyberark/conjur-oss-suite-release/releases/).
+    If additional validation is needed, it can be initially published as a pre-release
+    and promoted to a full release once final validation is complete.
+
+    Publishing the release:
+    - Runs the end-to-end test suite again
+    - Archives the current `suite.yml` as `releases/suite-x.y.z.yml` where `x.y.z` is the
+       new suite release version.
+    - Manual publishing of the release will make it public for consumers of this repo.
