@@ -1,1 +1,1 @@
-[![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-Green)](http://repo-url)
+[![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-6C757D)](http://repo-url)

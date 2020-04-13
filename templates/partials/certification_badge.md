@@ -1,9 +1,9 @@
 {{- if eq (toLower .CertificationLevel) "trusted" -}}
-[![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-Blue)]({{ .URL }})
+[![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF)]({{ .URL }})
 {{- else if eq (toLower .CertificationLevel) "certified" -}}
-[![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-Green)]({{ .URL }})
+[![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-6C757D)]({{ .URL }})
 {{- else if eq (toLower .CertificationLevel) "community" -}}
-[![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-Yellow)]({{ .URL }})
+[![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-28A745)]({{ .URL }})
 {{- else -}}
-[![Certification Level](https://img.shields.io/badge/Certification%20Level-Unknown-Red)]({{ .URL }})
+[![Certification Level](https://img.shields.io/badge/Certification%20Level-Unknown-DC3545)]({{ .URL }})
 {{- end -}}

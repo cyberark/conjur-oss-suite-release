@@ -15,9 +15,9 @@ All notable changes to this project will be documented in this file.
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
 
-- **[cyberark/conjur v1.4.7](https://github.com/cyberark/conjur/releases/tag/v1.4.7)** (2020-03-12) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-Blue)](https://github.com/cyberark/conjur)
-- **[cyberark/conjur-oss-helm-chart v1.3.8](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8)** (2019-12-20) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-Green)](https://github.com/cyberark/conjur-oss-helm-chart)
-- **[cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5)** (2019-12-06) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-Yellow)](https://github.com/cyberark/conjur-api-python3)
+- **[cyberark/conjur v1.4.7](https://github.com/cyberark/conjur/releases/tag/v1.4.7)** (2020-03-12) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF)](https://github.com/cyberark/conjur)
+- **[cyberark/conjur-oss-helm-chart v1.3.8](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8)** (2019-12-20) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-6C757D)](https://github.com/cyberark/conjur-oss-helm-chart)
+- **[cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5)** (2019-12-06) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-28A745)](https://github.com/cyberark/conjur-api-python3)
 
 ## Installation Instructions for the Suite Release Version of Conjur
 
