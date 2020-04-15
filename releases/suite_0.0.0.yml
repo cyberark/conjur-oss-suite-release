@@ -10,19 +10,12 @@ section:
         url: https://github.com/cyberark/conjur
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
-        certification: "certified"
         version: v1.4.4
         upgrade_url: https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
         version: v1.3.7
-        certification: "trusted"
-#      - name: cyberark/conjur-aws
-#        url: https://github.com/cyberark/conjur-aws
-#        description: AWS CloudFormation templates for deploying Conjur OSS.
-#        certification: "community"
-#        version: nil # No tags, can't include in release
 
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
@@ -30,32 +23,26 @@ section:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
-        certification: "certified"
         version: v6.0.1
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
-        certification: "community"
         version: v1.4.0
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
-        certification: "certified"
         version: v0.5.2
       - name: cyberark/conjur-api-java
         url: https://github.com/cyberark/conjur-api-java
         description: Conjur Java Client Library
-        certification: "community"
         version: v2.0.0
       - name: cyberark/conjur-api-python3
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
-        certification: "community"
         version: v0.0.5
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
-        certification: "certified"
         version: v5.3.1
 
   # This section goes back two versions to help ensure our logic for computing
@@ -70,7 +57,6 @@ section:
         tool: Kubernetes
         description: The Conjur authenticator client can be deployed as a sidecar
           or init container to ensure your application has a valid Conjur access token.
-        certification: "certified"
         version: v0.15.0
       - name: cyberark/secrets-provider-for-k8s
         url: https://github.com/cyberark/secrets-provider-for-k8s
@@ -78,14 +64,12 @@ section:
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        certification: "certified"
         version: v0.2.0
       - name: cyberark/conjur-service-broker
         url: https://github.com/cyberark/conjur-service-broker
         tool: Cloud Foundry
         description: The Conjur service broker ensures your Cloud Foundry-deployed
           applications are bootstrapped with a Conjur machine identity on deploy.
-        certification: "certified"
         version: v1.0.0
       - name: cyberark/cloudfoundry-conjur-buildpack
         url: https://github.com/cyberark/cloudfoundry-conjur-buildpack
@@ -94,7 +78,6 @@ section:
           your Cloud Foundry-deployed applications. Leverage your app's Conjur identity
           to automatically inject the secrets your app needs into its environment
           at runtime.
-        certification: "certified"
         version: v2.1.1
 
   - name: DevOps Tools
@@ -106,13 +89,11 @@ section:
         description: Ansible role to provide Conjur machine identity to application
           hosts and install the Summon tool, which enables hosts to securely retrieve
           credentials.
-        certification: "trusted"
         version: v0.3.1
       - name: cyberark/conjur-credentials-plugin
         url: https://github.com/cyberark/conjur-credentials-plugin
         tool: Jenkins
         description: Conjur plugin for securely providing credentials to Jenkins jobs.
-        certification: "community"
         version: v0.7.0
       - name: cyberark/conjur-puppet
         url: https://github.com/cyberark/conjur-puppet
@@ -120,14 +101,12 @@ section:
         description: Puppet module that simplifies the operation of establishing
           Conjur host identity and allows authorized Puppet nodes to fetch secrets
           from Conjur.
-        certification: "trusted"
         version: v2.0.1
       - name: cyberark/terraform-provider-conjur
         url: https://github.com/cyberark/terraform-provider-conjur
         tool: Terraform
         description: Terraform provider that makes secrets in Conjur available in
           Terraform manifests.
-        certification: "certified"
         version: v0.1.0
 
   - name: Secretless Broker
@@ -138,7 +117,6 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        certification: "certified"
         version: v1.5.1
 
   - name: Summon
@@ -149,30 +127,24 @@ section:
         url: https://github.com/cyberark/summon
         description: Summon is a secure tool to inject secrets into a subprocess
           environment.
-        certification: "certified"
         version: v0.8.0
       - name: cyberark/summon-aws-secrets
         url: https://github.com/cyberark/summon-aws-secrets
         description: Summon provider for AWS Secrets Manager.
-        certification: "community"
         version: v0.2.0
       - name: cyberark/summon-chefapi
         url: https://github.com/cyberark/summon-chefapi
         description: Summon provider for Chef encrypted data bags.
-        certification: "community"
         version: v0.1.0
       - name: cyberark/summon-conjur
         url: https://github.com/cyberark/summon-conjur
         description: Summon provider for Conjur.
-        certification: "certified"
         version: v0.5.2
       - name: cyberark/summon-keyring
         url: https://github.com/cyberark/summon-keyring
         description: Summon provider for cross-platform keyrings.
-        certification: "community"
         version: v0.2.1
       - name: cyberark/summon-s3
         url: https://github.com/cyberark/summon-s3
         description: Summon provider for AWS S3.
-        certification: "community"
         version: v0.1.0
