@@ -27,3 +27,12 @@ section:
         description: Conjur Python Client Library
         version: v0.0.5
         certification: "community"
+      - name: cyberark/conjur-api-java
+        url: https://github.com/cyberark/conjur-api-java
+        description: Conjur Java Client Library
+        version: v2.0.0
+      - name: cyberark/conjur-api-go
+        url: https://github.com/cyberark/conjur-api-go
+        description: Conjur Golang Client Library
+        version: v0.6.0
+        certification: "unknown"

@@ -42,6 +42,7 @@ jobs:
         run: ./test
 
       - uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: debug-log
           path: ./release-testing/debug-log.txt
