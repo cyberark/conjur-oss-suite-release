@@ -17,6 +17,12 @@
       <li>
         <p><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</p>
       </li>
+      <li>
+        <p><a href="https://github.com/cyberark/conjur-api-java/releases/tag/v2.0.0">cyberark/conjur-api-java v2.0.0</a> (2018-07-12)</p>
+      </li>
+      <li>
+        <p><a href="https://github.com/cyberark/conjur-api-go/releases/tag/v0.6.0">cyberark/conjur-api-go v0.6.0</a> (2019-03-04)</p>
+      </li>
     </ul>
 
     <h2>Upgrade Instructions</h2>
@@ -110,6 +116,34 @@ from the id.</p>
       <ul>
         <li>
           <p>Added ability to delete policies <a href="https://github.com/cyberark/conjur-api-python3/issues/23">#23</a></p>
+        </li>
+      </ul>
+    <h3 class="list">cyberark/conjur-api-java</h3>
+      <h4><a href="https://github.com/cyberark/conjur-api-java/releases/tag/v2.0.0">v2.0.0</a> (2018-07-12)</h4>
+      <p><strong>Added</strong></p>
+      <ul>
+        <li>
+          <p>License updated to Apache v2 - <a href="https://github.com/cyberark/conjur-api-java/pull/8">PR #8</a></p>
+        </li>
+      </ul>
+      <p><strong>Changed</strong></p>
+      <ul>
+        <li>
+          <p>Authn tokens now use the new Conjur 5 format - <a href="https://github.com/cyberark/conjur-api-java/pull/21">PR #21</a></p>
+        </li>
+        <li>
+          <p>Configuration change. When using environment variables, use CONJUR_AUTHN_LOGIN and CONJUR_AUTHN_API_KEY now instead of CONJUR_CREDENTIALS - <a href="https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb">https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb</a></p>
+        </li>
+      </ul>
+    <h3 class="list">cyberark/conjur-api-go</h3>
+      <h4><a href="https://github.com/cyberark/conjur-api-go/releases/tag/v0.6.0">v0.6.0</a> (2019-03-04)</h4>
+      <p><strong>Added</strong></p>
+      <ul>
+        <li>
+          <p>Converted to Golang 1.12</p>
+        </li>
+        <li>
+          <p>Started using os.UserHomeDir() built-in instead of go-homedir module</p>
         </li>
       </ul>
   </body>

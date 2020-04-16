@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - `cyberark/conjur@1.4.4`: Early validation of account existence during OIDC authentication
 - `cyberark/conjur@1.4.4`: Code coverage reporting and collection
+- `cyberark/conjur-api-go@0.6.0`: Converted to Golang 1.12
+- `cyberark/conjur-api-go@0.6.0`: Started using os.UserHomeDir() built-in instead of go-homedir module
+- `cyberark/conjur-api-java@2.0.0`: License updated to Apache v2 - [PR #8](https://github.com/cyberark/conjur-api-java/pull/8)
 - `cyberark/conjur-api-python3@0.0.5`: Added ability to delete policies [#23](https://github.com/cyberark/conjur-api-python3/issues/23)
 
 ### Changed
@@ -20,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `cyberark/conjur@1.4.6`: K8s hosts' application identity is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.
+- `cyberark/conjur-api-java@2.0.0`: Authn tokens now use the new Conjur 5 format - [PR #21](https://github.com/cyberark/conjur-api-java/pull/21)
+- `cyberark/conjur-api-java@2.0.0`: Configuration change. When using environment variables, use CONJUR_AUTHN_LOGIN and CONJUR_AUTHN_API_KEY now instead of CONJUR_CREDENTIALS - [https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb](https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb)
 - `cyberark/conjur-oss-helm-chart@1.3.7`: Server ciphers have been upgraded to TLS1.2 levels.
 
 ### Fixed
