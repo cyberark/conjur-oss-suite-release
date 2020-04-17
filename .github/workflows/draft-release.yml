@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   # This job name must match the `needs` field in `release` step
   run-tests:
@@ -84,8 +87,6 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: ${{ github.ref }}
@@ -95,8 +96,6 @@ jobs:
 
     - name: Upload RELEASE_NOTES to release
       uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./tmp_RELEASE_NOTES.md
@@ -105,8 +104,6 @@ jobs:
 
     - name: Upload CHANGELOG to release
       uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./tmp_CHANGELOG.md
@@ -115,8 +112,6 @@ jobs:
 
     - name: Upload ConjurSuite to release
       uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./tmp_ConjurSuite.htm
@@ -125,8 +120,6 @@ jobs:
 
     - name: Upload suite.yml to release
       uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./suite.yml
