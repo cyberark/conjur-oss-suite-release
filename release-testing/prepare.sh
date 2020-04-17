@@ -13,7 +13,7 @@ function deploy_pg {
   helm install --namespace "${TEST_NAMESPACE}" "${PG_RELEASE_NAME}" \
     --set postgresqlPassword="${DB_PASSWORD}" \
     --set persistence.enabled="false" \
-    stable/postgresql
+    bitnami/postgresql
 }
 
 function deploy_conjur {

@@ -34,8 +34,8 @@ jobs:
         with:
           version: v3.1.2
 
-      - name: Add Helm 'stable' repository
-        run: helm repo add stable https://kubernetes-charts.storage.googleapis.com/ && helm repo update
+      - name: Add Helm 'bitnami' repository
+        run: helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update
 
       - name: Run releases test
         working-directory: ./release-testing
