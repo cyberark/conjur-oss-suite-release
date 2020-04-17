@@ -7,6 +7,7 @@
 
     <h2>Components</h2>
     <p>The following components, with links to their GitHub releases, comprise the Conjur Open Source Suite:</p>
+    <h3>Conjur OSS Core</h3>
     <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">cyberark/conjur v1.4.6</a> (2020-01-21)</p>
@@ -14,6 +15,10 @@
       <li>
         <p><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">cyberark/conjur-oss-helm-chart v1.3.7</a> (2019-01-31)</p>
       </li>
+    </ul>
+
+    <h3>Conjur SDK</h3>
+    <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</p>
       </li>
@@ -37,114 +42,114 @@
     <p>The following components were introduced or enhanced in the Conjur OSS suite version unreleased.</p>
     <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
     <h3 class="list">cyberark/conjur</h3>
-      <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.3.6">v1.3.6</a> (2019-02-19)</h4>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>Reduced IAM authentication logging</p>
-        </li>
-        <li>
-          <p>Refactored authentication strategies</p>
-        </li>
-      </ul>
-      <p><strong>Removed</strong></p>
-      <ul>
-        <li>
-          <p>Removed OIDC APIs public access</p>
-        </li>
-      </ul>
-      <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.4">v1.4.4</a> (2019-12-19)</h4>
-      <p><strong>Added</strong></p>
-      <ul>
-        <li>
-          <p>Early validation of account existence during OIDC authentication</p>
-        </li>
-        <li>
-          <p>Code coverage reporting and collection</p>
-        </li>
-      </ul>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>Bumped puma from 3.12.0 to 3.12.2</p>
-        </li>
-        <li>
-          <p>Bumped rack from 1.6.11 to 1.6.12</p>
-        </li>
-        <li>
-          <p>Bumped excon from 0.62.0 to 0.71.0</p>
-        </li>
-      </ul>
-      <p><strong>Fixed</strong></p>
-      <ul>
-        <li>
-          <p>Fixed password rotation of blank password</p>
-        </li>
-        <li>
-          <p>Fixed bug with multi-cert CA chains in Kubernetes service accounts</p>
-        </li>
-        <li>
-          <p>Fixed build issues with creating namespaces with multiple values</p>
-        </li>
-      </ul>
-      <p><strong>Removed</strong></p>
-      <ul>
-        <li>
-          <p>Removed follower env configuration</p>
-        </li>
-      </ul>
-      <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">v1.4.6</a> (2020-01-21)</h4>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>K8s hosts' application identity is extracted from annotations or id. If it is
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.3.6">v1.3.6</a> (2019-02-19)</h4>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>Reduced IAM authentication logging</p>
+      </li>
+      <li>
+        <p>Refactored authentication strategies</p>
+      </li>
+    </ul>
+    <p><strong>Removed</strong></p>
+    <ul>
+      <li>
+        <p>Removed OIDC APIs public access</p>
+      </li>
+    </ul>
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.4">v1.4.4</a> (2019-12-19)</h4>
+    <p><strong>Added</strong></p>
+    <ul>
+      <li>
+        <p>Early validation of account existence during OIDC authentication</p>
+      </li>
+      <li>
+        <p>Code coverage reporting and collection</p>
+      </li>
+    </ul>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>Bumped puma from 3.12.0 to 3.12.2</p>
+      </li>
+      <li>
+        <p>Bumped rack from 1.6.11 to 1.6.12</p>
+      </li>
+      <li>
+        <p>Bumped excon from 0.62.0 to 0.71.0</p>
+      </li>
+    </ul>
+    <p><strong>Fixed</strong></p>
+    <ul>
+      <li>
+        <p>Fixed password rotation of blank password</p>
+      </li>
+      <li>
+        <p>Fixed bug with multi-cert CA chains in Kubernetes service accounts</p>
+      </li>
+      <li>
+        <p>Fixed build issues with creating namespaces with multiple values</p>
+      </li>
+    </ul>
+    <p><strong>Removed</strong></p>
+    <ul>
+      <li>
+        <p>Removed follower env configuration</p>
+      </li>
+    </ul>
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">v1.4.6</a> (2020-01-21)</h4>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>K8s hosts' application identity is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.</p>
-        </li>
-      </ul>
+      </li>
+    </ul>
     <h3 class="list">cyberark/conjur-oss-helm-chart</h3>
-      <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">v1.3.7</a> (2019-01-31)</h4>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>Server ciphers have been upgraded to TLS1.2 levels.</p>
-        </li>
-      </ul>
+    <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">v1.3.7</a> (2019-01-31)</h4>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>Server ciphers have been upgraded to TLS1.2 levels.</p>
+      </li>
+    </ul>
     <h3 class="list">cyberark/conjur-api-python3</h3>
-      <h4><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">v0.0.5</a> (2019-12-06)</h4>
-      <p><strong>Added</strong></p>
-      <ul>
-        <li>
-          <p>Added ability to delete policies <a href="https://github.com/cyberark/conjur-api-python3/issues/23">#23</a></p>
-        </li>
-      </ul>
+    <h4><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">v0.0.5</a> (2019-12-06)</h4>
+    <p><strong>Added</strong></p>
+    <ul>
+      <li>
+        <p>Added ability to delete policies <a href="https://github.com/cyberark/conjur-api-python3/issues/23">#23</a></p>
+      </li>
+    </ul>
     <h3 class="list">cyberark/conjur-api-java</h3>
-      <h4><a href="https://github.com/cyberark/conjur-api-java/releases/tag/v2.0.0">v2.0.0</a> (2018-07-12)</h4>
-      <p><strong>Added</strong></p>
-      <ul>
-        <li>
-          <p>License updated to Apache v2 - <a href="https://github.com/cyberark/conjur-api-java/pull/8">PR #8</a></p>
-        </li>
-      </ul>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>Authn tokens now use the new Conjur 5 format - <a href="https://github.com/cyberark/conjur-api-java/pull/21">PR #21</a></p>
-        </li>
-        <li>
-          <p>Configuration change. When using environment variables, use CONJUR_AUTHN_LOGIN and CONJUR_AUTHN_API_KEY now instead of CONJUR_CREDENTIALS - <a href="https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb">https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb</a></p>
-        </li>
-      </ul>
+    <h4><a href="https://github.com/cyberark/conjur-api-java/releases/tag/v2.0.0">v2.0.0</a> (2018-07-12)</h4>
+    <p><strong>Added</strong></p>
+    <ul>
+      <li>
+        <p>License updated to Apache v2 - <a href="https://github.com/cyberark/conjur-api-java/pull/8">PR #8</a></p>
+      </li>
+    </ul>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>Authn tokens now use the new Conjur 5 format - <a href="https://github.com/cyberark/conjur-api-java/pull/21">PR #21</a></p>
+      </li>
+      <li>
+        <p>Configuration change. When using environment variables, use CONJUR_AUTHN_LOGIN and CONJUR_AUTHN_API_KEY now instead of CONJUR_CREDENTIALS - <a href="https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb">https://github.com/cyberark/conjur-api-java/commit/60344308fc48cb5380c626e612b91e1e720c03fb</a></p>
+      </li>
+    </ul>
     <h3 class="list">cyberark/conjur-api-go</h3>
-      <h4><a href="https://github.com/cyberark/conjur-api-go/releases/tag/v0.6.0">v0.6.0</a> (2019-03-04)</h4>
-      <p><strong>Added</strong></p>
-      <ul>
-        <li>
-          <p>Converted to Golang 1.12</p>
-        </li>
-        <li>
-          <p>Started using os.UserHomeDir() built-in instead of go-homedir module</p>
-        </li>
-      </ul>
+    <h4><a href="https://github.com/cyberark/conjur-api-go/releases/tag/v0.6.0">v0.6.0</a> (2019-03-04)</h4>
+    <p><strong>Added</strong></p>
+    <ul>
+      <li>
+        <p>Converted to Golang 1.12</p>
+      </li>
+      <li>
+        <p>Started using os.UserHomeDir() built-in instead of go-homedir module</p>
+      </li>
+    </ul>
   </body>
 </html>

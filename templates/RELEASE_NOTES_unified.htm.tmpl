@@ -7,6 +7,8 @@
 
     <h2>Components</h2>
     <p>The following components, with links to their GitHub releases, comprise the Conjur Open Source Suite:</p>
+    {{- range .SuiteCategories }}
+    <h3>{{ .CategoryName }}</h3>
     <ul>
       {{- range .Components }}
       <li>
@@ -14,15 +16,18 @@
       </li>
       {{- end }}
     </ul>
+    {{ end }}
 
     <h2>Upgrade Instructions</h2>
     <p>Upgrade instructions are available for the following suite components:</p>
     <ul>
+      {{- range .SuiteCategories }}
       {{- range .Components }}
       {{- if .UpgradeURL }}
       <li>
         <p><a href="{{ .UpgradeURL }} ">{{ .Repo }}</a></p>
       </li>
+      {{- end }}
       {{- end }}
       {{- end }}
     </ul>
@@ -31,23 +36,25 @@
     <p>The following components were introduced or enhanced in the Conjur OSS suite version {{ toLower .Version }}.</p>
     <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
 
+    {{- range .SuiteCategories }}
     {{- range .Components }}
     {{- if ne (len .Changelogs) 0 }}
     <h3 class="list">{{ .Repo }}</h3>
-      {{- range .Changelogs }}
-      <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}">v{{ .Version }}</a> ({{ .Date }})</h4>
-      {{- range $sectionKey, $sectionValues := .Sections }}
-      <p><strong>{{ $sectionKey }}</strong></p>
-      <ul>
-        {{- range $sectionItem := $sectionValues }}
-        <li>
-          <p>{{ markdownHyperlinksToHTMLHyperlinks $sectionItem -}}</p>
-        </li>
-        {{- end }}
-      </ul>
+    {{- range .Changelogs }}
+    <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}">v{{ .Version }}</a> ({{ .Date }})</h4>
+    {{- range $sectionKey, $sectionValues := .Sections }}
+    <p><strong>{{ $sectionKey }}</strong></p>
+    <ul>
+      {{- range $sectionItem := $sectionValues }}
+      <li>
+        <p>{{ markdownHyperlinksToHTMLHyperlinks $sectionItem -}}</p>
+      </li>
       {{- end }}
-      {{- end }}
-      {{- end }}
+    </ul>
+    {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
     {{- end }}
   </body>
 </html>

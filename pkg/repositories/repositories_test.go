@@ -20,15 +20,15 @@ func newTestRepoObject(name string) Repository {
 }
 
 func testfileExpectedConfig(expectedRepos ...Repository) Config {
-	expectedCategories := []category{
-		category{
+	expectedCategories := []Category{
+		Category{
 			describedObject: describedObject{
 				Name:        "Category1",
 				Description: "Category1 Description",
 			},
 			Repos: expectedRepos,
 		},
-		category{
+		Category{
 			describedObject: describedObject{
 				Name:        "Category2",
 				Description: "Category2 Description",

@@ -14,9 +14,12 @@ All notable changes to this project will be documented in this file.
 
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
+### Conjur OSS Core
 
 - **[cyberark/conjur v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6)** (2020-01-21) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF)](https://github.com/cyberark/conjur)
 - **[cyberark/conjur-oss-helm-chart v1.3.7](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7)** (2019-01-31) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-6C757D)](https://github.com/cyberark/conjur-oss-helm-chart)
+### Conjur SDK
+
 - **[cyberark/conjur-api-python3 v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5)** (2019-12-06) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Community-28A745)](https://github.com/cyberark/conjur-api-python3)
 - **[cyberark/conjur-api-java v2.0.0](https://github.com/cyberark/conjur-api-java/releases/tag/v2.0.0)** (2018-07-12) 
 - **[cyberark/conjur-api-go v0.6.0](https://github.com/cyberark/conjur-api-go/releases/tag/v0.6.0)** (2019-03-04) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Unknown-DC3545)](https://github.com/cyberark/conjur-api-go)

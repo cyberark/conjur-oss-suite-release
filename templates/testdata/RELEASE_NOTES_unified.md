@@ -14,8 +14,11 @@ All notable changes to this project will be documented in this file.
 
 These are the components that combine to create this Conjur OSS Suite release and links
 to their releases:
+### Conjur Core
 
 - **[cyberark/conjur v1.4.4](https://github.com/cyberark/conjur/releases/tag/v1.4.4)** (2020-01-03) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF)](https://github.com/cyberark/conjur)
+### Secrets Delivery
+
 - **[cyberark/secretless-broker v1.4.2](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2)** (2020-01-08) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-6C757D)](https://github.com/cyberark/secretless-broker)
 
 ## Installation Instructions for the Suite Release Version of Conjur

@@ -18,7 +18,7 @@ import (
 type ReleaseSuite struct {
 	Version          string
 	Date             time.Time
-	Components       []github.SuiteComponent
+	SuiteCategories  []github.SuiteCategory
 	UnifiedChangelog string
 }
 
@@ -128,9 +128,11 @@ func (engine *Engine) WriteChangelog(
 // ComponentReleaseVersion returns the release version, stripped of the v-prefix,
 // for a given repo.
 func (r ReleaseSuite) ComponentReleaseVersion(repo string) string {
-	for _, component := range r.Components {
-		if component.Repo == repo {
-			return strings.TrimPrefix(component.ReleaseName, "v")
+	for _, category := range r.SuiteCategories {
+		for _, component := range category.Components {
+			if component.Repo == repo {
+				return strings.TrimPrefix(component.ReleaseName, "v")
+			}
 		}
 	}
 

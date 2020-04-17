@@ -14,6 +14,8 @@ import (
 
 // SuiteComponent represents a suite component with all of its changelogs and
 // relevant pin data
+// Note that in #155 we propose moving this into its own package, since it's not
+// really relevant to github
 type SuiteComponent struct {
 	CertificationLevel   string
 	Changelogs           []*changelog.VersionChangelog
@@ -23,6 +25,14 @@ type SuiteComponent struct {
 	UnreleasedChangesURL string
 	UpgradeURL           string
 	URL                  string
+}
+
+// SuiteCategory gives the set of SuiteComponents in a category
+// Note that in #155 we propose moving this into its own package, since it's not
+// really relevant to github
+type SuiteCategory struct {
+	CategoryName string
+	Components   []SuiteComponent
 }
 
 // ReleaseInfo is a representation of a v3 GitHub API JSON
@@ -139,14 +149,18 @@ func fetchChangelog(
 	return string(changelogBytes), nil
 }
 
-// CollectComponents retrieves all components specified within a config
-func CollectComponents(repoConfig repositories.Config, httpClient http.IClient) (
-	[]SuiteComponent,
+// CollectSuiteCategories retrieves components for all categories specified
+// within a config
+func CollectSuiteCategories(repoConfig repositories.Config, httpClient http.IClient) (
+	[]SuiteCategory,
 	error,
 ) {
-	var components []SuiteComponent
+	var suiteCategories []SuiteCategory
 	for _, category := range repoConfig.Section.Categories {
 		log.OutLogger.Printf("Processing category: %s", category.Name)
+
+		var components []SuiteComponent
+
 		for _, repo := range category.Repos {
 			log.OutLogger.Printf("- Processing repo: %s", repo.Name)
 
@@ -162,8 +176,15 @@ func CollectComponents(repoConfig repositories.Config, httpClient http.IClient) 
 
 			components = append(components, component)
 		}
+
+		suiteCategories = append(suiteCategories,
+			SuiteCategory{
+				CategoryName: category.Name,
+				Components:   components,
+			})
 	}
-	return components, nil
+
+	return suiteCategories, nil
 }
 
 func componentFromRepo(

@@ -11,6 +11,9 @@ This file documents all changes that have not been released yet
 ## Unreleased Components
 
 These are the component versions that have yet not been included in the Conjur OSS Suite:
+{{- range .SuiteCategories }}
+
+### {{ .CategoryName }}
 {{ range .Components -}}
 {{ range .Changelogs }}
 - [{{ .Repo }} v{{ .Version}} ({{ .Date }})](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }})
@@ -19,13 +22,17 @@ These are the component versions that have yet not been included in the Conjur O
 - [{{ .Repo }} @HEAD]({{ .UnreleasedChangesURL }})
 {{- end }}
 {{- end }}
+{{- end }}
 
 ## Unreleased Changes
 
 The following are changes that have been released in components but not yet released
 as part of the OSS Suite:
-{{ range .Components -}}
-{{ range .Changelogs }}
+
+{{- range .SuiteCategories }}
+{{- range .Components }}
+{{- range .Changelogs }}
+
 ### [{{ .Repo }} v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{ .Date }})
 {{ range $sectionKey, $sectionValues := .Sections }}
 #### {{ $sectionKey }}
@@ -33,5 +40,6 @@ as part of the OSS Suite:
 - {{ $sectionItem -}}
 {{ end }}
 {{ end }}
+{{- end }}
 {{- end }}
 {{- end }}
