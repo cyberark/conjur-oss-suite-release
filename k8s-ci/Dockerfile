@@ -30,6 +30,6 @@ RUN HELM_VERSION=v3.0.2 && \
     rm helm-${HELM_VERSION}-linux-amd64.tar.gz && \
     rm -rf linux-amd64
 
-# Install Helm stable repo
-RUN helm repo add stable https://kubernetes-charts.storage.googleapis.com/ && \
+# Install Helm bitnami repo
+RUN helm repo add bitnami https://charts.bitnami.com/bitnami && \
     helm repo update
