@@ -7,7 +7,7 @@
 
     <h2>Components</h2>
     <p>The following components, with links to their GitHub releases, comprise the Conjur Open Source Suite:</p>
-    <h3>Conjur Core</h3>
+    <h3>Conjur OSS Core</h3>
     <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7">cyberark/conjur v1.4.7</a> (2020-03-12)</p>
@@ -15,6 +15,9 @@
       <li>
         <p><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8">cyberark/conjur-oss-helm-chart v1.3.8</a> (2019-12-20)</p>
       </li>
+    </ul>
+    <h3>Conjur SDK</h3>
+    <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</p>
       </li>

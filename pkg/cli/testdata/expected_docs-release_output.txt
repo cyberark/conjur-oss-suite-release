@@ -16,7 +16,6 @@
         <p><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.7">cyberark/conjur-oss-helm-chart v1.3.7</a> (2019-01-31)</p>
       </li>
     </ul>
-
     <h3>Conjur SDK</h3>
     <ul>
       <li>

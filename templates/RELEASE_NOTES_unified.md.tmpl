@@ -17,7 +17,7 @@ to their releases:
 {{- range .SuiteCategories }}
 
 ### {{ .CategoryName }}
-{{ range .Components }}
+{{- range .Components }}
 - **[{{ .Repo }} {{ .ReleaseName }}](https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }})** ({{ .ReleaseDate }}) {{ template "certification_badge.md" . -}}
 {{- end }}
 {{- end }}
@@ -35,7 +35,7 @@ Upgrade instructions are available for the following components:
 - [{{ .Repo }}]({{ .UpgradeURL }})
 {{- end }}
 {{- end }}
-{{- end -}}
+{{- end }}
 
 ## Changes
 The following are changes to the constituent components since the last Conjur
@@ -44,12 +44,13 @@ OSS Suite release:
 {{- range .Components }}
 {{- if ne (len .Changelogs) 0 }}
 - [{{ .Repo }}](#{{ markdownHeaderLink .Repo }})
-{{ end -}}
+{{- end }}
 {{- end -}}
 
 {{ range .SuiteCategories }}
 {{- range .Components }}
 {{- if ne (len .Changelogs) 0 }}
+
 ### {{ .Repo }}
 {{ range .Changelogs }}
 #### [v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{.Date }})
@@ -62,4 +63,4 @@ OSS Suite release:
 {{- end }}
 {{- end }}
 {{- end }}
-{{- end -}}
+{{- end }}

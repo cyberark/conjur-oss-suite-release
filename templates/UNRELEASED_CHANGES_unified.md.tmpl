@@ -34,12 +34,13 @@ as part of the OSS Suite:
 {{- range .Changelogs }}
 
 ### [{{ .Repo }} v{{ .Version}}](https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}) ({{ .Date }})
-{{ range $sectionKey, $sectionValues := .Sections }}
+{{- range $sectionKey, $sectionValues := .Sections }}
+
 #### {{ $sectionKey }}
 {{- range $sectionItem := $sectionValues }}
-- {{ $sectionItem -}}
-{{ end }}
-{{ end }}
+- {{ $sectionItem }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
