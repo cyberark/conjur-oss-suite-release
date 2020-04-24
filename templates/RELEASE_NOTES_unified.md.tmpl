@@ -45,6 +45,7 @@ OSS Suite release:
 {{- if ne (len .Changelogs) 0 }}
 - [{{ .Repo }}](#{{ markdownHeaderLink .Repo }})
 {{- end }}
+{{- end }}
 {{- end -}}
 
 {{ range .SuiteCategories }}

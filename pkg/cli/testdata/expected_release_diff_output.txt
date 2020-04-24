@@ -62,7 +62,6 @@ The following are changes to the constituent components since the last Conjur
 OSS Suite release:
 - [cyberark/conjur](#cyberarkconjur)
 - [cyberark/conjur-oss-helm-chart](#cyberarkconjur-oss-helm-chart)
-- [cyberark/conjur-api-python3](#cyberarkconjur-api-python3)
 
 ### cyberark/conjur
 
