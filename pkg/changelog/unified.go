@@ -36,7 +36,7 @@ func (c UnifiedChangelog) String() string {
 	return res
 }
 
-// NewUnifiedChangelog creates a unified changelog from varios per-version and
+// NewUnifiedChangelog creates a unified changelog from various per-version and
 // per-repo changelogs
 func NewUnifiedChangelog(changelogs ...*VersionChangelog) UnifiedChangelog {
 	res := UnifiedChangelog{}

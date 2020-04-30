@@ -181,26 +181,29 @@ func TestGetAvailableReleasesUnmarshalingProblem(t *testing.T) {
 		"json: cannot unmarshal object into Go value of type []github.ReleaseInfo",
 	)
 }
-func TestCollectComponents(t *testing.T) {
+func TestCollectSuiteCategories(t *testing.T) {
 	mockClient := NewMockClient()
 
 	testCases := []struct {
-		description            string
-		shouldIncludChangelogs bool
-		oldSuiteFileName       string
-		newSuiteFileName       string
+		description             string
+		shouldIncludeChangelogs bool
+		oldSuiteFileName        string
+		newSuiteFileName        string
+		categoryName            string
 	}{
 		{
-			description:            "changes between repo versions",
-			shouldIncludChangelogs: true,
-			oldSuiteFileName:       "old_suite.yml",
-			newSuiteFileName:       "new_suite.yml",
+			description:             "changes between repo versions",
+			shouldIncludeChangelogs: true,
+			oldSuiteFileName:        "old_suite.yml",
+			newSuiteFileName:        "new_suite.yml",
+			categoryName:            "Conjur SDK",
 		},
 		{
-			description:            "no changes between repo versions",
-			shouldIncludChangelogs: false,
-			oldSuiteFileName:       "new_suite.yml",
-			newSuiteFileName:       "new_suite.yml",
+			description:             "no changes between repo versions",
+			shouldIncludeChangelogs: false,
+			oldSuiteFileName:        "new_suite.yml",
+			newSuiteFileName:        "new_suite.yml",
+			categoryName:            "Conjur SDK",
 		},
 	}
 
@@ -211,12 +214,14 @@ func TestCollectComponents(t *testing.T) {
 				return
 			}
 
-			actualSuiteComponents, err := CollectComponents(repoConfig, mockClient)
+			actualSuiteCategories, err := CollectSuiteCategories(repoConfig, mockClient)
 
-			assert.NotNil(t, actualSuiteComponents)
+			assert.NotNil(t, actualSuiteCategories)
 
-			if tc.shouldIncludChangelogs {
-				assert.NotNil(t, actualSuiteComponents[0].Changelogs)
+			assert.Equal(t, tc.categoryName, actualSuiteCategories[0].CategoryName)
+
+			if tc.shouldIncludeChangelogs {
+				assert.NotNil(t, actualSuiteCategories[0].Components[0].Changelogs)
 			}
 		})
 	}

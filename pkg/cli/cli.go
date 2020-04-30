@@ -102,16 +102,18 @@ func RunParser(options Options) error {
 	}
 	httpClient.AuthToken = githubAPIToken
 
-	components, err := github.CollectComponents(repoConfig, httpClient)
+	suiteCategories, err := github.CollectSuiteCategories(repoConfig, httpClient)
 	if err != nil {
 		return fmt.Errorf("ERROR: %v", err)
 	}
 
 	// Combine all changelogs into a single array to generate the unified changelog
 	changelogs := []*changelog.VersionChangelog{}
-	for _, component := range components {
-		if component.Changelogs != nil {
-			changelogs = append(changelogs, component.Changelogs...)
+	for _, category := range suiteCategories {
+		for _, component := range category.Components {
+			if component.Changelogs != nil {
+				changelogs = append(changelogs, component.Changelogs...)
+			}
 		}
 	}
 	unifiedChangelog := changelog.NewUnifiedChangelog(changelogs...)
@@ -125,7 +127,7 @@ func RunParser(options Options) error {
 		// TODO: Suite version should probably be read from some file
 		Version:          options.Version,
 		Date:             options.Date,
-		Components:       components,
+		SuiteCategories:  suiteCategories,
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
 

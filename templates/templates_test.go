@@ -56,54 +56,64 @@ func TestTemplates(t *testing.T) {
 		Version:          "11.22.33",
 		Date:             outputDate,
 		UnifiedChangelog: "@@@Unified changelog content@@@",
-		Components: []github.SuiteComponent{
-			github.SuiteComponent{
-				Repo:                 "cyberark/conjur",
-				URL:                  "https://github.com/cyberark/conjur",
-				UnreleasedChangesURL: "https://github.com/cyberark/conjur/compare/v1.4.4...HEAD",
-				ReleaseName:          "v1.4.4",
-				ReleaseDate:          date2.Format("2006-01-02"),
-				CertificationLevel:   "trusted",
-				UpgradeURL:           "https://conjur_upgrade_url",
-				Changelogs: []*changelog.VersionChangelog{
-					&changelog.VersionChangelog{
-						Repo:    "cyberark/conjur",
-						Version: "1.3.6",
-						// Why are these strings?
-						Date: date1.Format("2006-01-02"),
-						Sections: map[string][]string{
-							"Changed": []string{"136Change", "136Change2"},
-							"Removed": []string{"136Removal"},
-						},
-					},
-					&changelog.VersionChangelog{
-						Repo:    "cyberark/conjur",
-						Version: "1.4.4",
-						// Why are these strings?
-						Date: date2.Format("2006-01-02"),
-						Sections: map[string][]string{
-							"Added":   []string{"144Addition", "144Addition2"},
-							"Changed": []string{"144Change", "144Change2"},
-							"Fixed":   []string{"144Fix"},
+		SuiteCategories: []github.SuiteCategory{
+			github.SuiteCategory{
+				CategoryName: "Conjur Core",
+				Components: []github.SuiteComponent{
+					github.SuiteComponent{
+						Repo:                 "cyberark/conjur",
+						URL:                  "https://github.com/cyberark/conjur",
+						UnreleasedChangesURL: "https://github.com/cyberark/conjur/compare/v1.4.4...HEAD",
+						ReleaseName:          "v1.4.4",
+						ReleaseDate:          date2.Format("2006-01-02"),
+						CertificationLevel:   "trusted",
+						UpgradeURL:           "https://conjur_upgrade_url",
+						Changelogs: []*changelog.VersionChangelog{
+							&changelog.VersionChangelog{
+								Repo:    "cyberark/conjur",
+								Version: "1.3.6",
+								// Why are these strings?
+								Date: date1.Format("2006-01-02"),
+								Sections: map[string][]string{
+									"Changed": []string{"136Change", "136Change2"},
+									"Removed": []string{"136Removal"},
+								},
+							},
+							&changelog.VersionChangelog{
+								Repo:    "cyberark/conjur",
+								Version: "1.4.4",
+								// Why are these strings?
+								Date: date2.Format("2006-01-02"),
+								Sections: map[string][]string{
+									"Added":   []string{"144Addition", "144Addition2"},
+									"Changed": []string{"144Change", "144Change2"},
+									"Fixed":   []string{"144Fix"},
+								},
+							},
 						},
 					},
 				},
 			},
-			github.SuiteComponent{
-				Repo:               "cyberark/secretless-broker",
-				URL:                "https://github.com/cyberark/secretless-broker",
-				ReleaseName:        "v1.4.2",
-				ReleaseDate:        date3.Format("2006-01-02"),
-				CertificationLevel: "certified",
-				Changelogs: []*changelog.VersionChangelog{
-					&changelog.VersionChangelog{
-						Repo:    "cyberark/secretless-broker",
-						Version: "1.4.2",
-						Date:    date3.Format("2006-01-02"),
-						Sections: map[string][]string{
-							"Added":   []string{"Broker142Addition"},
-							"Changed": []string{"Broker142Change"},
-							"Removed": []string{"Broker142Removal"},
+			github.SuiteCategory{
+				CategoryName: "Secrets Delivery",
+				Components: []github.SuiteComponent{
+					github.SuiteComponent{
+						Repo:               "cyberark/secretless-broker",
+						URL:                "https://github.com/cyberark/secretless-broker",
+						ReleaseName:        "v1.4.2",
+						ReleaseDate:        date3.Format("2006-01-02"),
+						CertificationLevel: "certified",
+						Changelogs: []*changelog.VersionChangelog{
+							&changelog.VersionChangelog{
+								Repo:    "cyberark/secretless-broker",
+								Version: "1.4.2",
+								Date:    date3.Format("2006-01-02"),
+								Sections: map[string][]string{
+									"Added":   []string{"Broker142Addition"},
+									"Changed": []string{"Broker142Change"},
+									"Removed": []string{"Broker142Removal"},
+								},
+							},
 						},
 					},
 				},

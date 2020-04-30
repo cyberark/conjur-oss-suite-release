@@ -7,6 +7,7 @@
 
     <h2>Components</h2>
     <p>The following components, with links to their GitHub releases, comprise the Conjur Open Source Suite:</p>
+    <h3>Conjur OSS Core</h3>
     <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7">cyberark/conjur v1.4.7</a> (2020-03-12)</p>
@@ -14,6 +15,9 @@
       <li>
         <p><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8">cyberark/conjur-oss-helm-chart v1.3.8</a> (2019-12-20)</p>
       </li>
+    </ul>
+    <h3>Conjur SDK</h3>
+    <ul>
       <li>
         <p><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</p>
       </li>
@@ -31,59 +35,59 @@
     <p>The following components were introduced or enhanced in the Conjur OSS suite version unreleased.</p>
     <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
     <h3 class="list">cyberark/conjur</h3>
-      <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">v1.4.6</a> (2020-01-21)</h4>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>K8s hosts' application identity is extracted from annotations or id. If it is
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">v1.4.6</a> (2020-01-21)</h4>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>K8s hosts' application identity is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.</p>
-        </li>
-      </ul>
-      <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7">v1.4.7</a> (2020-03-12)</h4>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>Improved flows and rules around user creation (#1272)</p>
-        </li>
-        <li>
-          <p>Kubernetes authenticator now returns 403 on unpermitted hosts instead of a 401 (#1283)</p>
-        </li>
-        <li>
-          <p>Conjur hosts can authenticate with authn-k8s from anywhere in the policy branch (#1189)</p>
-        </li>
-      </ul>
-      <p><strong>Fixed</strong></p>
-      <ul>
-        <li>
-          <p>Updated broken links on server status page (#1341)</p>
-        </li>
-      </ul>
+      </li>
+    </ul>
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7">v1.4.7</a> (2020-03-12)</h4>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>Improved flows and rules around user creation (#1272)</p>
+      </li>
+      <li>
+        <p>Kubernetes authenticator now returns 403 on unpermitted hosts instead of a 401 (#1283)</p>
+      </li>
+      <li>
+        <p>Conjur hosts can authenticate with authn-k8s from anywhere in the policy branch (#1189)</p>
+      </li>
+    </ul>
+    <p><strong>Fixed</strong></p>
+    <ul>
+      <li>
+        <p>Updated broken links on server status page (#1341)</p>
+      </li>
+    </ul>
     <h3 class="list">cyberark/conjur-oss-helm-chart</h3>
-      <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8">v1.3.8</a> (2019-12-20)</h4>
-      <p><strong>Added</strong></p>
-      <ul>
-        <li>
-          <p>Added basic instructions on how to package the chart</p>
-        </li>
-        <li>
-          <p>Added gitleaks config to repo</p>
-        </li>
-      </ul>
-      <p><strong>Changed</strong></p>
-      <ul>
-        <li>
-          <p>Updated deployments to be able to run on Kubernetes 1.16+</p>
-        </li>
-        <li>
-          <p>Updated e2e scripts to support newest helm (v.1.3.8)</p>
-        </li>
-      </ul>
-      <p><strong>Removed</strong></p>
-      <ul>
-        <li>
-          <p>Removed GitLab pipeline (it wasn't working anyways)</p>
-        </li>
-      </ul>
+    <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8">v1.3.8</a> (2019-12-20)</h4>
+    <p><strong>Added</strong></p>
+    <ul>
+      <li>
+        <p>Added basic instructions on how to package the chart</p>
+      </li>
+      <li>
+        <p>Added gitleaks config to repo</p>
+      </li>
+    </ul>
+    <p><strong>Changed</strong></p>
+    <ul>
+      <li>
+        <p>Updated deployments to be able to run on Kubernetes 1.16+</p>
+      </li>
+      <li>
+        <p>Updated e2e scripts to support newest helm (v.1.3.8)</p>
+      </li>
+    </ul>
+    <p><strong>Removed</strong></p>
+    <ul>
+      <li>
+        <p>Removed GitLab pipeline (it wasn't working anyways)</p>
+      </li>
+    </ul>
   </body>
 </html>

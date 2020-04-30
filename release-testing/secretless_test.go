@@ -17,7 +17,7 @@ func callBashScript(script string) (string, error) {
 		`
 set -euo pipefail;
 . ./executors.sh;
-` + script,
+`+script,
 	).Output()
 
 	outString := string(out)

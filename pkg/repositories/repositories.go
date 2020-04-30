@@ -24,14 +24,16 @@ type Repository struct {
 	UpgradeURL         string `yaml:"upgrade_url,omitempty"`
 }
 
-type category struct {
+// Category represents a set of repositories that are logically part of the same
+// group
+type Category struct {
 	describedObject `yaml:",inline"`
 	Repos           []Repository
 }
 
 type section struct {
 	describedObject `yaml:",inline"`
-	Categories      []category
+	Categories      []Category
 }
 
 // Config is the toplevel object containing the layout of a suite.yml

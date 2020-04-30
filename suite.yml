@@ -50,10 +50,6 @@ section:
         description: Conjur Ruby Client Library
         version: v5.3.1
 
-  # This section goes back two versions to help ensure our logic for computing
-  # CHANGELOG diffs works when there are multiple versions between the latest
-  # and the pinned version.
-  # TODO: remove this comment when preparing for the first official release.
   - name: Platform Integrations
     description: Tools for Conjur integrations with platforms and cloud providers.
     repos:
