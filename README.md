@@ -43,6 +43,22 @@ If you're using Conjur OSS, we **strongly recommend** that you reference the lat
 suite release (link TBA) to determine which version of Conjur to use, and which corresponding
 versions of the suite are compatible with it.
 
+### A note on versioning
+The core of each Conjur OSS Suite release is the [Conjur server](https://github.com/cyberark/conjur).
+In light of this, we decided to tie our versioning of the suite to the _Conjur
+server version_.
+
+This means that if Conjur is included in the suite at version `1.x.y`, then the
+suite release will be versioned as `1.x.y+suite.z` (following the [semver standard](https://semver.org/)
+for build metadata). Most of the time, there will be one suite release per Conjur
+version - so that the suite will be versioned as `1.x.y+suite.1`. On occasions
+where there is an update to a suite component or a valuable _new_ suite component
+that becomes available between Conjur releases, we _may_ choose to release a new
+version of the suite that corresponds to the same Conjur version as in the previous
+suite release, and increment the last digit of the suite version (e.g. `1.x.y+suite.2`).
+
+**Importantly**, if you are using Conjur version `1.x.y`, then you can use any
+suite release with version starting with `1.x.y` with confidence.
 
 ## Development
 We welcome contributions of all kinds to this project. For instructions on how to

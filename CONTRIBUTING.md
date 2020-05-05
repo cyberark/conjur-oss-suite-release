@@ -109,6 +109,55 @@ $ go test -v -short ./...
 
 ## Releasing
 
+### Notes on versioning
+
+We version the suite using the syntax `1.x.y+suite.z`, where `1.x.y` is the version of
+the Conjur server included in the suite.
+
+This works as follows:
+
+- When there is sufficient content in the Conjur OSS suite that stakeholders
+  determine a suite release is merited, a new suite release is prepared with version
+  `1.x.y+suite.z`, where `1.x.y` is the version of [Conjur](https://github.com/cyberark/conjur)
+  included in the release.
+  - Note: suite releases will not necessarily happen for every Conjur core release.
+
+- If this is the first suite release for Conjur version `1.x.y`, then the suite
+  release will be versioned `1.x.y+suite.1`, where `1.x.y` matches the included
+  Conjur core version.
+
+- At the next point in time when there is sufficient content in the Conjur OSS
+  suite that stakeholders determine a suite release is merited:
+  - If the Conjur core version in the suite is still `1.x.y`, then the next suite
+    release version will be `1.x.y+suite.2`.
+  - If the Conjur core version has changed to `1.n.m`, then the next suite
+    release version will be `1.n.m+suite.1`.
+
+Additional notes:
+- If Conjur changes its version with a new **minor or patch** release, we _may_
+  have a new suite release, but it is not required unless the stakeholders agree.
+- If Conjur changes its version with a new **major** release, we _must_ have a
+  new suite release, and stakeholders will determine how long we will continue
+  to support old version of Conjur in the suite.
+- In any Conjur suite release, if the Conjur core version is the same as the last
+  suite release, the `.z` digit in the suite version will be incremented.
+- If a component in the suite increments its major version, stakeholders will
+  determine when to include the updated component in the suite release.
+- If a component in the suite is being permanently removed, stakeholders will
+  determine when to announce its deprecation in a suite release and will remove
+  it in the next release that follows the deprecation announcement.
+- If a new component is added to the suite, stakeholders will determine
+  when to include the new component in the suite release.
+- Changes to the Conjur server version _may_ result in changes to the suite version
+  in a subsequent release, but changes to the suite version _never_ result in
+  changes to the Conjur server version.
+
+In each line above, when we refer to "stakeholders" we are referring to the
+maintainers of the components in the suite and CyberArk product management.
+Anyone can request a new suite release, if they believe it is merited.
+
+### Release process
+
 1. Determine whether there are component changes since the last suite release
    that merit a new suite release.
 
@@ -142,7 +191,7 @@ $ go test -v -short ./...
    - [Submit your changes in a pull request (PR)](https://docs.joomla.org/Using_the_Github_UI_to_Make_Pull_Requests)
      as per our [contributor guidelines](https://github.com/cyberark/community).
      - **Important:** the PR description **must** include the suite release version (following
-       [semantic versioning](https://semver.org/) of the new suite. The maintainers
+       the [versioning standards](#notes-on-versioning) of the new suite. The maintainers
        of this project will use this info to complete the release.
      - The PR to modify the `suite.yml` will automatically kick off the end-to-end
        tests for the suite against the pinned suite component versions. If the tests
