@@ -49,10 +49,31 @@ Once you've cloned the repository, you can build and/or run the included code.
 
 ## Running
 
-Currently the only functionality included is the `CHANGELOG.md` generation which can be
-done with:
+### Usage
+
+- Edit the file `suite.yml` as needed
+- Run the CHANGELOG generator:
 ```
-$ ./parse-changelog
+./parse-changelogs
+```
+- Resulting changelog will be placed in `CHANGELOG.md`
+
+### Advanced usage
+
+The CLI accepts the following arguments/parameters:
+```
+  -f string
+        Repository YAML file to parse (default "suite.yml")
+  -o string
+        Output filename
+  -p string
+        GitHub API token. This can also be passed in as the 'GITHUB_TOKEN' environment variable. The flag takes precedence.
+  -r string
+        Directory of releases (containinng 'suite_<semver>.yml') files. Set this to empty string to skip suite version diffing. (default "releases")
+  -t string
+        Output type. Only accepts 'changelog', 'docs-release', 'release', and 'unreleased'. (default "changelog")
+  -v string
+        Version to embed in the changelog (default "Unreleased")
 ```
 
 ## Testing
@@ -65,6 +86,19 @@ $ ./parse-changelog
 
 ```sh-session
 $ go test -v ./...
+```
+
+Note: if you're running all the tests a lot during local development, you
+may want to run the tests after setting the `GITHUB_TOKEN` env var, so that
+you won't run up against GitHub API limits.
+
+If you have your GitHub API token saved in your keychain, you may also want
+to use [Summon](https://cyberark.github.io/summon) with the Keychain provider
+and run the test command instead as something like:
+```sh-session
+summon -p keyring.py \
+  --yaml 'GITHUB_TOKEN: !var github/api_token' \
+  bash -c 'go test -v ./...'
 ```
 
 ### Running only unit (short) tests
