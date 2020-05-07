@@ -88,11 +88,11 @@ The CLI accepts the following arguments/parameters:
 $ go test -v ./...
 ```
 
-Note: if you're running all the tests a lot during local development, you
+Note: if you're frequently running the whole test suite during local development, you
 may want to run the tests after setting the `GITHUB_TOKEN` env var, so that
 you won't run up against GitHub API limits.
 
-If you have your GitHub API token saved in your keychain, you may also want
+Alternatively, if you have your GitHub API token saved in your keychain, you may want
 to use [Summon](https://cyberark.github.io/summon) with the Keychain provider
 and run the test command instead as something like:
 ```sh-session
@@ -126,12 +126,7 @@ This works as follows:
   release will be versioned `1.x.y+suite.1`, where `1.x.y` matches the included
   Conjur core version.
 
-- At the next point in time when there is sufficient content in the Conjur OSS
-  suite that stakeholders determine a suite release is merited:
-  - If the Conjur core version in the suite is still `1.x.y`, then the next suite
-    release version will be `1.x.y+suite.2`.
-  - If the Conjur core version has changed to `1.n.m`, then the next suite
-    release version will be `1.n.m+suite.1`.
+- Subsequent suite releases using the same Conjur OSS version require that the suite version build component be incremented.  For example, a second suite release using Conjur `1.2.3` should be versioned `1.2.3+suite.2`, as the first one would have been versioned as `1.2.3+suite.1`.
 
 Additional notes:
 - If Conjur changes its version with a new **minor or patch** release, we _may_
