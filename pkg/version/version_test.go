@@ -104,23 +104,6 @@ func TestGetRelevantVersions(t *testing.T) {
 		relevantVersions)
 }
 
-func TestGetRelevantVersionsWithSwappedHighAndLowVersions(t *testing.T) {
-	relevantVersions, err := GetRelevantVersions(versionFixtureData, "v1.3.4", "v0.1.3")
-	if !assert.NoError(t, err) {
-		return
-	}
-
-	assert.Equal(
-		t,
-		[]string{
-			"v0.2.0",
-			"v0.29.20",
-			"v1.3.3",
-			"v1.3.4",
-		},
-		relevantVersions)
-}
-
 func TestGetRelevantVersionsWithExistingSameVersion(t *testing.T) {
 	versions := []string{
 		"v1.3.4",
@@ -135,7 +118,25 @@ func TestGetRelevantVersionsWithExistingSameVersion(t *testing.T) {
 	assert.Equal(t, []string{"v1.3.3"}, relevantVersions)
 }
 
-func TestGetRelevantVersionsWithOnlyLowVersion(t *testing.T) {
+func TestGetRelevantVersionsWithNonExistingSameVersion(t *testing.T) {
+	versions := []string{
+		"v1.3.4",
+		"v1.3.3",
+		"v1.20.0",
+	}
+	_, err := GetRelevantVersions(versions, "v1.3.10", "v1.3.10")
+	if !assert.Error(t, err) {
+		return
+	}
+
+	assert.EqualError(
+		t,
+		err,
+		"v1.3.10 is not in available versions ([v1.3.4 v1.3.3 v1.20.0])",
+	)
+}
+
+func TestGetRelevantVersionsWithOnlyLowVersionIncludesOnlyHigherVersions(t *testing.T) {
 	versions := []string{
 		"v1.3.4",
 		"v1.3.3",
@@ -146,19 +147,37 @@ func TestGetRelevantVersionsWithOnlyLowVersion(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, []string{"v1.3.3"}, relevantVersions)
+	assert.Equal(t, []string{"v1.3.4", "v1.20.0"}, relevantVersions)
 }
 
-func TestGetRelevantVersionsWithOnlyLowVersionThatIsMissing(t *testing.T) {
-	_, err := GetRelevantVersions(versionFixtureData, "v0.0.0", "")
-	if !assert.Error(t, err) {
+func TestGetRelevantVersionsWithOnlyMaxLowVersionIncludesNoVersions(t *testing.T) {
+	versions := []string{
+		"v1.3.4",
+		"v1.3.3",
+		"v1.20.0",
+	}
+	relevantVersions, err := GetRelevantVersions(versions, "v1.20.0", "")
+	if !assert.NoError(t, err) {
 		return
 	}
 
-	assert.EqualError(
+	assert.Equal(t, []string{}, relevantVersions)
+}
+
+func TestGetRelevantVersionsWithLowVersionThatIsMissingIncludesHigherVersions(t *testing.T) {
+	relevantVersions, err := GetRelevantVersions(versionFixtureData, "v1.2.2", "")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(
 		t,
-		err,
-		"v0.0.0 is not in available versions ([v1.3.4 v1.3.3 v1.20.0 v0.29.20 v0.2.0 v0.1.3])",
+		[]string{
+			"v1.3.3",
+			"v1.3.4",
+			"v1.20.0",
+		},
+		relevantVersions,
 	)
 }
 
@@ -220,20 +239,6 @@ func TestGetRelevantVersionsBadLowVersion(t *testing.T) {
 	}
 
 	assert.EqualError(t, err, "asddsf is not in dotted-tri format")
-}
-
-func TestGetRelevantVersionsWithNoVersionsWithinRange(t *testing.T) {
-	_, err := GetRelevantVersions(versionFixtureData, "v98.99.99", "v99.99.99")
-	if !assert.Error(t, err) {
-		return
-	}
-
-	assert.EqualError(
-		t,
-		err,
-		"could not find relevant versions for range v98.99.99 -> v99.99.99 "+
-			"in available versions ([v1.3.4 v1.3.3 v1.20.0 v0.29.20 v0.2.0 v0.1.3])",
-	)
 }
 
 func TestHighestVersion(t *testing.T) {

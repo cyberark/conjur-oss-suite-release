@@ -115,14 +115,26 @@ func GetRelevantVersions(availVersionsStr []string,
 	startVersionStr string,
 	endVersionStr string) ([]string, error) {
 
-	// Allow specifying `""` as a low version
+	// When `""` is the low version, we only want to return the current (high)
+	// version
 	if startVersionStr == "" {
 		startVersionStr = endVersionStr
 	}
 
-	// Allow specifying `""` as a high version
+	// When `""` is the high version, we want to actualy use the highest available
+	// version
 	if endVersionStr == "" {
-		endVersionStr = startVersionStr
+		var err error
+		endVersionStr, err = HighestVersion(availVersionsStr)
+		if err != nil {
+			return nil, err
+		}
+
+		// Special case: When lower bound is equal to the highest available
+		// version and upper limit is `""` there are no relevant versions to use
+		if endVersionStr == startVersionStr {
+			return []string{}, nil
+		}
 	}
 
 	// Parse the higher limit version from the provided string
@@ -184,11 +196,6 @@ func GetRelevantVersions(availVersionsStr []string,
 	filteredVersionNames := []string{}
 	for _, version := range versions {
 		filteredVersionNames = append(filteredVersionNames, "v"+(*version).String())
-	}
-
-	if len(filteredVersionNames) == 0 {
-		errorMsg := "could not find relevant versions for range v%s -> v%s in available versions (%s)"
-		return nil, fmt.Errorf(errorMsg, lowVersion, highVersion, availVersionsStr)
 	}
 
 	return filteredVersionNames, nil
