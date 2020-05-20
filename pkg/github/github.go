@@ -214,11 +214,6 @@ func componentFromRepo(
 		return component, err
 	}
 
-	if repo.Version == "" {
-		log.OutLogger.Printf("  Repo 'latest' release resolved as '%s'", highestVersion)
-		repo.Version = highestVersion
-	}
-
 	// Get a comparison between the highest version and HEAD
 	comparison, err := compareRefs(httpClient, repo.Name, highestVersion, "HEAD")
 	if err != nil {
