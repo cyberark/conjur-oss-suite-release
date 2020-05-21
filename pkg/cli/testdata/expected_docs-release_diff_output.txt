@@ -23,6 +23,40 @@
       </li>
     </ul>
 
+    <!--
+      This section should be in a partial on its own but we can't do that until issue
+      https://github.com/cyberark/conjur-oss-helm-chart/issues/50 is done
+    -->
+    <h2>Installation Instructions for the Suite Release Version of Conjur</h2>
+    Installing the Suite Release Version of Conjur requires setting the container image tag. Below are more specific instructions depending on environment.
+
+    <ul>
+      <li>
+        <b>Docker or docker-compose</b>
+
+        <p>
+        Set the container image tag to <code>cyberark/conjur:1.4.7</code>. For
+        example, make the following update to the conjur service in the
+        <a href="https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml">quickstart docker-compose.yml</a>:
+        </p>
+
+        <pre><code>image: cyberark/conjur:1.4.7</code></pre>
+      </li>
+      <li>
+        <b><a href="https://github.com/cyberark/conjur-oss-helm-chart">Conjur OSS Helm chart</a></b>
+
+        <p>
+        Update the <code>image.tag</code> value and use the appropriate release of the helm
+        chart:
+        </p>
+
+        <pre><code>helm install ... \
+  --set image.tag="1.4.7" \
+  ...
+  https://github.com/cyberark/conjur-oss-helm-chart/releases/download/v1.3.8/conjur-oss-1.3.8.tgz</code></pre>
+      </li>
+    </ul>
+
     <h2>Upgrade Instructions</h2>
     <p>Upgrade instructions are available for the following suite components:</p>
     <ul>

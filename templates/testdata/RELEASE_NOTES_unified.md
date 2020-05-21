@@ -17,6 +17,7 @@ to their releases:
 
 ### Conjur Core
 - **[cyberark/conjur v1.4.4](https://github.com/cyberark/conjur/releases/tag/v1.4.4)** (2020-01-03) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF)](https://github.com/cyberark/conjur)
+- **[cyberark/conjur-oss-helm-chart v1.3.8](https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8)** (2020-05-03) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Trusted-007BFF)](https://github.com/cyberark/conjur-oss-helm-chart)
 
 ### Secrets Delivery
 - **[cyberark/secretless-broker v1.4.2](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2)** (2020-01-08) [![Certification Level](https://img.shields.io/badge/Certification%20Level-Certified-6C757D)](https://github.com/cyberark/secretless-broker)
@@ -31,6 +32,16 @@ Installing the Suite Release Version of Conjur requires setting the container im
   For example, make the following update to the conjur service in the [quickstart docker-compose.yml](https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml)
   ```
   image: cyberark/conjur:1.4.4
+  ```
+
++ [**Conjur OSS Helm chart**](https://github.com/cyberark/conjur-oss-helm-chart)
+
+  Update the `image.tag` value and use the appropriate release of the helm chart:
+  ```
+  helm install ... \
+    --set image.tag="1.4.4" \
+    ...
+    https://github.com/cyberark/conjur-oss-helm-chart/releases/download/v1.3.8/conjur-oss-1.3.8.tgz
   ```
 
 ## Upgrade Instructions

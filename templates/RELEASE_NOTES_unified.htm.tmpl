@@ -1,3 +1,6 @@
+{{ $conjurVersion := .ComponentReleaseVersion "cyberark/conjur" -}}
+{{ $helmChartVersion := .ComponentReleaseVersion "cyberark/conjur-oss-helm-chart" -}}
+
 <?xml version="1.0" encoding="utf-8"?>
 <html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
   <head></head>
@@ -17,6 +20,43 @@
       {{- end }}
     </ul>
     {{- end }}
+
+    <!--
+      This section should be in a partial on its own but we can't do that until issue
+      https://github.com/cyberark/conjur-oss-helm-chart/issues/50 is done
+    -->
+    <h2>Installation Instructions for the Suite Release Version of Conjur</h2>
+    Installing the Suite Release Version of Conjur requires setting the container image tag. Below are more specific instructions depending on environment.
+
+    <ul>
+      <li>
+        <b>Docker or docker-compose</b>
+
+        <p>
+        Set the container image tag to <code>cyberark/conjur:{{$conjurVersion}}</code>. For
+        example, make the following update to the conjur service in the
+        <a href="https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml">quickstart docker-compose.yml</a>:
+        </p>
+
+        <pre><code>image: cyberark/conjur:{{$conjurVersion}}</code></pre>
+      </li>
+
+{{- if $helmChartVersion }}
+      <li>
+        <b><a href="https://github.com/cyberark/conjur-oss-helm-chart">Conjur OSS Helm chart</a></b>
+
+        <p>
+        Update the <code>image.tag</code> value and use the appropriate release of the helm
+        chart:
+        </p>
+
+        <pre><code>helm install ... \
+  --set image.tag="{{$conjurVersion}}" \
+  ...
+  https://github.com/cyberark/conjur-oss-helm-chart/releases/download/v{{$helmChartVersion}}/conjur-oss-{{$helmChartVersion}}.tgz</code></pre>
+      </li>
+{{- end }}
+    </ul>
 
     <h2>Upgrade Instructions</h2>
     <p>Upgrade instructions are available for the following suite components:</p>

@@ -48,9 +48,10 @@ func TestTemplates(t *testing.T) {
 	defer os.RemoveAll(dir)
 
 	outputDate, _ := time.Parse(time.RFC3339, "2020-02-19T11:58:05Z")
-	date1, _ := time.Parse(time.RFC3339, "2020-02-01T11:58:05Z")
-	date2, _ := time.Parse(time.RFC3339, "2020-01-03T11:58:05Z")
-	date3, _ := time.Parse(time.RFC3339, "2020-01-08T11:58:05Z")
+	conjurReleaseDate1, _ := time.Parse(time.RFC3339, "2020-02-01T11:58:05Z")
+	conjurReleaseDate2, _ := time.Parse(time.RFC3339, "2020-01-03T11:58:05Z")
+	helmReleaseDate, _ := time.Parse(time.RFC3339, "2020-05-03T11:58:05Z")
+	secretlessReleaseDate, _ := time.Parse(time.RFC3339, "2020-01-08T11:58:05Z")
 
 	testData := template.ReleaseSuite{
 		Version:          "11.22.33",
@@ -65,7 +66,7 @@ func TestTemplates(t *testing.T) {
 						URL:                  "https://github.com/cyberark/conjur",
 						UnreleasedChangesURL: "https://github.com/cyberark/conjur/compare/v1.4.4...HEAD",
 						ReleaseName:          "v1.4.4",
-						ReleaseDate:          date2.Format("2006-01-02"),
+						ReleaseDate:          conjurReleaseDate2.Format("2006-01-02"),
 						CertificationLevel:   "trusted",
 						UpgradeURL:           "https://conjur_upgrade_url",
 						Changelogs: []*changelog.VersionChangelog{
@@ -73,7 +74,7 @@ func TestTemplates(t *testing.T) {
 								Repo:    "cyberark/conjur",
 								Version: "1.3.6",
 								// Why are these strings?
-								Date: date1.Format("2006-01-02"),
+								Date: conjurReleaseDate1.Format("2006-01-02"),
 								Sections: map[string][]string{
 									"Changed": []string{"136Change", "136Change2"},
 									"Removed": []string{"136Removal"},
@@ -83,7 +84,7 @@ func TestTemplates(t *testing.T) {
 								Repo:    "cyberark/conjur",
 								Version: "1.4.4",
 								// Why are these strings?
-								Date: date2.Format("2006-01-02"),
+								Date: conjurReleaseDate2.Format("2006-01-02"),
 								Sections: map[string][]string{
 									"Added":   []string{"144Addition", "144Addition2"},
 									"Changed": []string{"144Change", "144Change2"},
@@ -91,6 +92,15 @@ func TestTemplates(t *testing.T) {
 								},
 							},
 						},
+					},
+					github.SuiteComponent{
+						Repo:                 "cyberark/conjur-oss-helm-chart",
+						URL:                  "https://github.com/cyberark/conjur-oss-helm-chart",
+						UnreleasedChangesURL: "https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.3.8...HEAD",
+						ReleaseName:          "v1.3.8",
+						ReleaseDate:          helmReleaseDate.Format("2006-01-02"),
+						CertificationLevel:   "trusted",
+						Changelogs:           []*changelog.VersionChangelog{},
 					},
 				},
 			},
@@ -101,13 +111,13 @@ func TestTemplates(t *testing.T) {
 						Repo:               "cyberark/secretless-broker",
 						URL:                "https://github.com/cyberark/secretless-broker",
 						ReleaseName:        "v1.4.2",
-						ReleaseDate:        date3.Format("2006-01-02"),
+						ReleaseDate:        secretlessReleaseDate.Format("2006-01-02"),
 						CertificationLevel: "certified",
 						Changelogs: []*changelog.VersionChangelog{
 							&changelog.VersionChangelog{
 								Repo:    "cyberark/secretless-broker",
 								Version: "1.4.2",
-								Date:    date3.Format("2006-01-02"),
+								Date:    secretlessReleaseDate.Format("2006-01-02"),
 								Sections: map[string][]string{
 									"Added":   []string{"Broker142Addition"},
 									"Changed": []string{"Broker142Change"},
