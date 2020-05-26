@@ -36,14 +36,6 @@ Installing the Suite Release Version of Conjur requires setting the container im
   image: cyberark/conjur:1.4.6
   ```
 
-+ [**Cloud Formation templates for AWS**](https://github.com/cyberark/conjur-aws)
-
-  Set the environment variable CONJUR_VERSION before building the AMI:
-  ```
-  export CONJUR_VERSION="1.4.6"
-  ./build-ami.sh
-  ```
-
 + [**Conjur OSS Helm chart**](https://github.com/cyberark/conjur-oss-helm-chart)
 
   Update the `image.tag` value and use the appropriate release of the helm chart:
