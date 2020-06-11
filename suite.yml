@@ -14,7 +14,7 @@ section:
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
-        version: v1.3.8
+        version: v2.0.0
 
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
@@ -26,7 +26,7 @@ section:
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
-        version: v1.4.0
+        version: v2.0.0
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
@@ -59,13 +59,13 @@ section:
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        version: v0.4.0
+        version: v1.0.0
       - name: cyberark/conjur-service-broker
         url: https://github.com/cyberark/conjur-service-broker
         tool: Cloud Foundry
         description: The Conjur service broker ensures your Cloud Foundry-deployed
           applications are bootstrapped with a Conjur machine identity on deploy.
-        version: v1.1.1
+        version: v1.1.2
       - name: cyberark/cloudfoundry-conjur-buildpack
         url: https://github.com/cyberark/cloudfoundry-conjur-buildpack
         tool: Cloud Foundry
@@ -107,7 +107,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.5.2
+        version: v1.6.0
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
