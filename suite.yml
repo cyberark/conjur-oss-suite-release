@@ -14,6 +14,7 @@ section:
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
+        upgrade_url: https://github.com/cyberark/conjur-oss-helm-chart/tree/master/conjur-oss#upgrading-modifying-or-migrating-a-conjur-oss-helm-deployment
         version: v2.0.0
 
   - name: Conjur SDK
