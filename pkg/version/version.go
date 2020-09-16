@@ -42,12 +42,8 @@ func LatestReleaseInDir(releasesDir string) (string, error) {
 		filename := file.Name()
 
 		if !strings.HasPrefix(filename, ReleasesPrefix) {
-			return "", fmt.Errorf(
-				"found non-release prefix ('%s') file '%s' in '%s'",
-				ReleasesPrefix,
-				filename,
-				releasesDir,
-			)
+			// Skipping this file, since it is not a release file
+			continue
 		}
 
 		// Turns `suite_x.y.z.yml` into `x.y.z`
@@ -72,6 +68,17 @@ func LatestReleaseInDir(releasesDir string) (string, error) {
 			highestVersion = version
 			highestReleaseFile = filename
 		}
+	}
+
+	// If we reach this point and the highestVersion is still at v0.0.0 (which is
+	// what it was initialized at), then we didn't find any valid release files in
+	// the specified dir.
+	if highestVersion.Equal(*semver.New("0.0.0")) {
+		return "", fmt.Errorf(
+			"Unable to find release file starting with '%s' in '%s'",
+			ReleasesPrefix,
+			releasesDir,
+		)
 	}
 
 	highestReleasePath := filepath.Join(releasesDir, highestReleaseFile)

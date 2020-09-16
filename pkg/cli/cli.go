@@ -102,7 +102,7 @@ func RunParser(options Options) error {
 	}
 	httpClient.AuthToken = githubAPIToken
 
-	suiteCategories, err := github.CollectSuiteCategories(repoConfig, httpClient)
+	suiteCategories, err := github.CollectSuiteCategories(repoConfig, httpClient, options.Version)
 	if err != nil {
 		return fmt.Errorf("ERROR: %v", err)
 	}

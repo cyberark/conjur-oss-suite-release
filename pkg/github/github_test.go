@@ -2,6 +2,7 @@ package github
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	stdlibHttp "net/http"
 	"os"
@@ -36,7 +37,17 @@ func (client *MockClient) Get(url string) ([]byte, error) {
 	if strings.Contains(url, "compare") {
 		return httpClient.Get("file://./testdata/compare_v3.json")
 	} else if strings.Contains(url, "CHANGELOG") {
+		if strings.Contains(url, "real_release_branch") {
+			// We are running a test where the repo has a release branch
+			return httpClient.Get("file://./testdata/release_branch_changelog.md")
+		}
 		return httpClient.Get("file://./testdata/simple_changelog.md")
+	} else if strings.Contains(url, "branches") {
+		if strings.Contains(url, "real_release_branch") {
+			// We are running a test where the repo has a release branch
+			return httpClient.Get("file://./testdata/branch_v3.json")
+		}
+		return nil, fmt.Errorf("Branch not found")
 	}
 	// Return local data only
 	return httpClient.Get("file://./testdata/releases_v3.json")
@@ -181,29 +192,72 @@ func TestGetAvailableReleasesUnmarshalingProblem(t *testing.T) {
 		"json: cannot unmarshal object into Go value of type []github.ReleaseInfo",
 	)
 }
+
+func TestGetAvailableReleasesBadSemver(t *testing.T) {
+
+	expectedReleases := []string{
+		"v1.0.6",
+		"v1.0.6",
+		"v1.0.5",
+		"v1.0.4",
+		"v1.0.2",
+		"v1.0.0-rc4",
+		"v1.0.0-rc1",
+		"v0.1.0-beta1",
+	}
+
+	httpClient := generateHTTPClientWithFileSupportTransport()
+
+	// bad_semver_releases_v3.json should skip versions with bad semver
+	actualReleases, err := getAvailableReleases(
+		httpClient,
+		"file://./testdata/bad_semver_releases_v3.json",
+	)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, expectedReleases, actualReleases)
+}
+
 func TestCollectSuiteCategories(t *testing.T) {
 	mockClient := NewMockClient()
 
 	testCases := []struct {
 		description             string
 		shouldIncludeChangelogs bool
+		changelogVersions       int
 		oldSuiteFileName        string
 		newSuiteFileName        string
 		categoryName            string
+		releaseBranch           string
 	}{
 		{
-			description:             "changes between repo versions",
+			description:             "2 version diff between suite versions, but only 1 diff in changelog",
 			shouldIncludeChangelogs: true,
+			changelogVersions:       1,
 			oldSuiteFileName:        "old_suite.yml",
 			newSuiteFileName:        "new_suite.yml",
 			categoryName:            "Conjur SDK",
+			releaseBranch:           "",
 		},
 		{
 			description:             "no changes between repo versions",
 			shouldIncludeChangelogs: false,
+			changelogVersions:       0,
 			oldSuiteFileName:        "new_suite.yml",
 			newSuiteFileName:        "new_suite.yml",
 			categoryName:            "Conjur SDK",
+			releaseBranch:           "",
+		},
+		{
+			description:             "2 version diff between suite versions, using release branch with full changelog",
+			shouldIncludeChangelogs: true,
+			changelogVersions:       2,
+			oldSuiteFileName:        "old_suite.yml",
+			newSuiteFileName:        "new_suite.yml",
+			categoryName:            "Conjur SDK",
+			releaseBranch:           "real_release_branch",
 		},
 	}
 
@@ -214,7 +268,7 @@ func TestCollectSuiteCategories(t *testing.T) {
 				return
 			}
 
-			actualSuiteCategories, err := CollectSuiteCategories(repoConfig, mockClient)
+			actualSuiteCategories, err := CollectSuiteCategories(repoConfig, mockClient, tc.releaseBranch)
 
 			assert.NotNil(t, actualSuiteCategories)
 
@@ -222,6 +276,8 @@ func TestCollectSuiteCategories(t *testing.T) {
 
 			if tc.shouldIncludeChangelogs {
 				assert.NotNil(t, actualSuiteCategories[0].Components[0].Changelogs)
+
+				assert.Equal(t, tc.changelogVersions, len(actualSuiteCategories[0].Components[0].Changelogs))
 			}
 		})
 	}
