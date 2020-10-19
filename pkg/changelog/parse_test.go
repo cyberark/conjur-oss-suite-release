@@ -52,7 +52,7 @@ func TestComplexChangelog(t *testing.T) {
 		Date:    "2020-01-21",
 		Sections: map[string][]string{
 			"Changed": {
-				`K8s hosts' application identity is extracted from annotations or id. If it is
+				`K8s hosts' resource restrictions is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.`,
 				"Another change ABC!@#$%",

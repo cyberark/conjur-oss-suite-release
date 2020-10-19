@@ -59,7 +59,7 @@ OSS Suite release:
 
 #### [v1.4.6](https://github.com/cyberark/conjur/releases/tag/v1.4.6) (2020-01-21)
 * **Changed**
-    - K8s hosts' application identity is extracted from annotations or id. If it is
+    - K8s hosts' resource restrictions is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.
 #### [v1.4.7](https://github.com/cyberark/conjur/releases/tag/v1.4.7) (2020-03-12)
