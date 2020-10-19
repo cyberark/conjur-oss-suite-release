@@ -73,7 +73,7 @@
     <p><strong>Changed</strong></p>
     <ul>
       <li>
-        <p>K8s hosts' application identity is extracted from annotations or id. If it is
+        <p>K8s hosts' resource restrictions is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.</p>
       </li>

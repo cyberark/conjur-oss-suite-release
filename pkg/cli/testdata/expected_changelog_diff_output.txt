@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `cyberark/conjur-oss-helm-chart@1.3.8`: Added gitleaks config to repo
 
 ### Changed
-- `cyberark/conjur@1.4.6`: K8s hosts' application identity is extracted from annotations or id. If it is
+- `cyberark/conjur@1.4.6`: K8s hosts' resource restrictions is extracted from annotations or id. If it is
 defined in annotations it will taken from there and if not, it will be taken
 from the id.
 - `cyberark/conjur@1.4.7`: Improved flows and rules around user creation (#1272)
