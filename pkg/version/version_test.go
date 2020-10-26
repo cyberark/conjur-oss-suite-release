@@ -74,7 +74,16 @@ func TestLatestReleaseInDirBadSemverReleaseFileError(t *testing.T) {
 }
 
 func TestLatestReleaseInDirBadReleasePrefixFile(t *testing.T) {
-	_, err := LatestReleaseInDir("testdata/latest_releases_extra_files")
+	latest, err := LatestReleaseInDir("testdata/latest_releases_extra_files")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, "testdata/latest_releases_extra_files/suite_2.3.4.yml", latest)
+}
+
+func TestLatestReleaseInDirNoValidFiles(t *testing.T) {
+	_, err := LatestReleaseInDir("testdata/latest_releases_no_valid_files")
 	if !assert.Error(t, err) {
 		return
 	}
@@ -82,8 +91,7 @@ func TestLatestReleaseInDirBadReleasePrefixFile(t *testing.T) {
 	assert.EqualError(
 		t,
 		err,
-		"found non-release prefix ('suite_') file 'notsuite_5.4.3.yml' "+
-			"in 'testdata/latest_releases_extra_files'",
+		"Unable to find release file starting with 'suite_' in 'testdata/latest_releases_no_valid_files'",
 	)
 }
 

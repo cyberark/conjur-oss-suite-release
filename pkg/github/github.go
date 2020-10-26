@@ -3,8 +3,10 @@ package github
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"strings"
 
+	"github.com/coreos/go-semver/semver"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/changelog"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/http"
 	"github.com/cyberark/conjur-oss-suite-release/pkg/log"
@@ -60,6 +62,9 @@ const releasesURLTemplate = "https://api.github.com/repos/%s/releases"
 
 // e.g. https://api.github.com/repos/cyberark/secretless-broker/compare/v1.5.2...HEAD
 const compareURLTemplate = "https://api.github.com/repos/%s/compare/%s...%s"
+
+// e.g. https://api.github.com/repos/cyberark/secretless-broker/branches/branchName
+const branchesURLTemplate = "https://api.github.com/repos/%s/branches/%s"
 
 var providerToEndpointPrefix = map[string]string{
 	"github": "https://raw.githubusercontent.com",
@@ -121,9 +126,18 @@ func getAvailableReleases(
 	}
 
 	// Convert ReleaseInfo array to an array of just the version strings
-	releaseVersions := make([]string, len(releases))
-	for index, release := range releases {
-		releaseVersions[index] = release.TagName
+	releaseVersions := make([]string, 0)
+	for _, release := range releases {
+		versionStr := strings.TrimPrefix(release.Name, "v")
+		_, err := semver.NewVersion(versionStr)
+
+		if err != nil {
+			// Skip adding versions that don't follow semver
+			log.OutLogger.Printf("Skipping version %s", versionStr)
+			continue
+		}
+
+		releaseVersions = append(releaseVersions, release.Name)
 	}
 
 	log.OutLogger.Printf("  Available versions: [%s]", strings.Join(releaseVersions, ", "))
@@ -149,9 +163,30 @@ func fetchChangelog(
 	return string(changelogBytes), nil
 }
 
+// CheckForBranch checks whether a branch with a specific name exists in the repo
+func checkForBranch(
+	client http.IClient,
+	provider string,
+	repo string,
+	branchName string,
+) (bool, error) {
+
+	branchURL := fmt.Sprintf(branchesURLTemplate, repo, url.QueryEscape(branchName))
+	_, err := client.Get(branchURL)
+	if err != nil {
+		if strings.Contains(err.Error(), "Branch not found") {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	return true, nil
+}
+
 // CollectSuiteCategories retrieves components for all categories specified
 // within a config
-func CollectSuiteCategories(repoConfig repositories.Config, httpClient http.IClient) (
+func CollectSuiteCategories(repoConfig repositories.Config, httpClient http.IClient, suiteVersion string) (
 	[]SuiteCategory,
 	error,
 ) {
@@ -164,7 +199,7 @@ func CollectSuiteCategories(repoConfig repositories.Config, httpClient http.ICli
 		for _, repo := range category.Repos {
 			log.OutLogger.Printf("- Processing repo: %s", repo.Name)
 
-			component, err := componentFromRepo(httpClient, repo)
+			component, err := componentFromRepo(httpClient, repo, suiteVersion)
 			if err != nil {
 				return nil, err
 			}
@@ -190,6 +225,7 @@ func CollectSuiteCategories(repoConfig repositories.Config, httpClient http.ICli
 func componentFromRepo(
 	httpClient http.IClient,
 	repo repositories.Repository,
+	suiteVersion string,
 ) (SuiteComponent, error) {
 
 	component := SuiteComponent{
@@ -236,8 +272,21 @@ func componentFromRepo(
 
 	log.OutLogger.Printf("  Relevant versions: [%s]", strings.Join(relevantVersions, ", "))
 
+	// Check if there is a "releases/{suiteVersion}" branch
+	// If it exists, use that; if not, use master.
+	branch := "master"
+	hasReleaseBranch, err := checkForBranch(httpClient, "github_api", repo.Name, fmt.Sprintf("release/%s", suiteVersion))
+	if err != nil {
+		return component, err
+	}
+
+	if hasReleaseBranch {
+		branch = fmt.Sprintf("release/%s", suiteVersion)
+		log.OutLogger.Printf("Using release branch %s...", branch)
+	}
+
 	// TODO: This should be somehow transformed from repo url
-	completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, "master")
+	completeChangelog, err := fetchChangelog(httpClient, "github", repo.Name, branch)
 	if err != nil {
 		return component, err
 	}
