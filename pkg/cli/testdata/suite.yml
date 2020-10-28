@@ -1,6 +1,7 @@
 ---
 section:
   name: Conjur OSS Suite Release
+  version: 1.2.3
   description: These are the primary repositories for Conjur Open Source and its SDK.
   categories:
   - name: Conjur OSS Core

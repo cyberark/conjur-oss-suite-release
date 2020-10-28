@@ -40,7 +40,7 @@ func testfileExpectedConfig(expectedRepos ...Repository) Config {
 	}
 
 	return Config{
-		Section: section{
+		Section: Section{
 			describedObject: describedObject{
 				Name:        "Section Name",
 				Description: "Section Description",

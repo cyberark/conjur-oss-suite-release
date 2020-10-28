@@ -55,6 +55,7 @@ func TestTemplates(t *testing.T) {
 
 	testData := template.ReleaseSuite{
 		Version:          "11.22.33",
+		Description:      "A very special suite release.",
 		Date:             outputDate,
 		UnifiedChangelog: "@@@Unified changelog content@@@",
 		SuiteCategories: []github.SuiteCategory{

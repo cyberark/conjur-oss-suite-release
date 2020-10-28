@@ -18,6 +18,7 @@ import (
 type ReleaseSuite struct {
 	Version          string
 	Date             time.Time
+	Description      string
 	SuiteCategories  []github.SuiteCategory
 	UnifiedChangelog string
 }

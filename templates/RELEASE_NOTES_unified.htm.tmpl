@@ -6,6 +6,9 @@
   <head></head>
   <body>
     <h1>Version {{ toLower .Version }}</h1>
+{{- if .Description }}
+    <p>{{ .Description }}</p>
+{{- end }}
     <p>The following components are included or enhanced in the Conjur OSS suite version {{ toLower .Version }}.</p>
 
     <h2>Components</h2>
