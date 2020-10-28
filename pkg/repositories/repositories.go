@@ -31,7 +31,9 @@ type Category struct {
 	Repos           []Repository
 }
 
-type section struct {
+// Section is the bulk of the suite configuration, and includes the description
+// of this specific release
+type Section struct {
 	describedObject `yaml:",inline"`
 	Categories      []Category
 }
@@ -39,7 +41,7 @@ type section struct {
 // Config is the toplevel object containing the layout of a suite.yml
 // file
 type Config struct {
-	Section section
+	Section Section
 }
 
 // NewConfig ingests a YAML file and returns a Config representing the definitions

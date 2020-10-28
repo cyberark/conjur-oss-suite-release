@@ -127,6 +127,7 @@ func RunParser(options Options) error {
 		// TODO: Suite version should probably be read from some file
 		Version:          options.Version,
 		Date:             options.Date,
+		Description:      repoConfig.Section.Description,
 		SuiteCategories:  suiteCategories,
 		UnifiedChangelog: unifiedChangelog.String(),
 	}
