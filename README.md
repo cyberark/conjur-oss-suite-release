@@ -1,19 +1,12 @@
 # conjur-oss-suite-release
 
-Building the official releases of the [Conjur OSS suite](https://cyberark.github.io/conjur)
+Building the official releases of the [Conjur OSS suite](https://cyberark.github.io/conjur)!
 
-**THIS REPO IS UNDER CONSTRUCTION, AND THERE ARE NO SUITE RELEASES AVAILABLE YET**
-
-_For more info on the planned work, please see our [design doc](https://github.com/cyberark/conjur/blob/master/design/oss_suite_release.md)
-and monitor the [github issues](https://github.com/cyberark/conjur-oss-suite-release/issues)._
-
-Once we have a first release with release notes, we'll be adding a link to the
-official release notes in the Conjur documentation. At that time, we will recommend:
-> You've found the repository that we use for building the official Conjur OSS suite
-> releases. To keep track of upcoming releases and plans, please see the
-> [github issues](https://github.com/cyberark/conjur-oss-suite-release/issues).
-> To view the latest release and relevant documentation, please see _the official_
-> _release notes_.
+You've found the repository that we use for building the official Conjur OSS suite
+releases. To keep track of upcoming releases and plans, please see the
+[github issues](https://github.com/cyberark/conjur-oss-suite-release/issues).
+To view the latest release and relevant documentation, please see [the official
+release notes](https://docs.conjur.org/Latest/en/Content/ReleaseNotes/ConjurOSS-suite-RN.htm).
 
 #### This repo's metrics:
 ![Tests](https://github.com/cyberark/conjur-oss-suite-release/workflows/Tests/badge.svg)
