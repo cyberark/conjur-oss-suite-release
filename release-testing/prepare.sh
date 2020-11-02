@@ -38,7 +38,7 @@ function deploy_conjur {
   TEST_NAMESPACE="$(store_get TEST_NAMESPACE)"
 
   helm install --namespace "${TEST_NAMESPACE}" "${CONJUR_RELEASE_NAME}" \
-    --set account="${CONJUR_ACCOUNT}" \
+    --set account.name="${CONJUR_ACCOUNT}" \
     --set authenticators="authn-k8s/${AUTHENTICATOR_ID}\,authn" \
     --set databaseUrl="postgres://postgres:${DB_PASSWORD}@${PG_RELEASE_NAME}-postgresql.${TEST_NAMESPACE}.svc.cluster.local/postgres" \
     --set dataKey="${DATA_KEY}" \
