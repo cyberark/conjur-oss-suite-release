@@ -169,7 +169,7 @@ func TestGetAvailableReleasesFetchingProblem(t *testing.T) {
 	assert.EqualError(
 		t,
 		err,
-		"Get doesnotexist: unsupported protocol scheme \"\"",
+		"Get \"doesnotexist\": unsupported protocol scheme \"\"",
 	)
 }
 

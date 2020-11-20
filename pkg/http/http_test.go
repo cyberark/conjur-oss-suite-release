@@ -56,7 +56,7 @@ func TestHttpClientGetRequestUrlProblem(t *testing.T) {
 		return
 	}
 
-	assert.EqualError(t, err, "Get zzz: unsupported protocol scheme \"\"")
+	assert.EqualError(t, err, "Get \"zzz\": unsupported protocol scheme \"\"")
 }
 
 func TestHttpClientGetRequestBadStatusCode(t *testing.T) {

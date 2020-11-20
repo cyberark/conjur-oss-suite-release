@@ -21,17 +21,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up Go 1.13
+    - name: Set up Go 1.15
       uses: actions/setup-go@v1
       with:
-        go-version: 1.13
+        go-version: 1.15
       id: go
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
     - name: Set BRANCH_NAME
-      run: echo "::set-env name=GIT_BRANCH::${GITHUB_REF#refs/heads/}"
+      run: echo "GIT_BRANCH={GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
     - name: Prepare CC for reporting data
       run: |
