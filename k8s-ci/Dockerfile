@@ -1,4 +1,4 @@
-FROM golang:1.13-stretch
+FROM golang:1.15-stretch
 
 RUN mkdir -p /src
 WORKDIR /src
