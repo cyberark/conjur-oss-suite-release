@@ -181,7 +181,8 @@ Anyone can request a new suite release, if they believe it is merited.
 
    - Edit the [suite release config](https://github.com/cyberark/conjur-oss-suite-release/blob/master/suite.yml)
      to bump the versions of any components with new tags and/or to add any new components
-     to the next suite release.
+     to the next suite release. Also update the CHANGELOG to mark the new
+     version - there's no need to add an entry for the suite version bumps.
 
    - [Submit your changes in a pull request (PR)](https://docs.joomla.org/Using_the_Github_UI_to_Make_Pull_Requests)
      as per our [contributor guidelines](https://github.com/cyberark/community).
