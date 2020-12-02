@@ -142,10 +142,12 @@ func (r ReleaseSuite) ComponentReleaseVersion(repo string) string {
 
 func markdownHyperlinksToHTMLHyperlinks(sectionItem string) string {
 	linkTemplate := `<a href="%s">%s</a>`
+	linkTemplateNewWindow := `<a href="%s" target="_blank">%s</a>`
 
 	markdownRegex := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 	nameRegex := regexp.MustCompile(`\[(.*)\]`)
 	urlRegex := regexp.MustCompile(`\((.*)\)`)
+	docsURLRegex := regexp.MustCompile(`docs\.(conjur|cyberark)\.(org|com)`)
 
 	links := markdownRegex.FindAllString(sectionItem, -1)
 
@@ -158,7 +160,11 @@ func markdownHyperlinksToHTMLHyperlinks(sectionItem string) string {
 		name = strings.Replace(name, "[", "", 1)
 		name = strings.Replace(name, "]", "", 1)
 
-		htmlLink := fmt.Sprintf(linkTemplate, url, name)
+		// Only ask link to open in a new window if it's not a docs link
+		htmlLink := fmt.Sprintf(linkTemplateNewWindow, url, name)
+		if docsURLRegex.FindString(url) != "" {
+			htmlLink = fmt.Sprintf(linkTemplate, url, name)
+		}
 
 		sectionItem = strings.Replace(sectionItem, markdownLink, htmlLink, 1)
 	}

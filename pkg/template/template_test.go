@@ -152,12 +152,22 @@ func TestMarkdownHyperlinksToHTMLHyperlinks(t *testing.T) {
 		{
 			description:    `input contains a single url`,
 			inputString:    `foo [bar](baz)`,
-			expectedString: `foo <a href="baz">bar</a>`,
+			expectedString: `foo <a href="baz" target="_blank">bar</a>`,
+		},
+		{
+			description:    `input contains a single conjur docs url`,
+			inputString:    `foo [bar](https://docs.conjur.org/baz)`,
+			expectedString: `foo <a href="https://docs.conjur.org/baz">bar</a>`,
+		},
+		{
+			description:    `input contains a single cyberark docs url`,
+			inputString:    `foo [bar](https://docs.cyberark.com/baz)`,
+			expectedString: `foo <a href="https://docs.cyberark.com/baz">bar</a>`,
 		},
 		{
 			description:    `input contains multiple urls`,
 			inputString:    `foo [bar](baz) & [jack](box)`,
-			expectedString: `foo <a href="baz">bar</a> & <a href="box">jack</a>`,
+			expectedString: `foo <a href="baz" target="_blank">bar</a> & <a href="box" target="_blank">jack</a>`,
 		},
 	}
 

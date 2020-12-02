@@ -78,7 +78,10 @@ OSS Suite release:
 #### [v1.4.2](https://github.com/cyberark/secretless-broker/releases/tag/v1.4.2) (2020-01-08)
 * **Added**
     - Broker142Addition
+    - Broker142Addition With Link [my link](https://github.com/cyberark/conjur/issues/142)
 * **Changed**
     - Broker142Change
+    - Broker142Change With Conjur Docs Link [my link](https://docs.conjur.org/sub-url)
 * **Removed**
     - Broker142Removal
+    - Broker142Removal With CyberArk Docs Link [my link](https://docs.cyberark.com/sub-url)
