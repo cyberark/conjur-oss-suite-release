@@ -78,12 +78,11 @@
 
     <h2>What's New by Component</h2>
     <p>The following components were introduced or enhanced in the Conjur OSS suite version {{ toLower .Version }}.</p>
-    <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
 
     {{- range .SuiteCategories }}
     {{- range .Components }}
     {{- if ne (len .Changelogs) 0 }}
-    <h3 class="list">{{ .Repo }}</h3>
+    <h3 class="itt">{{ .Repo }}</h3>
     {{- range .Changelogs }}
     <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}" target="_blank">v{{ .Version }}</a> ({{ .Date }})</h4>
     {{- range $sectionKey, $sectionValues := .Sections }}

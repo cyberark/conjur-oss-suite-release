@@ -69,8 +69,7 @@
 
     <h2>What's New by Component</h2>
     <p>The following components were introduced or enhanced in the Conjur OSS suite version unreleased.</p>
-    <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
-    <h3 class="list">cyberark/conjur</h3>
+    <h3 class="itt">cyberark/conjur</h3>
     <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6" target="_blank">v1.4.6</a> (2020-01-21)</h4>
     <p><strong>Changed</strong></p>
     <ul>
@@ -99,7 +98,7 @@ from the id.</p>
         <p>Updated broken links on server status page (#1341)</p>
       </li>
     </ul>
-    <h3 class="list">cyberark/conjur-oss-helm-chart</h3>
+    <h3 class="itt">cyberark/conjur-oss-helm-chart</h3>
     <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8" target="_blank">v1.3.8</a> (2019-12-20)</h4>
     <p><strong>Added</strong></p>
     <ul>
