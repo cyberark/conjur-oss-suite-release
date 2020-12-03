@@ -11,16 +11,16 @@
     <h3>Conjur OSS Core</h3>
     <ul>
       <li>
-        <p><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7">cyberark/conjur v1.4.7</a> (2020-03-12)</p>
+        <p><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7" target="_blank">cyberark/conjur v1.4.7</a> (2020-03-12)</p>
       </li>
       <li>
-        <p><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8">cyberark/conjur-oss-helm-chart v1.3.8</a> (2019-12-20)</p>
+        <p><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8" target="_blank">cyberark/conjur-oss-helm-chart v1.3.8</a> (2019-12-20)</p>
       </li>
     </ul>
     <h3>Conjur SDK</h3>
     <ul>
       <li>
-        <p><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</p>
+        <p><a href="https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5" target="_blank">cyberark/conjur-api-python3 v0.0.5</a> (2019-12-06)</p>
       </li>
     </ul>
 
@@ -39,13 +39,13 @@
         <p>
         Set the container image tag to <code>cyberark/conjur:1.4.7</code>. For
         example, make the following update to the conjur service in the
-        <a href="https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml">quickstart docker-compose.yml</a>:
+        <a href="https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml" target="_blank">quickstart docker-compose.yml</a>:
         </p>
 
         <pre><code>image: cyberark/conjur:1.4.7</code></pre>
       </li>
       <li>
-        <b><a href="https://github.com/cyberark/conjur-oss-helm-chart">Conjur OSS Helm chart</a></b>
+        <b><a href="https://github.com/cyberark/conjur-oss-helm-chart" target="_blank">Conjur OSS Helm chart</a></b>
 
         <p>
         Update the <code>image.tag</code> value and use the appropriate release of the helm
@@ -63,15 +63,14 @@
     <p>Upgrade instructions are available for the following suite components:</p>
     <ul>
       <li>
-        <p><a href="https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm ">cyberark/conjur</a></p>
+        <p><a href="https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/Upgrade/upgrade-intro.htm" target="_blank">cyberark/conjur</a></p>
       </li>
     </ul>
 
     <h2>What's New by Component</h2>
     <p>The following components were introduced or enhanced in the Conjur OSS suite version unreleased.</p>
-    <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
-    <h3 class="list">cyberark/conjur</h3>
-    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6">v1.4.6</a> (2020-01-21)</h4>
+    <h3 class="itt">cyberark/conjur</h3>
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.6" target="_blank">v1.4.6</a> (2020-01-21)</h4>
     <p><strong>Changed</strong></p>
     <ul>
       <li>
@@ -80,7 +79,7 @@ defined in annotations it will taken from there and if not, it will be taken
 from the id.</p>
       </li>
     </ul>
-    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7">v1.4.7</a> (2020-03-12)</h4>
+    <h4><a href="https://github.com/cyberark/conjur/releases/tag/v1.4.7" target="_blank">v1.4.7</a> (2020-03-12)</h4>
     <p><strong>Changed</strong></p>
     <ul>
       <li>
@@ -99,8 +98,8 @@ from the id.</p>
         <p>Updated broken links on server status page (#1341)</p>
       </li>
     </ul>
-    <h3 class="list">cyberark/conjur-oss-helm-chart</h3>
-    <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8">v1.3.8</a> (2019-12-20)</h4>
+    <h3 class="itt">cyberark/conjur-oss-helm-chart</h3>
+    <h4><a href="https://github.com/cyberark/conjur-oss-helm-chart/releases/tag/v1.3.8" target="_blank">v1.3.8</a> (2019-12-20)</h4>
     <p><strong>Added</strong></p>
     <ul>
       <li>

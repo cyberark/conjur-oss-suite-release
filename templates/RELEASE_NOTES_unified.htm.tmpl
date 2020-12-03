@@ -18,7 +18,7 @@
     <ul>
       {{- range .Components }}
       <li>
-        <p><a href="https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }}">{{ .Repo }} {{ .ReleaseName }}</a> ({{ .ReleaseDate }})</p>
+        <p><a href="https://github.com/{{ .Repo }}/releases/tag/{{ .ReleaseName }}" target="_blank">{{ .Repo }} {{ .ReleaseName }}</a> ({{ .ReleaseDate }})</p>
       </li>
       {{- end }}
     </ul>
@@ -39,7 +39,7 @@
         <p>
         Set the container image tag to <code>cyberark/conjur:{{$conjurVersion}}</code>. For
         example, make the following update to the conjur service in the
-        <a href="https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml">quickstart docker-compose.yml</a>:
+        <a href="https://github.com/cyberark/conjur-quickstart/blob/master/docker-compose.yml" target="_blank">quickstart docker-compose.yml</a>:
         </p>
 
         <pre><code>image: cyberark/conjur:{{$conjurVersion}}</code></pre>
@@ -47,7 +47,7 @@
 
 {{- if $helmChartVersion }}
       <li>
-        <b><a href="https://github.com/cyberark/conjur-oss-helm-chart">Conjur OSS Helm chart</a></b>
+        <b><a href="https://github.com/cyberark/conjur-oss-helm-chart" target="_blank">Conjur OSS Helm chart</a></b>
 
         <p>
         Update the <code>image.tag</code> value and use the appropriate release of the helm
@@ -69,7 +69,7 @@
       {{- range .Components }}
       {{- if .UpgradeURL }}
       <li>
-        <p><a href="{{ .UpgradeURL }} ">{{ .Repo }}</a></p>
+        <p><a href="{{ .UpgradeURL }}" target="_blank">{{ .Repo }}</a></p>
       </li>
       {{- end }}
       {{- end }}
@@ -78,14 +78,13 @@
 
     <h2>What's New by Component</h2>
     <p>The following components were introduced or enhanced in the Conjur OSS suite version {{ toLower .Version }}.</p>
-    <MadCap:listOfProxy style="mc-list-of-tag: h3;mc-list-of-class: list;mc-list-of-paragraph-class: RN;" />
 
     {{- range .SuiteCategories }}
     {{- range .Components }}
     {{- if ne (len .Changelogs) 0 }}
-    <h3 class="list">{{ .Repo }}</h3>
+    <h3 class="itt">{{ .Repo }}</h3>
     {{- range .Changelogs }}
-    <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}">v{{ .Version }}</a> ({{ .Date }})</h4>
+    <h4><a href="https://github.com/{{ .Repo }}/releases/tag/v{{ .Version }}" target="_blank">v{{ .Version }}</a> ({{ .Date }})</h4>
     {{- range $sectionKey, $sectionValues := .Sections }}
     <p><strong>{{ $sectionKey }}</strong></p>
     <ul>

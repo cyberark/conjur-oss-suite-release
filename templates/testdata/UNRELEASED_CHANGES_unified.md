@@ -54,9 +54,12 @@ as part of the OSS Suite:
 
 #### Added
 - Broker142Addition
+- Broker142Addition With Link [my link](https://github.com/cyberark/conjur/issues/142)
 
 #### Changed
 - Broker142Change
+- Broker142Change With Conjur Docs Link [my link](https://docs.conjur.org/sub-url)
 
 #### Removed
 - Broker142Removal
+- Broker142Removal With CyberArk Docs Link [my link](https://docs.cyberark.com/sub-url)

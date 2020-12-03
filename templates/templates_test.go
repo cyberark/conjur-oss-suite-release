@@ -120,9 +120,9 @@ func TestTemplates(t *testing.T) {
 								Version: "1.4.2",
 								Date:    secretlessReleaseDate.Format("2006-01-02"),
 								Sections: map[string][]string{
-									"Added":   []string{"Broker142Addition"},
-									"Changed": []string{"Broker142Change"},
-									"Removed": []string{"Broker142Removal"},
+									"Added":   []string{"Broker142Addition", "Broker142Addition With Link [my link](https://github.com/cyberark/conjur/issues/142)"},
+									"Changed": []string{"Broker142Change", "Broker142Change With Conjur Docs Link [my link](https://docs.conjur.org/sub-url)"},
+									"Removed": []string{"Broker142Removal", "Broker142Removal With CyberArk Docs Link [my link](https://docs.cyberark.com/sub-url)"},
 								},
 							},
 						},
