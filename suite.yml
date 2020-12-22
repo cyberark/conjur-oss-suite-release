@@ -16,7 +16,7 @@ section:
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
         upgrade_url: https://github.com/cyberark/conjur-oss-helm-chart/tree/master/conjur-oss#upgrading-modifying-or-migrating-a-conjur-oss-helm-deployment
-        version: v2.0.2
+        version: v2.0.3
 
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
@@ -24,7 +24,7 @@ section:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
-        version: v6.2.2
+        version: v6.2.3
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
@@ -66,13 +66,21 @@ section:
   - name: DevOps Tools
     description: Conjur OSS integrations with DevOps tools.
     repos:
+      - name: cyberark/ansible-conjur-collection
+        url: https://github.com/cyberark/ansible-conjur-collection
+        tool: Ansible
+        description: Conjur Ansible collection for use with Ansible 2.9+.
+          Includes an Ansible role to bootstrap Ansible hosts with a Conjur
+          identity, and a lookup plugin to enable easy access to Conjur secrets
+          from within your Ansible playbooks, etc.
+        version: v1.1.0
       - name: cyberark/ansible-conjur-host-identity
         url: https://github.com/cyberark/ansible-conjur-host-identity
         tool: Ansible
         description: Ansible role to provide Conjur machine identity to application
           hosts and install the Summon tool, which enables hosts to securely retrieve
           credentials.
-        version: v0.3.1
+        version: v0.3.2
       - name: cyberark/conjur-puppet
         url: https://github.com/cyberark/conjur-puppet
         tool: Puppet
