@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.11.1+suite.2] - 2021-02-10
+
+- The [Conjur Service Broker](https://github.com/cyberark/conjur-service-broker)
+  and [Conjur Buildpack](https://github.com/cyberark/cloudfoundry-conjur-buildpack)
+  have been added to the suite.
+  [PR cyberark/conjur-oss-suite-release#207](https://github.com/cyberark/conjur-oss-suite-release/pull/207)
+
 ## [v1.11.1+suite.2] - 2021-01-06
 
 ### Added
@@ -21,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   open in a new window, unless the link points to a CyberArk docs site.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
-[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.1+suite.2...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.2+suite.1...HEAD
+[v1.11.2+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.2...v1.11.2+suite.1
 [v1.11.1+suite.2]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.1...v1.11.1+suite.2
 [v1.11.1+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.10.0+suite.1...v1.11.1+suite.1
