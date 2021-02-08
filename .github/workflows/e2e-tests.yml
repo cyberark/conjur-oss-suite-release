@@ -32,7 +32,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
-          version: v3.1.2
+          version: v3.2.0
 
       - name: Add Helm 'bitnami' repository
         run: helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update
