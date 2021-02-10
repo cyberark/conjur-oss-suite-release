@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/coreos/go-semver/semver"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,13 +18,77 @@ var versionFixtureData = []string{
 	"v0.1.3",
 }
 
+func TestVersionFromString(t *testing.T) {
+
+	type testCase struct {
+		description string
+		error       bool
+		expected    *semver.Version
+		input       string
+	}
+
+	testCases := []testCase{
+		{
+			input: "v1.1.0",
+			error: false,
+			expected: &semver.Version{
+				Major: 1,
+				Minor: 1,
+				Patch: 0,
+			},
+			description: "correct syntax",
+		},
+		{
+			input: "v1.0",
+			error: true,
+			expected: &semver.Version{
+				Major: 1,
+				Minor: 0,
+			},
+			description: "non-tri-dot semver syntax",
+		},
+		{
+			input: "v1.0.0+suite",
+			error: false,
+			expected: &semver.Version{
+				Major:    1,
+				Minor:    0,
+				Metadata: "suite",
+			},
+			description: "no suite version given",
+		},
+		{
+			input: "v1.0.0+suite.1",
+			error: false,
+			expected: &semver.Version{
+				Major:    1,
+				Minor:    0,
+				Metadata: "suite.1",
+			},
+			description: "correct syntax suite version given",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			actual, err := versionFromString(tc.input)
+
+			if tc.error {
+				assert.Error(t, err)
+			} else {
+				assert.Equal(t, tc.expected, actual)
+			}
+		})
+	}
+}
+
 func TestLatestReleaseInDir(t *testing.T) {
 	latest, err := LatestReleaseInDir("testdata/latest_releases")
 	if !assert.NoError(t, err) {
 		return
 	}
 
-	assert.Equal(t, "testdata/latest_releases/suite_11.5.12.yml", latest)
+	assert.Equal(t, "testdata/latest_releases/suite_11.5.12+suite.2.yml", latest)
 }
 
 func TestLatestReleaseInDirBadDirectoryError(t *testing.T) {

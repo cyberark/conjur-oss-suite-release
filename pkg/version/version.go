@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/coreos/go-semver/semver"
@@ -62,6 +64,20 @@ func LatestReleaseInDir(releasesDir string) (string, error) {
 				releasesDir,
 				err,
 			)
+		}
+
+		if highestVersion.Equal(*version) {
+			if highestVersion.Metadata != "" {
+				// get version number suffix from metadata
+				re := regexp.MustCompile(`[\d]`)
+				highestMetaVersion, _ := strconv.Atoi(re.FindString(highestVersion.Metadata))
+				metaVersion, _ := strconv.Atoi(re.FindString(version.Metadata))
+				// compare "metaversions"
+				if highestMetaVersion < metaVersion {
+					highestVersion = version
+					highestReleaseFile = filename
+				}
+			}
 		}
 
 		if highestVersion.LessThan(*version) {

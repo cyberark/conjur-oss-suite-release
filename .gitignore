@@ -2,3 +2,5 @@ c.out
 
 .idea
 .DS_Store
+bin/cc-test-reporter
+drafts/RELEASE_NOTES.md
