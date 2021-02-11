@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd "$(dirname "$0")" || (echo "cannot cd into dir" && exit 1)
+
+docker build -t tester .
+
+# includes colorized test output
+docker run --rm \
+      -v "$PWD/..:/work" \
+      -w "/work" \
+      tester bash -c "
+      go test -v ./... | \
+        sed ''/PASS/s//$(printf "\033[32mPASS\033[0m")/'' | \
+        sed ''/FAIL/s//$(printf "\033[31mFAIL\033[0m")/''
+      "

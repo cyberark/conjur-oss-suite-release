@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/coreos/go-semver/semver"
@@ -15,6 +17,23 @@ const ReleasesPrefix = "suite_"
 func versionFromString(versionStr string) (*semver.Version, error) {
 	// Strip the 'v' from the beginning, if present
 	return semver.NewVersion(strings.TrimPrefix(versionStr, "v"))
+}
+
+// suiteIteration returns the suite iteration from the build metadata of the
+// suite version. if the build metadata doesn't give a version, this defaults
+// to 1
+func suiteIteration(suiteVersion *semver.Version) int {
+	suiteIteration := 1
+	suiteIterationRegExp := regexp.MustCompile(`\d+`)
+
+	if suiteVersion.Metadata != "" {
+		metadataDigits := suiteIterationRegExp.FindString(suiteVersion.Metadata)
+		if metadataDigits != "" {
+			suiteIteration, _ = strconv.Atoi(metadataDigits)
+		}
+	}
+
+	return suiteIteration
 }
 
 // LatestReleaseInDir returns the file matching the highest semver for a
@@ -38,6 +57,7 @@ func LatestReleaseInDir(releasesDir string) (string, error) {
 
 	highestVersion, _ := versionFromString("0.0.0")
 	highestReleaseFile := files[0].Name()
+	highestVersionSuiteIteration := 1
 	for _, file := range files {
 		filename := file.Name()
 
@@ -67,6 +87,14 @@ func LatestReleaseInDir(releasesDir string) (string, error) {
 		if highestVersion.LessThan(*version) {
 			highestVersion = version
 			highestReleaseFile = filename
+			highestVersionSuiteIteration = suiteIteration(highestVersion)
+		} else if highestVersion.Equal(*version) {
+			suiteIteration := suiteIteration(version)
+			if highestVersionSuiteIteration < suiteIteration {
+				highestVersion = version
+				highestReleaseFile = filename
+				highestVersionSuiteIteration = suiteIteration
+			}
 		}
 	}
 
