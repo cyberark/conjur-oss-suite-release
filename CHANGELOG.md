@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- The version package now uses the build metadata of the form `{string}.{number}`
+  in determining the highest release version in a directory. Previously, if
+  two files had the same version and differed only in the increment in the
+  build metadata, whichever file was processed last would be marked the latest
+  release. With this change the file with the highest build metadata increment
+  will be considered as the latest release instead.
+  [cyberark/conjur-oss-suite-release#208](https://github.com/cyberark/conjur-oss-suite-release/issues/208)
+
 ## [v1.11.1+suite.2] - 2021-01-06
 
 ### Added

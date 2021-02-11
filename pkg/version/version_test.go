@@ -82,6 +82,76 @@ func TestVersionFromString(t *testing.T) {
 	}
 }
 
+func TestSuiteIterationFromSemver(t *testing.T) {
+
+	type testCase struct {
+		description string
+		input       *semver.Version
+		expected    int
+	}
+
+	testCases := []testCase{
+		{
+			expected: 1,
+			input: &semver.Version{
+				Major:    1,
+				Minor:    1,
+				Patch:    0,
+				Metadata: "suite.1",
+			},
+			description: "build metadata has iteration",
+		},
+		{
+			expected: 1,
+			input: &semver.Version{
+				Major:    1,
+				Minor:    1,
+				Patch:    0,
+				Metadata: "suite",
+			},
+			description: "build metadata has no iteration",
+		},
+		{
+			expected: 1,
+			input: &semver.Version{
+				Major:    1,
+				Minor:    1,
+				Patch:    0,
+				Metadata: "",
+			},
+			description: "no build metadata",
+		},
+		{
+			expected: 7,
+			input: &semver.Version{
+				Major:    1,
+				Minor:    1,
+				Patch:    0,
+				Metadata: "suite.7",
+			},
+			description: "build metadata has non-default iteration",
+		},
+		{
+			expected: 72,
+			input: &semver.Version{
+				Major:    1,
+				Minor:    1,
+				Patch:    0,
+				Metadata: "suite.72",
+			},
+			description: "build metadata has non-default multi-digit iteration",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			actual := suiteIteration(tc.input)
+
+			assert.Equal(t, tc.expected, actual)
+		})
+	}
+}
+
 func TestLatestReleaseInDir(t *testing.T) {
 	latest, err := LatestReleaseInDir("testdata/latest_releases")
 	if !assert.NoError(t, err) {
