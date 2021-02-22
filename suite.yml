@@ -11,7 +11,7 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.11.2
+        version: v1.11.3
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
@@ -32,7 +32,7 @@ section:
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
-        version: v0.6.1
+        version: v0.7.1
       - name: cyberark/conjur-api-java
         url: https://github.com/cyberark/conjur-api-java
         description: Conjur Java Client Library
@@ -54,25 +54,25 @@ section:
         description: The Conjur Buildpack will use the Conjur identity provided
           by the Conjur Service Broker to inject secrets into your application
           environment at runtime.
-        version: v2.1.6
+        version: v2.2.0
       - name: cyberark/conjur-service-broker
         url: https://github.com/cyberark/conjur-service-broker
         description: The Conjur Service Broker provides your applications running
           in Cloud Foundry with a Conjur identity.
-        version: v1.1.4
+        version: v1.1.5
       - name: cyberark/conjur-authn-k8s-client
         url: https://github.com/cyberark/conjur-authn-k8s-client
         tool: Kubernetes
         description: The Conjur authenticator client can be deployed as a sidecar
           or init container to ensure your application has a valid Conjur access token.
-        version: v0.19.0
+        version: v0.19.1
       - name: cyberark/secrets-provider-for-k8s
         url: https://github.com/cyberark/secrets-provider-for-k8s
         tool: Kubernetes
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        version: v1.1.2
+        version: v1.1.3
 
   - name: DevOps Tools
     description: Conjur OSS integrations with DevOps tools.
@@ -114,7 +114,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.7.2
+        version: v1.7.3
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
