@@ -42,8 +42,9 @@ jobs:
       with:
         go-version: 1.15
 
-    - name: Set GIT_BRANCH
-      run: echo "GIT_BRANCH={GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+    - name: Set up version info
+      id: get_version
+      uses: battila7/get-version-action@v2
 
     - name: Add suite.yml to artifacts
       uses: actions/upload-artifact@v1
@@ -52,7 +53,7 @@ jobs:
         name: suite.yml
 
     - name: Generate RELEASE_NOTES.md
-      run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -t release -o tmp_RELEASE_NOTES.md
+      run: go run cmd/changelog-parser/main.go -v "${{ steps.get_version.outputs.version }}" -t release -o tmp_RELEASE_NOTES.md
 
     - name: Add RELEASE_NOTES to artifacts
       uses: actions/upload-artifact@v1
@@ -61,7 +62,7 @@ jobs:
         name: RELEASE_NOTES.md
 
     - name: Generate CHANGELOG.md
-      run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -o tmp_CHANGELOG.md
+      run: go run cmd/changelog-parser/main.go -v "${{ steps.get_version.outputs.version }}" -o tmp_CHANGELOG.md
 
     - name: Add CHANGELOG to artifacts
       uses: actions/upload-artifact@v1
@@ -70,7 +71,7 @@ jobs:
         name: CHANGELOG.md
 
     - name: Generate ConjurSuite.htm
-      run: go run cmd/changelog-parser/main.go -v "${GIT_BRANCH}" -t docs-release -o tmp_ConjurSuite.htm
+      run: go run cmd/changelog-parser/main.go -v "${{ steps.get_version.outputs.version }}" -t docs-release -o tmp_ConjurSuite.htm
 
     - name: Add ConjurSuite to artifacts
       uses: actions/upload-artifact@v1
