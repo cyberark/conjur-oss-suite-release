@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- The draft release action is updated to use valid logic for determining the
+  suite version so that the draft release notes will include the correct
+  interpolated version.
+  [cyberark/conjur-oss-suite-release#212](https://github.com/cyberark/conjur-oss-suite-release/issues/212)
+
 ## [v1.11.2+suite.1] - 2021-02-10
 
 ### Added
