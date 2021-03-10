@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.11.3+suite.1] - 2021-03-09
+
 ### Fixed
 - The draft release action is updated to use valid logic for determining the
   suite version so that the draft release notes will include the correct
@@ -44,7 +46,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   open in a new window, unless the link points to a CyberArk docs site.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
-[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.2+suite.1...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.3+suite.1...HEAD
+[v1.11.3+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.2+suite.1...v1.11.3+suite.1
 [v1.11.2+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.2...v1.11.2+suite.1
 [v1.11.1+suite.2]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.1...v1.11.1+suite.2
 [v1.11.1+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.10.0+suite.1...v1.11.1+suite.1
