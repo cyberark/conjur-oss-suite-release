@@ -11,12 +11,12 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.11.3
+        version: v1.11.5
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
         upgrade_url: https://github.com/cyberark/conjur-oss-helm-chart/tree/master/conjur-oss#upgrading-modifying-or-migrating-a-conjur-oss-helm-deployment
-        version: v2.0.3
+        version: v2.0.4
 
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
@@ -40,7 +40,7 @@ section:
       - name: cyberark/conjur-api-python3
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
-        version: v0.1.1
+        version: v7.0.1
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
@@ -128,4 +128,4 @@ section:
       - name: cyberark/summon-conjur
         url: https://github.com/cyberark/summon-conjur
         description: Summon provider for Conjur.
-        version: v0.5.3
+        version: v0.5.4
