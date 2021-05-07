@@ -11,7 +11,11 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.11.5
+        version: v1.11.6
+      - name: cyberark/conjur-openapi-spec
+        url: https://github.com/cyberark/conjur-openapi-spec
+        description: Conjur OpenAPI v3 specification
+        version: v5.1.1
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
@@ -44,7 +48,7 @@ section:
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
-        version: v5.3.4
+        version: v5.3.5
 
   - name: Platform Integrations
     description: Tools for Conjur integrations with platforms and cloud providers.
@@ -104,7 +108,7 @@ section:
         tool: Terraform
         description: Terraform provider that makes secrets in Conjur available in
           Terraform manifests.
-        version: v0.4.0
+        version: v0.5.0
 
   - name: Secretless Broker
     description: Secure your apps by making them Secretless.
@@ -124,7 +128,7 @@ section:
         url: https://github.com/cyberark/summon
         description: Summon is a secure tool to inject secrets into a subprocess
           environment.
-        version: v0.8.3
+        version: v0.8.4
       - name: cyberark/summon-conjur
         url: https://github.com/cyberark/summon-conjur
         description: Summon provider for Conjur.
