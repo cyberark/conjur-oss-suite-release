@@ -1,0 +1,102 @@
+{
+  "name": "main",
+  "commit": {
+    "sha": "3f8ba6c01b0f0c5889cedf1c55c6e78bbc0f156a",
+    "node_id": "MDY6Q29tbWl0NjIxNzQ5Nzc6M2Y4YmE2YzAxYjBmMGM1ODg5Y2VkZjFjNTVjNmU3OGJiYzBmMTU2YQ==",
+    "commit": {
+      "author": {
+        "name": "Matthew Brace",
+        "email": "ismarc@users.noreply.github.com",
+        "date": "2020-10-16T14:45:30Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-10-16T14:45:30Z"
+      },
+      "message": "Merge pull request from GHSA-mjxj-6m5w-g629\n\nRelease/11.7",
+      "tree": {
+        "sha": "d7d3e5254950579dde6ebfa55cf7ef63830a68de",
+        "url": "https://api.github.com/repos/cyberark/conjur/git/trees/d7d3e5254950579dde6ebfa55cf7ef63830a68de"
+      },
+      "url": "https://api.github.com/repos/cyberark/conjur/git/commits/3f8ba6c01b0f0c5889cedf1c55c6e78bbc0f156a",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJfibIKCRBK7hj4Ov3rIwAAdHIIACIN7wlyWRhz/+ABiKYdB4D+\n0z17lVptjF8OpZjppoCT4OdT6mxeCqgMfueZif4jADvMwU2fcAzSVZC4eN5/h5wc\nr8slyLaMY3I+zwvumUCHQdip4CuZJNa9OxexZVSr9D/tomsk6FeV1rAJ8kCsMIvq\nMcxUlMAdyeTN9VofT/OCBuIwz3vkr4dpqK1nkZnrLw1MSFAMEFT+6MYN1bcDDXdO\nTZ6tF+TURIZXknSvmJWcQzX9aPhu/2Zb5r/dQVeCRFX45cX8uwUffSx/7ouhO/nO\nu7LMQwdBc5TnuVMKioPFPZx4AOXrnCuYaVqukhGNokfJF94yevq7wQwoEyTv3To=\n=MTVT\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree d7d3e5254950579dde6ebfa55cf7ef63830a68de\nparent 27c0f86569b85eeca7d3f097ee19faed8cab2e5d\nparent 0313b67044e7fdb10f1e5cde80f1bdc1be4a5841\nauthor Matthew Brace <ismarc@users.noreply.github.com> 1602859530 -0500\ncommitter GitHub <noreply@github.com> 1602859530 -0500\n\nMerge pull request from GHSA-mjxj-6m5w-g629\n\nRelease/11.7"
+      }
+    },
+    "url": "https://api.github.com/repos/cyberark/conjur/commits/3f8ba6c01b0f0c5889cedf1c55c6e78bbc0f156a",
+    "html_url": "https://github.com/cyberark/conjur/commit/3f8ba6c01b0f0c5889cedf1c55c6e78bbc0f156a",
+    "comments_url": "https://api.github.com/repos/cyberark/conjur/commits/3f8ba6c01b0f0c5889cedf1c55c6e78bbc0f156a/comments",
+    "author": {
+      "login": "ismarc",
+      "id": 113569,
+      "node_id": "MDQ6VXNlcjExMzU2OQ==",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/113569?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/ismarc",
+      "html_url": "https://github.com/ismarc",
+      "followers_url": "https://api.github.com/users/ismarc/followers",
+      "following_url": "https://api.github.com/users/ismarc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ismarc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/ismarc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ismarc/subscriptions",
+      "organizations_url": "https://api.github.com/users/ismarc/orgs",
+      "repos_url": "https://api.github.com/users/ismarc/repos",
+      "events_url": "https://api.github.com/users/ismarc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/ismarc/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "27c0f86569b85eeca7d3f097ee19faed8cab2e5d",
+        "url": "https://api.github.com/repos/cyberark/conjur/commits/27c0f86569b85eeca7d3f097ee19faed8cab2e5d",
+        "html_url": "https://github.com/cyberark/conjur/commit/27c0f86569b85eeca7d3f097ee19faed8cab2e5d"
+      },
+      {
+        "sha": "0313b67044e7fdb10f1e5cde80f1bdc1be4a5841",
+        "url": "https://api.github.com/repos/cyberark/conjur/commits/0313b67044e7fdb10f1e5cde80f1bdc1be4a5841",
+        "html_url": "https://github.com/cyberark/conjur/commit/0313b67044e7fdb10f1e5cde80f1bdc1be4a5841"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/cyberark/conjur/branches/main",
+    "html": "https://github.com/cyberark/conjur/tree/main"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [
+
+      ]
+    }
+  },
+  "protection_url": "https://api.github.com/repos/cyberark/conjur/branches/main/protection"
+}
