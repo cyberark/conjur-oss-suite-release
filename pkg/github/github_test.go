@@ -40,15 +40,22 @@ func (client *MockClient) Get(url string) ([]byte, error) {
 		if strings.Contains(url, "real_release_branch") {
 			// We are running a test where the repo has a release branch
 			return httpClient.Get("file://./testdata/release_branch_changelog.md")
+		} else if strings.Contains(url, "repo_with_main_branch") {
+			// We are running a test where the repo has a main branch
+			return httpClient.Get("file://./testdata/main_branch_changelog.md")
 		}
 		return httpClient.Get("file://./testdata/simple_changelog.md")
 	} else if strings.Contains(url, "branches") {
 		if strings.Contains(url, "real_release_branch") {
 			// We are running a test where the repo has a release branch
 			return httpClient.Get("file://./testdata/branch_v3.json")
+		} else if strings.Contains(url, "repo_with_main_branch/branches/main") {
+			// We are running a test where the repo has a release branch
+			return httpClient.Get("file://./testdata/main_v3.json")
 		}
 		return nil, fmt.Errorf("Branch not found")
 	}
+
 	// Return local data only
 	return httpClient.Get("file://./testdata/releases_v3.json")
 }
@@ -258,6 +265,15 @@ func TestCollectSuiteCategories(t *testing.T) {
 			newSuiteFileName:        "new_suite.yml",
 			categoryName:            "Conjur SDK",
 			releaseBranch:           "real_release_branch",
+		},
+		{
+			description:             "2 version diff between suite versions with changelog from main branch",
+			shouldIncludeChangelogs: true,
+			changelogVersions:       2,
+			oldSuiteFileName:        "old_main_suite.yml",
+			newSuiteFileName:        "new_main_suite.yml",
+			categoryName:            "Conjur SDK",
+			releaseBranch:           "fake_release_branch",
 		},
 	}
 

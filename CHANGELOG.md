@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.11.6+suite.1] - 2021-05-11
+
+### Added
+- The Conjur OpenAPI specification is now part of the Conjur Open Source Suite.
+
 ## [v1.11.5+suite.1] - 2021-04-14
+
+### Changed
 - The Python SDK is incremented to v7.0.1 to announce the release of the v7 CLI.
 
 ## [v1.11.3+suite.1] - 2021-03-09
@@ -49,7 +56,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   open in a new window, unless the link points to a CyberArk docs site.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
-[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.5+suite.1...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.6+suite.1...HEAD
+[v1.11.6+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.5+suite.1...v1.11.6+suite.1
 [v1.11.5+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.3+suite.1...v1.11.5+suite.1
 [v1.11.3+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.2+suite.1...v1.11.3+suite.1
 [v1.11.2+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.2...v1.11.2+suite.1

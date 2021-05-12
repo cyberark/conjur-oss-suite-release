@@ -31,7 +31,7 @@ Resolves #[relevant GitHub issues, eg 76]
      summon -p keyring.py   --yaml 'GITHUB_TOKEN: !var github/api_token' \
        ./parse-changelogs \
        -v {suite-version} \
-       -t release
+       -t release \
        -o RELEASE_NOTES.md
      ```
 - [ ] The PR includes PM-approved "What's new" text.

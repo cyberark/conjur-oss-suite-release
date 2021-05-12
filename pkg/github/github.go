@@ -275,14 +275,40 @@ func componentFromRepo(
 	// Check if there is a "releases/{suiteVersion}" branch
 	// If it exists, use that; if not, use master.
 	branch := "master"
-	hasReleaseBranch, err := checkForBranch(httpClient, "github_api", repo.Name, fmt.Sprintf("release/%s", suiteVersion))
+	hasReleaseBranch, err := checkForBranch(
+		httpClient,
+		"github_api",
+		repo.Name,
+		fmt.Sprintf("release/%s", suiteVersion),
+	)
 	if err != nil {
 		return component, err
 	}
 
 	if hasReleaseBranch {
 		branch = fmt.Sprintf("release/%s", suiteVersion)
-		log.OutLogger.Printf("Using release branch %s...", branch)
+		log.OutLogger.Printf("  Using release branch %s...", branch)
+	}
+
+	// Check if the repo has a "main" branch; if so, and there is no matching release
+	// branch for this version, use "main" as the default instead
+	if !hasReleaseBranch {
+		hasMainBranch, err := checkForBranch(
+			httpClient,
+			"github_api",
+			repo.Name,
+			"main",
+		)
+
+		if err != nil {
+			return component, err
+		}
+
+		if hasMainBranch {
+			branch = "main"
+
+			log.OutLogger.Print("  Using main branch...")
+		}
 	}
 
 	// TODO: This should be somehow transformed from repo url
