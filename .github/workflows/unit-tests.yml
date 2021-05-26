@@ -3,7 +3,7 @@ on:
   # Only run this on pushes to master
   push:
     branches:
-    - master
+    - main
 
   # And when PRs operations are done
   pull_request:
