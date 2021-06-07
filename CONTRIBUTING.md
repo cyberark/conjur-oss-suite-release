@@ -153,19 +153,42 @@ Anyone can request a new suite release, if they believe it is merited.
 
 ### Release process
 
-1. Determine whether there are component changes since the last suite release
-   that merit a new suite release.
+During the suite release kickoff call, we:
 
-   - Check the [wiki](https://github.com/cyberark/conjur-oss-suite-release/wiki/Unreleased-Changes)
-     to see the daily report on which components have had new tagged
-     versions since the last release, and which components have unreleased changes.
+1. Determine the Suite release version
+
+   - Review the [unreleased changes wiki](https://github.com/cyberark/conjur-oss-suite-release/wiki/Unreleased-Changes#conjur-server)
+     to determine the Conjur version that will be included in the suite (see
+     [notes on versioning](#notes-on-versioning) above for more details).
+
+1. Create a new suite release wiki page
+
+   - Create a new suite release wiki page using the [template](https://github.com/cyberark/conjur-oss-suite-release/wiki/Suite-release-template)
+     for this suite release. The title of the page should be the suite release
+     version, e.g. `v1.11.7+suite.1`, and the new page should be linked to from
+     the [suite releases wiki page](https://github.com/cyberark/conjur-oss-suite-release/wiki/Conjur-OSS-Suite-Releases).
+   
+1. Create a new ZenHub release for this suite release
+
+   - All issues that you open during the kickoff call should be added to this
+     release in ZenHub.
+
+1. Review components that need releases
+
+   - Review the [unreleased changes wiki](https://github.com/cyberark/conjur-oss-suite-release/wiki/Unreleased-Changes)
+     to determine which components have new tags since the last suite release
+     that should be included in the next release, and which components have
+     unreleased changes to determine whether adding a tag should be included
+     in this suite release process.
+   
      - Note: Entries for components with unreleased changes (changes on the master
        branch that are not yet available in a GitHub release) show in this report as
        `org/repo @HEAD`. The links take you to the commit history for all commits on
        master that are not included in the latest GitHub release.
 
    - If there are any components with unreleased changes that should be tagged,
-     open an issue in that component's repository for adding a new tag.
+     open a `kind/release` issue in that component's repository for adding a new tag.
+     Add the release issue to the ZenHub release and the release wiki page.
 
 1. Ensure the components have green builds.
 
@@ -176,6 +199,25 @@ Anyone can request a new suite release, if they believe it is merited.
      Note: The Jenkins dashboard does not include the following components at
      this time:
      - [Jenkins plugin](https://github.com/cyberark/conjur-credentials-plugin)
+
+   - If there are any projects with failing builds that need to be fixed, file a
+     `kind/failing-test` issue and add the issue to the ZenHub release and the
+     release wiki page.
+  
+1. File a [release notes docs issue](github.com/cyberark/conjur-docs/issues/new?assignees=&labels=doc%2FReleaseNotes%2C+doc%2FWhatsNew+kind%2Fdocumentation+component%2Fsuite&template=suite-release-notes.md&title=)
+
+   - File an issue in the `cyberark/conjur-docs` repo to publish the release notes.
+     Review components with updates that will be included in this release to determine
+     whether any additional documentation issues **must** be completed in this suite
+     release; if there are any, list them in this docs issue.
+     
+     Include the release notes doc issue and any other doc issues required for this
+     suite release in the ZenHub release.
+     
+After the kickoff meeting, the issues in the ZenHub release must be planned into the
+regular work stream of the developers and technical writers.
+
+Once the broken build and component release issues have been completed, the PO will:
 
 1. Update the versions included in the suite release.
 
@@ -195,11 +237,15 @@ Anyone can request a new suite release, if they believe it is merited.
      - To see the status of the automated tests, you can check the
        [status tab](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-status-checks)
        in the pull request.
+       
+   - Update the PR with draft "What's New" content (in the description or a comment),
+     and tag PM as a reviewer.
 
    - A maintainer of this project will review the PR to make sure the release is
      ready to move forward. In particular, they will do the following before
      approving and merging the PR:
      - Check that the PR description includes the desired suite release version.
+     - Check that the PR has been approved by PM.
      - Review the status of the automated tests, to make sure they are passing.
      - Check the [Jenkins dashboard](https://jenkins.conjur.net/view/OSS%20Suite%20Components/)
        to make sure there are no ongoing build failures for any of the OSS suite
@@ -219,6 +265,11 @@ Anyone can request a new suite release, if they believe it is merited.
      - Note: To view the progress of the GitHub actions that automatically run post-tag,
        you can take a look at
        [this page](https://github.com/cyberark/conjur-oss-suite-release/actions).
+       
+  - The maintainer will copy a ZIP of the HTML release notes output in the draft release
+    to the docs issue linked on the release wiki page.
+    
+ Once the technical writers have completed and published the documentation, a maintainer will:
 
  1. [Publish](https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository)
     the [draft GitHub release](https://github.com/cyberark/conjur-oss-suite-release/releases/).
