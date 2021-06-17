@@ -32,7 +32,7 @@ where you can:
 - Find out which version of Conjur to use, and which corresponding versions of
   the suite components are compatible with it
 
-If you're using Conjur OSS, we **strongly recommend** that you reference the latest
+If you're using Conjur Open Source, we **strongly recommend** that you reference the latest
 suite release (link TBA) to determine which version of Conjur to use, and which corresponding
 versions of the suite are compatible with it.
 
