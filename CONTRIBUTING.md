@@ -204,7 +204,7 @@ During the suite release kickoff call, we:
      `kind/failing-test` issue and add the issue to the ZenHub release and the
      release wiki page.
   
-1. File a [release notes docs issue](github.com/cyberark/conjur-docs/issues/new?assignees=&labels=doc%2FReleaseNotes%2C+doc%2FWhatsNew+kind%2Fdocumentation+component%2Fsuite&template=suite-release-notes.md&title=)
+1. File a [release notes docs issue](https://github.com/cyberark/conjur-docs/issues/new?assignees=&labels=doc%2FReleaseNotes%2C+doc%2FWhatsNew%2C+kind%2Fdocumentation%2C+component%2Fsuite&template=suite-release-notes.md&title=Conjur+OSS+Suite+Release+v1.x.y%2Bsuite.1)
 
    - File an issue in the `cyberark/conjur-docs` repo to publish the release notes.
      Review components with updates that will be included in this release to determine
