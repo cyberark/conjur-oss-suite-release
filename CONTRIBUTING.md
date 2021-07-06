@@ -126,7 +126,7 @@ This works as follows:
   release will be versioned `1.x.y+suite.1`, where `1.x.y` matches the included
   Conjur core version.
 
-- Subsequent suite releases using the same Conjur OSS version require that the suite version build component be incremented.  For example, a second suite release using Conjur `1.2.3` should be versioned `1.2.3+suite.2`, as the first one would have been versioned as `1.2.3+suite.1`.
+- Subsequent suite releases using the same Conjur Open Source version require that the suite version build component be incremented.  For example, a second suite release using Conjur `1.2.3` should be versioned `1.2.3+suite.2`, as the first one would have been versioned as `1.2.3+suite.1`.
 
 Additional notes:
 - If Conjur changes its version with a new **minor or patch** release, we _may_

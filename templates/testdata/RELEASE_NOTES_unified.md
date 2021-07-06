@@ -34,7 +34,7 @@ Installing the Suite Release Version of Conjur requires setting the container im
   image: cyberark/conjur:1.4.4
   ```
 
-+ [**Conjur OSS Helm chart**](https://github.com/cyberark/conjur-oss-helm-chart)
++ [**Conjur Open Source Helm chart**](https://github.com/cyberark/conjur-oss-helm-chart)
 
   Update the `image.tag` value and use the appropriate release of the helm chart:
   ```
