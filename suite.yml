@@ -11,7 +11,7 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.11.6
+        version: v1.11.7
       - name: cyberark/conjur-openapi-spec
         url: https://github.com/cyberark/conjur-openapi-spec
         description: Conjur OpenAPI v3 specification
@@ -58,7 +58,7 @@ section:
         description: The Conjur Buildpack will use the Conjur identity provided
           by the Conjur Service Broker to inject secrets into your application
           environment at runtime.
-        version: v2.2.0
+        version: v2.2.1
       - name: cyberark/conjur-service-broker
         url: https://github.com/cyberark/conjur-service-broker
         description: The Conjur Service Broker provides your applications running
@@ -69,7 +69,7 @@ section:
         tool: Kubernetes
         description: The Conjur authenticator client can be deployed as a sidecar
           or init container to ensure your application has a valid Conjur access token.
-        version: v0.19.1
+        version: v0.21.0
       - name: cyberark/secrets-provider-for-k8s
         url: https://github.com/cyberark/secrets-provider-for-k8s
         tool: Kubernetes
