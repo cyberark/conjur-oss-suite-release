@@ -11,7 +11,7 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.11.7
+        version: v1.13.0
       - name: cyberark/conjur-openapi-spec
         url: https://github.com/cyberark/conjur-openapi-spec
         description: Conjur OpenAPI v3 specification
@@ -28,7 +28,7 @@ section:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
-        version: v6.2.3
+        version: v6.2.4
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
@@ -63,7 +63,7 @@ section:
         url: https://github.com/cyberark/conjur-service-broker
         description: The Conjur Service Broker provides your applications running
           in Cloud Foundry with a Conjur identity.
-        version: v1.1.5
+        version: v1.2.1
       - name: cyberark/conjur-authn-k8s-client
         url: https://github.com/cyberark/conjur-authn-k8s-client
         tool: Kubernetes
@@ -76,7 +76,7 @@ section:
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        version: v1.1.3
+        version: v1.1.4
 
   - name: DevOps Tools
     description: Conjur OSS integrations with DevOps tools.
@@ -108,7 +108,7 @@ section:
         tool: Terraform
         description: Terraform provider that makes secrets in Conjur available in
           Terraform manifests.
-        version: v0.5.0
+        version: v0.6.0
 
   - name: Secretless Broker
     description: Secure your apps by making them Secretless.
@@ -118,7 +118,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.7.3
+        version: v1.7.5
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
@@ -128,8 +128,8 @@ section:
         url: https://github.com/cyberark/summon
         description: Summon is a secure tool to inject secrets into a subprocess
           environment.
-        version: v0.8.4
+        version: v0.9.0
       - name: cyberark/summon-conjur
         url: https://github.com/cyberark/summon-conjur
         description: Summon provider for Conjur.
-        version: v0.5.4
+        version: v0.6.0
