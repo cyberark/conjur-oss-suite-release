@@ -1,0 +1,135 @@
+---
+section:
+  name: Conjur OSS Suite Release
+  description: These are the primary repositories for Conjur Open Source and its SDK.
+  categories:
+  - name: Conjur Server
+    description: Conjur Core and Deployment Tools
+    repos:
+      - name: cyberark/conjur
+        url: https://github.com/cyberark/conjur
+        description: Conjur OSS server. Conjur comes built-in with custom authenticators
+          for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
+        upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
+        version: v1.13.0
+      - name: cyberark/conjur-openapi-spec
+        url: https://github.com/cyberark/conjur-openapi-spec
+        description: Conjur OpenAPI v3 specification
+        version: v5.1.1
+      - name: cyberark/conjur-oss-helm-chart
+        url: https://github.com/cyberark/conjur-oss-helm-chart
+        description: Helm chart for deploying Conjur OSS.
+        upgrade_url: https://github.com/cyberark/conjur-oss-helm-chart/tree/master/conjur-oss#upgrading-modifying-or-migrating-a-conjur-oss-helm-deployment
+        version: v2.0.4
+
+  - name: Conjur SDK
+    description: Conjur Command Line Interface (CLI) and Client Libraries
+    repos:
+      - name: cyberark/conjur-cli
+        url: https://github.com/cyberark/conjur-cli
+        description: Conjur Ruby CLI
+        version: v6.2.4
+      - name: cyberark/conjur-api-dotnet
+        url: https://github.com/cyberark/conjur-api-dotnet
+        description: Conjur .Net Client Library
+        version: v2.0.0
+      - name: cyberark/conjur-api-go
+        url: https://github.com/cyberark/conjur-api-go
+        description: Conjur Golang Client Library
+        version: v0.7.1
+      - name: cyberark/conjur-api-java
+        url: https://github.com/cyberark/conjur-api-java
+        description: Conjur Java Client Library
+        version: v3.0.2
+      - name: cyberark/conjur-api-python3
+        url: https://github.com/cyberark/conjur-api-python3
+        description: Conjur Python Client Library
+        version: v7.0.1
+      - name: cyberark/conjur-api-ruby
+        url: https://github.com/cyberark/conjur-api-ruby
+        description: Conjur Ruby Client Library
+        version: v5.3.5
+
+  - name: Platform Integrations
+    description: Tools for Conjur integrations with platforms and cloud providers.
+    repos:
+      - name: cyberark/cloudfoundry-conjur-buildpack
+        url: https://github.com/cyberark/cloudfoundry-conjur-buildpack
+        description: The Conjur Buildpack will use the Conjur identity provided
+          by the Conjur Service Broker to inject secrets into your application
+          environment at runtime.
+        version: v2.2.1
+      - name: cyberark/conjur-service-broker
+        url: https://github.com/cyberark/conjur-service-broker
+        description: The Conjur Service Broker provides your applications running
+          in Cloud Foundry with a Conjur identity.
+        version: v1.2.1
+      - name: cyberark/conjur-authn-k8s-client
+        url: https://github.com/cyberark/conjur-authn-k8s-client
+        tool: Kubernetes
+        description: The Conjur authenticator client can be deployed as a sidecar
+          or init container to ensure your application has a valid Conjur access token.
+        version: v0.21.0
+      - name: cyberark/secrets-provider-for-k8s
+        url: https://github.com/cyberark/secrets-provider-for-k8s
+        tool: Kubernetes
+        description: The Conjur Secrets Provider for K8s is deployed as an init
+          container in your application pod. It injects secrets from Conjur
+          into Kubernetes secrets, which are accessible to your application pod.
+        version: v1.1.4
+
+  - name: DevOps Tools
+    description: Conjur OSS integrations with DevOps tools.
+    repos:
+      - name: cyberark/ansible-conjur-collection
+        url: https://github.com/cyberark/ansible-conjur-collection
+        tool: Ansible
+        description: Conjur Ansible collection for use with Ansible 2.9+.
+          Includes an Ansible role to bootstrap Ansible hosts with a Conjur
+          identity, and a lookup plugin to enable easy access to Conjur secrets
+          from within your Ansible playbooks, etc.
+        version: v1.1.0
+      - name: cyberark/ansible-conjur-host-identity
+        url: https://github.com/cyberark/ansible-conjur-host-identity
+        tool: Ansible
+        description: Ansible role to provide Conjur machine identity to application
+          hosts and install the Summon tool, which enables hosts to securely retrieve
+          credentials.
+        version: v0.3.2
+      - name: cyberark/conjur-puppet
+        url: https://github.com/cyberark/conjur-puppet
+        tool: Puppet
+        description: Puppet module that simplifies the operation of establishing
+          Conjur host identity and allows authorized Puppet nodes to fetch secrets
+          from Conjur.
+        version: v3.1.0
+      - name: cyberark/terraform-provider-conjur
+        url: https://github.com/cyberark/terraform-provider-conjur
+        tool: Terraform
+        description: Terraform provider that makes secrets in Conjur available in
+          Terraform manifests.
+        version: v0.6.0
+
+  - name: Secretless Broker
+    description: Secure your apps by making them Secretless.
+    repos:
+      - name: cyberark/secretless-broker
+        url: https://github.com/cyberark/secretless-broker
+        description: Secretless Broker can be used to securely connect your
+          applications to services they need - without ever having to fetch or
+          manage passwords and keys.
+        version: v1.7.5
+
+  - name: Summon
+    description: Run your processes wrapped with Summon to ensure they have
+      the secrets they need.
+    repos:
+      - name: cyberark/summon
+        url: https://github.com/cyberark/summon
+        description: Summon is a secure tool to inject secrets into a subprocess
+          environment.
+        version: v0.9.0
+      - name: cyberark/summon-conjur
+        url: https://github.com/cyberark/summon-conjur
+        description: Summon provider for Conjur.
+        version: v0.6.0
