@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.13.1+suite.1] - 2021-09-14
+
 ## [v1.13.0+suite.1] - 2021-08-13
 
 ## [v1.11.7+suite.1] - 2021-07-07
@@ -60,7 +62,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   open in a new window, unless the link points to a CyberArk docs site.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
-[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.7+suite.1...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.13.1+suite.1...HEAD
+[v1.13.1+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.13.0+suite.1...v1.13.1+suite.1
+[v1.13.0+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.7+suite.1...v1.13.0+suite.1
 [v1.11.7+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.6+suite.1...v1.11.7+suite.1
 [v1.11.6+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.5+suite.1...v1.11.6+suite.1
 [v1.11.5+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.3+suite.1...v1.11.5+suite.1
