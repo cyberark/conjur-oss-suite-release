@@ -11,11 +11,11 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.13.0
+        version: v1.13.1
       - name: cyberark/conjur-openapi-spec
         url: https://github.com/cyberark/conjur-openapi-spec
         description: Conjur OpenAPI v3 specification
-        version: v5.1.1
+        version: v5.2.0
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
@@ -32,11 +32,11 @@ section:
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
-        version: v2.0.0
+        version: v2.1.0
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
-        version: v0.7.1
+        version: v0.8.0
       - name: cyberark/conjur-api-java
         url: https://github.com/cyberark/conjur-api-java
         description: Conjur Java Client Library
@@ -69,14 +69,14 @@ section:
         tool: Kubernetes
         description: The Conjur authenticator client can be deployed as a sidecar
           or init container to ensure your application has a valid Conjur access token.
-        version: v0.21.0
+        version: v0.22.0
       - name: cyberark/secrets-provider-for-k8s
         url: https://github.com/cyberark/secrets-provider-for-k8s
         tool: Kubernetes
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        version: v1.1.4
+        version: v1.1.5
 
   - name: DevOps Tools
     description: Conjur OSS integrations with DevOps tools.
@@ -108,7 +108,7 @@ section:
         tool: Terraform
         description: Terraform provider that makes secrets in Conjur available in
           Terraform manifests.
-        version: v0.6.0
+        version: v0.6.2
 
   - name: Secretless Broker
     description: Secure your apps by making them Secretless.
@@ -118,7 +118,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.7.5
+        version: v1.7.6
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
