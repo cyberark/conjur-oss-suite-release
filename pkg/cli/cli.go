@@ -97,9 +97,13 @@ func RunParser(options Options) error {
 	httpClient := http.NewClient()
 
 	githubAPIToken := options.APIToken
-	if githubAPIToken == "" {
+	if len(githubAPIToken) == 0 {
 		githubAPIToken = os.Getenv("GITHUB_TOKEN")
 	}
+	if len(githubAPIToken) == 0 {
+		log.ErrLogger.Printf("WARN: No Github API token specified (via %q flag or %q environment variable). This run might FAIL due to the API rate limit", "-p", "GITHUB_TOKEN")
+	}
+
 	httpClient.AuthToken = githubAPIToken
 
 	suiteCategories, err := github.CollectSuiteCategories(repoConfig, httpClient, options.Version)
