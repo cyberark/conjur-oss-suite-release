@@ -11,7 +11,7 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.13.1
+        version: v1.14.1
       - name: cyberark/conjur-openapi-spec
         url: https://github.com/cyberark/conjur-openapi-spec
         description: Conjur OpenAPI v3 specification
@@ -28,7 +28,7 @@ section:
       - name: cyberark/conjur-cli
         url: https://github.com/cyberark/conjur-cli
         description: Conjur Ruby CLI
-        version: v6.2.4
+        version: v6.2.5
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
@@ -76,7 +76,7 @@ section:
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        version: v1.1.5
+        version: v1.1.6
 
   - name: DevOps Tools
     description: Conjur OSS integrations with DevOps tools.
@@ -118,7 +118,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.7.6
+        version: v1.7.8
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
