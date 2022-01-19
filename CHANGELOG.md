@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Updated Go version to 1.15. [cyberark/conjur-oss-suite-release#241](https://github.com/cyberark/conjur-oss-suite-release/pull/241)
+
 ## [v1.14.1+suite.1] - 2021-11-12
 
 ## [v1.13.1+suite.1] - 2021-09-14

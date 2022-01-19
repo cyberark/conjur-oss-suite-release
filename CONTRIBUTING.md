@@ -13,7 +13,7 @@
 ## Prerequisites
 
 ### Go version
-To work in this codebase, you will want to have at least Go v1.15 installed. The
+To work in this codebase, you will want to have at least Go v1.17 installed. The
 code may work on older versions but it has not been tested nor evaluated to be
 compatible for those configurations. We expect at the very least that you will
 need Go modules support so you will at minimum need Go v1.11+.
