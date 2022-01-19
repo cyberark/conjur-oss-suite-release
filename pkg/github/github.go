@@ -46,6 +46,7 @@ type ReleaseInfo struct {
 	Draft       bool   `json:"draft"`
 	Name        string `json:"name"`
 	TagName     string `json:"tag_name"`
+	Prerelease  bool   `json:"prerelease"`
 }
 
 // ComparisonInfo is a representation of a v3 GitHub API JSON
@@ -128,6 +129,11 @@ func getAvailableReleases(
 	// Convert ReleaseInfo array to an array of just the version strings
 	releaseVersions := make([]string, 0)
 	for _, release := range releases {
+		// Exclude prereleases
+		if release.Prerelease {
+			continue
+		}
+
 		versionStr := strings.TrimPrefix(release.Name, "v")
 		_, err := semver.NewVersion(versionStr)
 
