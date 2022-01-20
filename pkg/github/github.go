@@ -58,7 +58,7 @@ type ComparisonInfo struct {
 }
 
 // e.g. https://api.github.com/repos/cyberark/secretless-broker/releases
-const releasesURLTemplate = "https://api.github.com/repos/%s/releases"
+const releasesURLTemplate = "https://api.github.com/repos/%s/releases?per_page=100"
 
 // e.g. https://api.github.com/repos/cyberark/secretless-broker/compare/v1.5.2...HEAD
 const compareURLTemplate = "https://api.github.com/repos/%s/compare/%s...%s"
