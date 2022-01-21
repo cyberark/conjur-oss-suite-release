@@ -46,6 +46,7 @@ type ReleaseInfo struct {
 	Draft       bool   `json:"draft"`
 	Name        string `json:"name"`
 	TagName     string `json:"tag_name"`
+	Prerelease  bool   `json:"prerelease"`
 }
 
 // ComparisonInfo is a representation of a v3 GitHub API JSON
@@ -58,7 +59,7 @@ type ComparisonInfo struct {
 }
 
 // e.g. https://api.github.com/repos/cyberark/secretless-broker/releases
-const releasesURLTemplate = "https://api.github.com/repos/%s/releases"
+const releasesURLTemplate = "https://api.github.com/repos/%s/releases?per_page=100"
 
 // e.g. https://api.github.com/repos/cyberark/secretless-broker/compare/v1.5.2...HEAD
 const compareURLTemplate = "https://api.github.com/repos/%s/compare/%s...%s"
@@ -128,6 +129,11 @@ func getAvailableReleases(
 	// Convert ReleaseInfo array to an array of just the version strings
 	releaseVersions := make([]string, 0)
 	for _, release := range releases {
+		// Exclude prereleases
+		if release.Prerelease {
+			continue
+		}
+
 		versionStr := strings.TrimPrefix(release.Name, "v")
 		_, err := semver.NewVersion(versionStr)
 

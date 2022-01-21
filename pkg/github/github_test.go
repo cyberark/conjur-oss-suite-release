@@ -93,9 +93,14 @@ func TestReleasesParsing(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, len(releases), 3)
+	assert.Equal(t, len(releases), 4)
 
 	expectedReleases := []ReleaseInfo{
+		ReleaseInfo{
+			TagName: "v0.1.1",
+			Name:    "v0.1.1",
+			Draft:   false,
+		},
 		ReleaseInfo{
 			TagName: "v0.0.5",
 			Name:    "v0.0.5",
@@ -141,8 +146,8 @@ func Test_comparisonFromURL(t *testing.T) {
 
 func TestGetAvailableReleases(t *testing.T) {
 	expectedReleases := []string{
+		"v0.1.1",
 		"v0.0.5",
-		"v0.0.4",
 		"v0.0.3",
 	}
 
@@ -210,7 +215,6 @@ func TestGetAvailableReleasesBadSemver(t *testing.T) {
 		"v1.0.2",
 		"v1.0.0-rc4",
 		"v1.0.0-rc1",
-		"v0.1.0-beta1",
 	}
 
 	httpClient := generateHTTPClientWithFileSupportTransport()
@@ -285,6 +289,9 @@ func TestCollectSuiteCategories(t *testing.T) {
 			}
 
 			actualSuiteCategories, err := CollectSuiteCategories(repoConfig, mockClient, tc.releaseBranch)
+			if !assert.NoError(t, err) {
+				return
+			}
 
 			assert.NotNil(t, actualSuiteCategories)
 
