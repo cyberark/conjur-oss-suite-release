@@ -9,5 +9,5 @@ section:
       - name: cyberark/repo_with_main_branch
         url: https://github.com/cyberark/repo_with_main_branch
         description: Conjur Python Client Library
-        version: v0.0.5
+        version: v0.1.1
         certification: "community"

@@ -2,6 +2,11 @@
 description
 ## [Unreleased]
 
+## 0.1.1 2020-03-05
+
+### Fixed
+- Some fix
+
 ## 0.0.5 2020-03-04
 
 ### Fixed

@@ -9,5 +9,5 @@ section:
       - name: cyberark/conjur-api-python3
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
-        version: v0.0.5
+        version: v0.1.1
         certification: "community"

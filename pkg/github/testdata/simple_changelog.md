@@ -2,15 +2,15 @@
 description
 ## [Unreleased]
 
-## 0.0.4 2020-01-29
-
-### Added
-- add 1
-- `cyberark/conjur@1.4.4`: Bumped `toolset` from 3.12.0 to 3.12.2
+## 0.1.1 2020-02-01
 
 ### Changed
-- change 1
-- change 2
+- change something
+
+## 0.0.4 2020-01-22
+
+### Added
+- add something
 
 ## 0.0.3 2020-01-03
 
