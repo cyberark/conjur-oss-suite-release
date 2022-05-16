@@ -11,11 +11,11 @@ section:
         description: Conjur OSS server. Conjur comes built-in with custom authenticators
           for Kubernetes, OpenShift, AWS IAM, OIDC, and more.
         upgrade_url: https://github.com/cyberark/conjur/blob/master/UPGRADING.md
-        version: v1.15.0
+        version: v1.17.6
       - name: cyberark/conjur-openapi-spec
         url: https://github.com/cyberark/conjur-openapi-spec
         description: Conjur OpenAPI v3 specification
-        version: v5.2.0
+        version: v5.3.0
       - name: cyberark/conjur-oss-helm-chart
         url: https://github.com/cyberark/conjur-oss-helm-chart
         description: Helm chart for deploying Conjur OSS.
@@ -32,15 +32,15 @@ section:
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
-        version: v2.1.0
+        version: v2.1.1
       - name: cyberark/conjur-api-go
         url: https://github.com/cyberark/conjur-api-go
         description: Conjur Golang Client Library
-        version: v0.8.0
+        version: v0.10.1
       - name: cyberark/conjur-api-java
         url: https://github.com/cyberark/conjur-api-java
         description: Conjur Java Client Library
-        version: v3.0.2
+        version: v3.0.3
       - name: cyberark/conjur-api-python3
         url: https://github.com/cyberark/conjur-api-python3
         description: Conjur Python Client Library
@@ -48,7 +48,7 @@ section:
       - name: cyberark/conjur-api-ruby
         url: https://github.com/cyberark/conjur-api-ruby
         description: Conjur Ruby Client Library
-        version: v5.3.5
+        version: v5.3.7
 
   - name: Platform Integrations
     description: Tools for Conjur integrations with platforms and cloud providers.
@@ -58,25 +58,25 @@ section:
         description: The Conjur Buildpack will use the Conjur identity provided
           by the Conjur Service Broker to inject secrets into your application
           environment at runtime.
-        version: v2.2.1
+        version: v2.2.4
       - name: cyberark/conjur-service-broker
         url: https://github.com/cyberark/conjur-service-broker
         description: The Conjur Service Broker provides your applications running
           in Cloud Foundry with a Conjur identity.
-        version: v1.2.3
+        version: v1.2.5
       - name: cyberark/conjur-authn-k8s-client
         url: https://github.com/cyberark/conjur-authn-k8s-client
         tool: Kubernetes
         description: The Conjur authenticator client can be deployed as a sidecar
           or init container to ensure your application has a valid Conjur access token.
-        version: v0.22.0
+        version: v0.23.6
       - name: cyberark/secrets-provider-for-k8s
         url: https://github.com/cyberark/secrets-provider-for-k8s
         tool: Kubernetes
         description: The Conjur Secrets Provider for K8s is deployed as an init
           container in your application pod. It injects secrets from Conjur
           into Kubernetes secrets, which are accessible to your application pod.
-        version: v1.3.0
+        version: v1.4.3
 
   - name: DevOps Tools
     description: Conjur OSS integrations with DevOps tools.
@@ -118,7 +118,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.7.8
+        version: v1.7.13
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
@@ -128,8 +128,8 @@ section:
         url: https://github.com/cyberark/summon
         description: Summon is a secure tool to inject secrets into a subprocess
           environment.
-        version: v0.9.0
+        version: v0.9.3
       - name: cyberark/summon-conjur
         url: https://github.com/cyberark/summon-conjur
         description: Summon provider for Conjur.
-        version: v0.6.0
+        version: v0.6.4
