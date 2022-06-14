@@ -5,13 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
 ### Changed
-- Updated Go version to 1.15. [cyberark/conjur-oss-suite-release#241](https://github.com/cyberark/conjur-oss-suite-release/pull/241)
+- Updated go dependencies to latest versions (github.com/gomarkdown/markdown
+  -> v0.0.0-20220607163217-45f7c050e2d1, github.com/stretchr/testify -> v1.7.2,
+  gopkg.in/yaml.v3 -> v3.0.1)
+  [cyberark/conjur-oss-suite-release#248](https://github.com/cyberark/conjur-oss-suite-release/pull/248)
 
 ### Security
 - Updated gopkg.in/yaml.v2 to resolve CVE-2019-11254
   [cyberark/conjur-oss-suite-release#245](https://github.com/cyberark/conjur-oss-suite-release/pull/245)
+
+## [v1.15.1+suite.1] - 2022-01-31
+### Changed
+- Updated Go version to 1.17. [cyberark/conjur-oss-suite-release#241](https://github.com/cyberark/conjur-oss-suite-release/pull/241)
 
 ## [v1.14.1+suite.1] - 2021-11-12
 
