@@ -99,7 +99,7 @@ from the id.
 #### [v0.0.5](https://github.com/cyberark/conjur-api-python3/releases/tag/v0.0.5) (2019-12-06)
 * **Added**
     - Added ability to delete
-policies [cyberark/conjur-api-python3#23](https://github.com/cyberark/conjur-api-python3/issues/23)
+policies [cyberark/cyberark-conjur-cli#23](https://github.com/cyberark/cyberark-conjur-cli/issues/23)
 
 ### cyberark/conjur-api-java
 
