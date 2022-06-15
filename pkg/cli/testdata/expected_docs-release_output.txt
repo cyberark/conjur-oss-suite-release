@@ -155,7 +155,7 @@ from the id.</p>
     <ul>
       <li>
         <p>Added ability to delete
-policies <a href="https://github.com/cyberark/conjur-api-python3/issues/23" target="_blank">cyberark/conjur-api-python3#23</a></p>
+policies <a href="https://github.com/cyberark/cyberark-conjur-cli/issues/23" target="_blank">cyberark/cyberark-conjur-cli#23</a></p>
       </li>
     </ul>
     <h3 class="itt">cyberark/conjur-api-java</h3>

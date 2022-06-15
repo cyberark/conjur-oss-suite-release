@@ -11,11 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   gopkg.in/yaml.v3 -> v3.0.1)
   [cyberark/conjur-oss-suite-release#248](https://github.com/cyberark/conjur-oss-suite-release/pull/248)
 
+## [v1.17.6+suite.1] - 2022-05-17
 ### Security
 - Updated gopkg.in/yaml.v2 to resolve CVE-2019-11254
   [cyberark/conjur-oss-suite-release#245](https://github.com/cyberark/conjur-oss-suite-release/pull/245)
+  [cyberark/conjur-oss-suite-release#246](https://github.com/cyberark/conjur-oss-suite-release/pull/246)
 
-## [v1.15.1+suite.1] - 2022-01-31
 ### Changed
 - Updated Go version to 1.17. [cyberark/conjur-oss-suite-release#241](https://github.com/cyberark/conjur-oss-suite-release/pull/241)
 
@@ -77,14 +78,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   open in a new window, unless the link points to a CyberArk docs site.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
-[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.14.1+suite.1...HEAD
-[v1.14.1+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.13.1+suite.1...v1.14.1+suite.1
-[v1.13.1+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.13.0+suite.1...v1.13.1+suite.1
-[v1.13.0+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.7+suite.1...v1.13.0+suite.1
-[v1.11.7+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.6+suite.1...v1.11.7+suite.1
-[v1.11.6+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.5+suite.1...v1.11.6+suite.1
-[v1.11.5+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.3+suite.1...v1.11.5+suite.1
-[v1.11.3+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.2+suite.1...v1.11.3+suite.1
-[v1.11.2+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.2...v1.11.2+suite.1
-[v1.11.1+suite.2]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.11.1+suite.1...v1.11.1+suite.2
-[v1.11.1+suite.1]: https://github.com/cyberark/conjur-oss-helm-chart/compare/v1.10.0+suite.1...v1.11.1+suite.1
+[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.17.6+suite.1...HEAD
+[v1.17.6+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.15.0+suite.1...v1.17.6+suite.1
+[v1.15.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.14.1+suite.1...v1.15.0+suite.1
+[v1.14.1+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.13.1+suite.1...v1.14.1+suite.1
+[v1.13.1+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.13.0+suite.1...v1.13.1+suite.1
+[v1.13.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.7+suite.1...v1.13.0+suite.1
+[v1.11.7+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.6+suite.1...v1.11.7+suite.1
+[v1.11.6+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.5+suite.1...v1.11.6+suite.1
+[v1.11.5+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.3+suite.1...v1.11.5+suite.1
+[v1.11.3+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.2+suite.1...v1.11.3+suite.1
+[v1.11.2+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.1+suite.2...v1.11.2+suite.1
+[v1.11.1+suite.2]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.11.1+suite.1...v1.11.1+suite.2
+[v1.11.1+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.10.0+suite.1...v1.11.1+suite.1
