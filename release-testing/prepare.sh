@@ -78,7 +78,7 @@ function register_conjur_client_pod() {
   local CONJUR_CLIENT_POD_NAME="conjur-client-pod"
 
   # Start the CLI pod
-  kubectl --namespace "${TEST_NAMESPACE}" run --generator=run-pod/v1 \
+  kubectl --namespace "${TEST_NAMESPACE}" run \
     "${CONJUR_CLIENT_POD_NAME}" \
     --restart='Never' \
     --image cyberark/conjur-cli:5 \
