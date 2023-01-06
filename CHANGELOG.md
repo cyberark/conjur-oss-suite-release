@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.20.0+suite.1] - 2023-01-06
+
+### Changed
+- Upgraded release-testing go.mod to use github.com/stretchr/testify v1.8.1
+  [cyberark/conjur-oss-suite-release#258](https://github.com/cyberark/conjur-oss-suite-release/pull/258)
+
 ## [v1.19.0+suite.1] - 2022-11-30
 
 ## [v1.18.4+suite.1] - 2022-09-16
