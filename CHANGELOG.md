@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v1.20.0+suite.1] - 2023-01-06
 
 ### Changed
+- Replace deprecated Ruby CLI with Go CLI
+  [cyberark/conjur-oss-suite-release#259](https://github.com/cyberark/conjur-oss-suite-release/pull/259)
 - Upgraded release-testing go.mod to use github.com/stretchr/testify v1.8.1
   [cyberark/conjur-oss-suite-release#258](https://github.com/cyberark/conjur-oss-suite-release/pull/258)
 
