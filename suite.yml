@@ -25,10 +25,10 @@ section:
   - name: Conjur SDK
     description: Conjur Command Line Interface (CLI) and Client Libraries
     repos:
-      - name: cyberark/conjur-cli
-        url: https://github.com/cyberark/conjur-cli
-        description: Conjur Ruby CLI
-        version: v6.2.8
+      - name: cyberark/conjur-cli-go
+        url: https://github.com/cyberark/conjur-cli-go
+        description: Conjur Go CLI
+        version: v8.0.0
       - name: cyberark/conjur-api-dotnet
         url: https://github.com/cyberark/conjur-api-dotnet
         description: Conjur .Net Client Library
