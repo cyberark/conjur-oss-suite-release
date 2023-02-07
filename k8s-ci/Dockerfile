@@ -1,4 +1,4 @@
-FROM golang:1.17-buster
+FROM golang:1.19
 
 RUN mkdir -p /src
 WORKDIR /src
