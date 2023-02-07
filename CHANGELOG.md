@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v1.20.0+suite.1] - 2023-01-06
+## [v1.20.0+suite.1] - 2023-02-06
 
 ### Changed
+- Updated gopkg.in/yaml.v3 indirect dependency and k8s-ci Dockerfile base image
+  [cyberark/conjur-oss-suite-release#260](https://github.com/cyberark/conjur-oss-suite-release/pull/260)
 - Replace deprecated Ruby CLI with Go CLI
   [cyberark/conjur-oss-suite-release#259](https://github.com/cyberark/conjur-oss-suite-release/pull/259)
 - Upgraded release-testing go.mod to use github.com/stretchr/testify v1.8.1
@@ -97,7 +99,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
 [Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.0+suite.1...HEAD
-[v1.18.4+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.18.4+suite.1...v1.19.0+suite.1
+[v1.19.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.18.4+suite.1...v1.19.0+suite.1
 [v1.18.4+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.18.0+suite.1...v1.18.4+suite.1
 [v1.18.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.17.6+suite.1...v1.18.0+suite.1
 [v1.17.6+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.15.0+suite.1...v1.17.6+suite.1
