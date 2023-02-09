@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur-oss-suite-release#259](https://github.com/cyberark/conjur-oss-suite-release/pull/259)
 - Upgraded release-testing go.mod to use github.com/stretchr/testify v1.8.1
   [cyberark/conjur-oss-suite-release#258](https://github.com/cyberark/conjur-oss-suite-release/pull/258)
+- Fixed link to Python API
+  [cyberark/conjur-oss-suite-release#261](https://github.com/cyberark/conjur-oss-suite-release/pull/261)
 
 ## [v1.19.0+suite.1] - 2022-11-30
 

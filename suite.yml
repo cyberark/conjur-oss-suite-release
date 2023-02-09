@@ -41,8 +41,8 @@ section:
         url: https://github.com/cyberark/conjur-api-java
         description: Conjur Java Client Library
         version: v3.0.3
-      - name: cyberark/conjur-api-python3
-        url: https://github.com/cyberark/conjur-api-python3
+      - name: cyberark/conjur-api-python
+        url: https://github.com/cyberark/conjur-api-python
         description: Conjur Python Client Library
         version: v7.1.0
       - name: cyberark/conjur-api-ruby
