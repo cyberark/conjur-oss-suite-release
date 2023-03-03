@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v1.20.0+suite.1] - 2023-02-06
+## [v1.19.2+suite.1] - 2023-03-03
 
 ### Changed
 - Updated gopkg.in/yaml.v3 indirect dependency and k8s-ci Dockerfile base image
