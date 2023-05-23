@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+- Upgrade Go in k8s-ci/Dockerfile to 1.20
+  [cyberark/conjur-oss-suite-release#267](https://github.com/cyberark/conjur-oss-suite-release/pull/267)
+
 ## [v1.19.3+suite.1] - 2023-04-21
 
 ## [v1.19.2+suite.1] - 2023-03-03
