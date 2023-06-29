@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.19.5+suite.1] - 2023-06-29
+
 ### Security
 - Upgrade Go in k8s-ci/Dockerfile to 1.20
   [cyberark/conjur-oss-suite-release#267](https://github.com/cyberark/conjur-oss-suite-release/pull/267)
@@ -106,9 +108,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   open in a new window, unless the link points to a CyberArk docs site.
   [cyberark/conjur-oss-suite-release#199](https://github.com/cyberark/conjur-oss-suite-release/issues/199)
 
-[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.3+suite.1...HEAD
-[v1.19.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.2+suite.1...v1.19.3+suite.1
-[v1.19.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.0+suite.1...v1.19.2+suite.1
+[Unreleased]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.5+suite.1...HEAD
+[v1.19.5+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.3+suite.1...v1.19.5+suite.1
+[v1.19.3+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.2+suite.1...v1.19.3+suite.1
+[v1.19.2+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.19.0+suite.1...v1.19.2+suite.1
 [v1.19.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.18.4+suite.1...v1.19.0+suite.1
 [v1.18.4+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.18.0+suite.1...v1.18.4+suite.1
 [v1.18.0+suite.1]: https://github.com/cyberark/conjur-oss-suite-release/compare/v1.17.6+suite.1...v1.18.0+suite.1

@@ -1,3 +1,4 @@
+//go:build release_test
 // +build release_test
 
 package main
