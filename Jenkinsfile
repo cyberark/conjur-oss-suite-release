@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent { label 'executor-v2' }
+  agent { label 'conjur-enterprise-common-agent' }
 
   options {
     timestamps()
@@ -13,16 +13,27 @@ pipeline {
   }
 
   stages {
+    stage('Get InfraPool ExecutorV2 Agent') {
+      steps {
+        script {
+          // Get InfraPool ExecutorV2 Agent
+          INFRAPOOL_EXECUTORV2_AGENT_0 = getInfraPoolAgent.connected(type: "ExecutorV2", quantity: 1, duration: 1)[0]
+        }
+      }
+    }
+
     stage('Release test') {
       steps {
-        sh 'summon -f ./k8s-ci/secrets.yml ./k8s-ci/test release-testing'
+        script {
+          INFRAPOOL_EXECUTORV2_AGENT_0.agentSh 'summon -f ./k8s-ci/secrets.yml ./k8s-ci/test release-testing'
+        }
       }
     }
   }
 
   post {
     always {
-      cleanupAndNotify(currentBuild.currentResult)
-    }
+      releaseInfraPoolAgent(".infrapool/release_agents")
+     }
   }
 }
