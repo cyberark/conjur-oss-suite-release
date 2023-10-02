@@ -4,3 +4,6 @@ c.out
 .DS_Store
 bin/cc-test-reporter
 drafts/RELEASE_NOTES.md
+
+release-testing/*.txt
+release-testing/store*
