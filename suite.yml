@@ -118,7 +118,7 @@ section:
         description: Secretless Broker can be used to securely connect your
           applications to services they need - without ever having to fetch or
           manage passwords and keys.
-        version: v1.7.18
+        version: v1.7.19
 
   - name: Summon
     description: Run your processes wrapped with Summon to ensure they have
